@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pqm-admin
+  name: pqm-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pqm-admin
+  template:
+    metadata:
+      labels:
+        app: pqm-admin
+        build_number: ${BUILD_NUMBER}
+        role: rolling-update
+    spec:
+      containers:
+      - image: 192.168.1.2:5000/pqm-admin:beta
+        imagePullPolicy: Always
+        name: pqm-admin
+      imagePullSecrets:
+      - name: mydockercredentials
+  strategy:
+    type: RollingUpdate
+  revisionHistoryLimit: 1
