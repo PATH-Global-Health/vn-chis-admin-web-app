@@ -56,7 +56,7 @@ const AddPermissionUIToUserModal: React.FC<Props> = (props) => {
       ),
   );
   const permissionCode = watch('code');
-  const permissionTypeList = useMemo(
+  const permissionTypeList: string[] = useMemo(
     () => permissionUIList.find((p) => p.code === permissionCode)?.types ?? [],
     [permissionCode],
   );
@@ -141,7 +141,7 @@ const AddPermissionUIToUserModal: React.FC<Props> = (props) => {
               label="Loại quyền"
               control={StyledSelect}
               options={permissionUITypeList.filter((p) =>
-                (permissionTypeList || []).includes(p.value),
+                permissionTypeList.includes(p.value),
               )}
               value={watch('types') || []}
               // eslint-disable-next-line

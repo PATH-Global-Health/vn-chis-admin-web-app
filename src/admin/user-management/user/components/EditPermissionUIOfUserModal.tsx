@@ -57,7 +57,7 @@ const EditPermissionOfUserModal: React.FC<Props> = (props) => {
     () => permissionUIList.find((p) => permissionCode.includes(p?.code ?? '')),
     [permissionCode],
   );
-  const permissionTypeList = useMemo(
+  const permissionTypeList: string[] = useMemo(
     () =>
       // eslint-disable-next-line
       permissionUIList.find((p) => p.code.includes(permissionUI?.code ?? ''))?.types ?? [],

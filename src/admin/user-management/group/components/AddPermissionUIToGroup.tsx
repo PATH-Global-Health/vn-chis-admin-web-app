@@ -56,7 +56,7 @@ const AddPermissionToGroupModal: React.FC<Props> = (props) => {
       ),
   );
   const permissionCode = watch('code');
-  const permissionTypeList = useMemo(
+  const permissionTypeList: string[] = useMemo(
     () => permissionUIList.find((p) => p.code === permissionCode)?.types ?? [],
     [permissionCode],
   );
