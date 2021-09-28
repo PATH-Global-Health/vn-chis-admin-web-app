@@ -69,7 +69,7 @@ const AddPermissionToGroupModal: React.FC<Props> = (props) => {
         if (types) {
           const permissions = types.map((type) => ({
             name: permission.name,
-            code: `${permission.code}_${type}`,
+            code: `${permission.code}${type !== 'ALL' ? `_${type}` : ''}`,
             permissionType: PermissionType.ALLOW,
           }));
           await fetch(

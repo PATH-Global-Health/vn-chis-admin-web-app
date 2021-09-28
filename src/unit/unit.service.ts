@@ -3,7 +3,7 @@ import { UnitCM } from '@unit/unit.model';
 
 const createUnitWithUser = async (username: string, data: UnitCM) => {
   try {
-    await httpClient.put({
+    await httpClient.post({
       url: apiLinks.unit.createUnitWithUser(username),
       data,
     });
@@ -11,4 +11,8 @@ const createUnitWithUser = async (username: string, data: UnitCM) => {
   } catch (error) {}
 };
 
-export { createUnitWithUser };
+const unitService = {
+  createUnitWithUser,
+}
+
+export default unitService;

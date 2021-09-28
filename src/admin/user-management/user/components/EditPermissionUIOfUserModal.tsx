@@ -102,7 +102,7 @@ const EditPermissionOfUserModal: React.FC<Props> = (props) => {
         .filter((type) => !(permissionUIOfUserList || []).find((permission) => (permission?.code ?? '').includes(type)))
         .map((type) => ({
           name: permissionUI?.name ?? '',
-          code: `${permissionUI?.code ?? ''}_${type}`,
+          code: `${permissionUI?.code ?? ''}${type !== 'ALL' ? `_${type}` : ''}`,
           permissionType: PermissionType.ALLOW,
         }));
 
