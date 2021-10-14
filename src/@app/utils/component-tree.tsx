@@ -4,9 +4,22 @@ import UserPage from '@admin/user-management/user';
 import GroupPage from '@admin/user-management/group';
 import RolePage from '@admin/user-management/role';
 
+import CategoriesPage from '@news/category';
+import TagsPage from '@news/tag';
+import PostsPage from '@news/post';
+import ServicesPage from '@category/service';
+
 export enum GroupKey {
   // #region admin
   ADMIN_USER_MANAGEMENT = 'ADMIN_USER_MANAGEMENT',
+  // #endregion
+
+  // #region news
+  PQM_NEWS = 'PQM_NEWS',
+  // #endregion
+
+  // #region csyt
+  CSYT_CATALOG = 'CSYT_CATALOG',
   // #endregion
 }
 
@@ -16,6 +29,18 @@ export enum ComponentKey {
   ADMIN_GROUP = 'ADMIN_GROUP',
   ADMIN_ROLE = 'ADMIN_ROLE',
   // #endregion
+
+  // #region news
+  PQM_CATEGORY = 'PQM_CATEGORY',
+  PQM_TAG = 'PQM_TAG',
+  PQM_POST = 'PQM_POST',
+  // #endregion
+
+  // #region csyt
+  CSYT_SERVICE = 'CSYT_SERVICE',
+  CSYT_SERVICE_TYPE = 'CSYT_SERVICE_TYPE',
+
+
 }
 
 export interface Component {
@@ -46,6 +71,42 @@ const componentTree: Component[] = [
         key: ComponentKey.ADMIN_ROLE,
         title: 'Vai trò',
         component: <RolePage />,
+      },
+    ],
+  },
+  {
+    key: GroupKey.CSYT_CATALOG,
+    title: 'Quản lý dịch vụ',
+    //permissionCode: 'ADMIN_SERVICE_MANAGEMENT',
+    childrenList: [
+
+      {
+        key: ComponentKey.CSYT_SERVICE,
+        title: 'Dịch vụ',
+        component: <ServicesPage />,
+        /* permissionCode: 'CSYT_CATALOG_SERVICE', */
+      },
+    ],
+  },
+  {
+    key: GroupKey.PQM_NEWS,
+    title: 'Quản lí bài viết',
+    /* permissionCode: 'PQM_NEWS', */
+    childrenList: [
+      {
+        key: ComponentKey.PQM_CATEGORY,
+        title: 'Thể loại',
+        component: <CategoriesPage />,
+      },
+      {
+        key: ComponentKey.PQM_TAG,
+        title: 'Nhãn',
+        component: <TagsPage />,
+      },
+      {
+        key: ComponentKey.PQM_POST,
+        title: 'Bài viết',
+        component: <PostsPage />,
       },
     ],
   },

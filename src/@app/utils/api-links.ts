@@ -3,7 +3,8 @@
 //   url.indexOf('abcde') > -1 || process.env.NODE_ENV === 'development';
 
 const authUrl = 'https://user-management.bakco.vn/api';
-const unitUrl = 'http://202.78.227.174:30111/api';
+const unitUrl = 'https://schedule-management.bakco.vn/api';
+const postUrl = 'https://mini-cms.bakco.vn';
 
 const apiLinks = {
   admin: {
@@ -63,8 +64,46 @@ const apiLinks = {
     token: `${authUrl}/Users/Login`,
     userInfo: `${authUrl}/Users`,
   },
+  news: {
+    tag: {
+      get: `${postUrl}/api/Tag`,
+      create: `${postUrl}/api/Tag`,
+      update: `${postUrl}/api/Tag`,
+      delete: `${postUrl}/api/Tag`,
+    },
+    category: {
+      get: `${postUrl}/api/Category`,
+      create: `${postUrl}/api/Category`,
+      update: `${postUrl}/api/Category`,
+      delete: `${postUrl}/api/Category`,
+    },
+    part: {
+      get: `${postUrl}/api/Part`,
+      update: `${postUrl}/api/Part`,
+      delete: `${postUrl}/api/Part`,
+    },
+    post: {
+      get: `${postUrl}/api/Post`,
+      create: `${postUrl}/api/Post`,
+      update: `${postUrl}/api/Post`,
+      delete: `${postUrl}/api/Post`,
+      addParts: `${postUrl}/api/Post/Parts`,
+    },
+  },
   unit: {
     createUnitWithUser: (username: string): string => `${unitUrl}/Hospitals/HospitalByAdmin/${username}`,
+  },
+  service: {
+    get: `${unitUrl}/Services`,
+    create: `${unitUrl}/Services`,
+    update: `${unitUrl}/Services`,
+    delete: `${unitUrl}/Services`,
+  },
+  serviceType: {
+    get: `${unitUrl}/ServiceTypes`,
+    create: `${unitUrl}/ServiceTypes`,
+    update: `${unitUrl}/ServiceTypes`,
+    delete: `${unitUrl}/ServiceTypes`,
   },
   unitType: {
     get: `${unitUrl}/UnitTypes`,
