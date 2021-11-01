@@ -24,7 +24,7 @@ const permissionUIList = [
     types: [],
   },
   {
-    name: 'Facility - Danh mục', 
+    name: 'Facility - Danh mục',
     code: 'CSYT_CATALOG',
     types: [],
   },

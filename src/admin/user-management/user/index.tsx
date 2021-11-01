@@ -71,7 +71,7 @@ const UserPage: React.FC = () => {
   const { data } = user;
 
   const getData = useCallback(() => {
-    dispatch(getUsers({ username: searchValue }));
+    dispatch(getUsers({ keyword: searchValue }));
   }, [dispatch, searchValue]);
   useEffect(getData, [getData]);
 

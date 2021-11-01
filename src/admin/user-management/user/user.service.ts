@@ -96,7 +96,7 @@ const resetPassword = async (username: string): Promise<void> => {
       },
     });
     // eslint-disable-next-line
-  } catch (error) {}
+  } catch (error) { }
 };
 
 const userService = {

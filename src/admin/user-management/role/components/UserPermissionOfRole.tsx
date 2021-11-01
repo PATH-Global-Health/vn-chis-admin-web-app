@@ -15,6 +15,7 @@ import {
 import roleService from '@admin/user-management/role/role.service';
 import permissionService from '@admin/user-management/permission/permission.service';
 import { HolderType } from '@admin/user-management/utils/constants';
+import AddPermissionUIToRoleModal from './AddPermissionUIToRole';
 
 interface Props {
   isUser?: boolean;
@@ -172,8 +173,8 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
             isUser
               ? d?.fullName ?? ''
               : isPermissionResource
-              ? `${d?.method ?? ''} - ${d?.url ?? ''}`
-              : `Mã: ${d?.code ?? ''}`
+                ? `${d?.method ?? ''} - ${d?.url ?? ''}`
+                : `Mã: ${d?.code ?? ''}`
           // eslint-disable-next-line react/jsx-curly-newline
         }
       />
@@ -182,12 +183,17 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
         onClose={() => setAddUserModal(false)}
         onRefresh={getData}
       />
-      <AddPermissionToRole
+      {/*  <AddPermissionToRole
         open={addPermissionModal}
         onClose={() => setAddPermissionModal(false)}
         onRefresh={getData}
         isPermissionUI={isPermissionUI}
         isPermissionResource={isPermissionResource}
+      /> */}
+      <AddPermissionUIToRoleModal
+        open={addPermissionModal}
+        onClose={() => setAddPermissionModal(false)}
+        onRefresh={getData}
       />
     </>
   );

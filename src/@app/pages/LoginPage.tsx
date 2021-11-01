@@ -52,7 +52,7 @@ const LoginPage: React.FC = () => {
   };
 
   useEffect(() => {
-    window.document.title = 'CDS';
+    window.document.title = 'CHIS-ADMIN';
   }, []);
 
   return (

@@ -65,7 +65,7 @@ const AddUserRoleToGroup: React.FC<Props> = (props) => {
     if (isRole) {
       dispatch(getRoles());
     } else {
-      dispatch(getUsers({ username: searchValue, pageIndex, pageSize }));
+      dispatch(getUsers({ keyword: searchValue, pageIndex, pageSize }));
     }
   }, [isRole, searchValue, pageIndex, pageSize, dispatch]);
   const onSubmit = useCallback(async () => {
@@ -74,13 +74,13 @@ const AddUserRoleToGroup: React.FC<Props> = (props) => {
         await fetch(
           isRole
             ? groupService.addRolesToGroup(
-                (multipleSelect || []).map((o) => o.id),
-                selectedGroup.id,
-              )
+              (multipleSelect || []).map((o) => o.id),
+              selectedGroup.id,
+            )
             : groupService.addUsersToGroup(
-                (multipleSelect || []).map((o) => o.id),
-                selectedGroup.id,
-              ),
+              (multipleSelect || []).map((o) => o.id),
+              selectedGroup.id,
+            ),
         );
         onClose();
         onRefresh();

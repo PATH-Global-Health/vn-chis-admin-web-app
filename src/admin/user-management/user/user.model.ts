@@ -12,7 +12,7 @@ export interface UserCM extends Omit<User, 'id'> {
 }
 
 export interface UserFilter {
-  username?: string;
+  keyword?: string;
   pageIndex?: number;
   pageSize?: number;
 }

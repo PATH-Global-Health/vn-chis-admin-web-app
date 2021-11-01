@@ -46,7 +46,7 @@ const AddUserToRoleModal: React.FC<Props> = (props) => {
   const [multipleSelect, setMultipleSelect] = useState<UserOrRoleType[]>([]);
 
   const getData = useCallback(() => {
-    dispatch(getUsers({ username: searchValue, pageIndex, pageSize }));
+    dispatch(getUsers({ keyword: searchValue, pageIndex, pageSize }));
   }, [searchValue, pageIndex, pageSize, dispatch]);
   const onSubmit = useCallback(async () => {
     if (selectedRole && multipleSelect.length > 0) {
