@@ -55,7 +55,7 @@ const createRole = async (data: RoleCM): Promise<void> => {
 const updateRole = async (data: Role): Promise<void> => {
   try {
     await httpClient.put({
-      url: apiLinks.admin.userManagement.role.update,
+      url: `${apiLinks.admin.userManagement.role.update}/${data.id}`,
       data,
     });
     toast.success('Cập nhật thành công');
