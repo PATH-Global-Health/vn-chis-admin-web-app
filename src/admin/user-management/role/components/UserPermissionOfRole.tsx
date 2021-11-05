@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
 
 import DataList from '@app/components/data-list';
-import AddPermissionToRole from '@admin/user-management/role/components/AddPermissionToRole';
 import AddUserToRole from '@admin/user-management/role/components/AddUserToRole';
 import { useConfirm, useDispatch, useFetchApi, useSelector } from '@app/hooks';
 

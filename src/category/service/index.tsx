@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 import { GroupKey, ComponentKey } from '@app/utils/component-tree';
 import DataTable, { Column } from '@app/components/data-table';
@@ -7,11 +6,9 @@ import {
   useSelector,
   useDispatch,
   useRefreshCallback,
-  useConfirm,
   useFetchApi,
 } from '@app/hooks';
 
-import serviceService from './service.service';
 import { getServices } from './service.slice';
 import { Service } from './service.model';
 
@@ -38,13 +35,10 @@ const ServicesPage: React.FC = () => {
   const [openCreate, setOpenCreate] = useState(false);
   const [updateDetails, setUpdateDetails] = useState<Service>();
 
-  const { fetch, fetching } = useFetchApi();
-  const confirm = useConfirm();
-
+  const { fetching } = useFetchApi();
   const loading = fetching || getServicesLoading;
   return (
     <>
-      {console.log(serviceList)}
       <DataTable
         title="Dịch vụ"
         loading={loading}
