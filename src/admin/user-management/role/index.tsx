@@ -130,9 +130,12 @@ const RolePage: React.FC = () => {
       )}
       <RoleModal
         open={roleModal}
-        onClose={(): void => setRoleModal(false)}
-        onRefresh={getData}
         data={selected}
+        onClose={(): void => {
+          setRoleModal(false);
+          setSelected(undefined);
+        }}
+        onRefresh={getData}
       />
     </Grid>
   );

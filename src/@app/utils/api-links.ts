@@ -12,6 +12,9 @@ const apiLinks = {
       user: {
         get: `${authUrl}/Users`,
         create: `${authUrl}/Users`,
+        enable: (idUser: string): string => `${authUrl}/Users/${idUser}/Enable`,
+        disable: (idUser: string): string =>
+          `${authUrl}/Users/${idUser}/Disable`,
         resetPassword: `${authUrl}/Users/Tools/ResetDefaultPassword`,
         getGroups: `${authUrl}/Users/Groups`,
         getRoles: `${authUrl}/Users/Roles`,
@@ -54,10 +57,6 @@ const apiLinks = {
         delete: `${authUrl}/Permissions`,
         addUser: `${authUrl}/Permissions`,
       },
-    },
-    moduleManagement: {
-      get: `${authUrl}/Modules`,
-      create: `${authUrl}/Modules`,
     },
   },
   authentication: {

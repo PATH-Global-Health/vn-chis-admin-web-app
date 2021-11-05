@@ -1,63 +1,100 @@
-import React, { useMemo } from 'react';
-import { Modal } from 'semantic-ui-react';
+/* eslint-disable no-nested-ternary */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/unbound-method */
+import React, { useEffect } from 'react';
 
-import SimpleForm from '@app/components/simple-form';
-import { FormField } from '@app/models/form-field';
-import { useFetchApi, useSelector } from '@app/hooks';
+import { useForm } from 'react-hook-form';
+import { Modal, Form, Input, TextArea, Button } from 'semantic-ui-react';
 
+import { useFetchApi } from '@app/hooks';
 import { Role } from '@admin/user-management/role/role.model';
 import roleService from '@admin/user-management/role/role.service';
 
 interface Props {
   open: boolean;
+  data?: Role;
   onClose: () => void;
   onRefresh: () => void;
-  data?: Role;
 }
 const RoleModal: React.FC<Props> = (props) => {
   const { open, onClose, onRefresh, data } = props;
-  const { fetch, fetching } = useFetchApi();
-  const { getRolesLoading } = useSelector(
-    (state) => state.admin.userManagement.role,
-  );
-  const formFields = useMemo(
-    (): FormField<Role>[] => [
-      {
-        name: 'id',
-        hidden: true,
-      },
-      {
-        name: 'name',
-        label: 'Tên role',
-      },
-      {
-        name: 'description',
-        label: 'Miêu tả',
-      },
-    ],
-    [],
-  );
 
-  const handleSubmit = async (d: Role): Promise<void> => {
-    await fetch(d.id ? roleService.updateRole(d) : roleService.createRole(d));
+  const {
+    formState: { errors },
+    register,
+    watch,
+    reset,
+    trigger,
+    setValue,
+    handleSubmit,
+  } = useForm<Role>({
+    defaultValues: {},
+  });
+  const { fetch, fetching } = useFetchApi();
+
+  const disabled = !!errors?.name?.message;
+
+  const onSubmit = async (d: Role): Promise<void> => {
+    await fetch(
+      data?.id
+        ? roleService.updateRole({ ...d, id: data.id })
+        : roleService.createRole(d),
+    );
     onRefresh();
     onClose();
+    reset({});
   };
 
+  useEffect(() => {
+    register('name', { required: 'Bắt buộc phải nhập tên vai trò' });
+    register('description');
+  }, [register, watch]);
+
+  useEffect(() => {
+    if (data?.id) {
+      reset(data);
+    }
+  }, [data, reset]);
+
   return (
-    <Modal open={open} onClose={onClose}>
-      <Modal.Header>
-        {data ? 'Sửa ' : 'Tạo '}
-        vai trò
-      </Modal.Header>
+    <Modal open={open || Boolean(data?.id)} onClose={onClose}>
+      <Modal.Header>{data?.id ? 'Sửa đổi' : 'Tạo mới'}</Modal.Header>
       <Modal.Content>
-        <SimpleForm
-          defaultValues={data}
-          loading={fetching || getRolesLoading}
-          formFields={formFields}
-          onSubmit={handleSubmit}
-        />
+        <Form>
+          <Form.Group widths="equal">
+            <Form.Field
+              required
+              control={Input}
+              label="Tên vai trò"
+              error={!!errors?.name?.message && errors.name.message}
+              value={watch('name') ?? ''}
+              onChange={(__: any, { value }: any) => {
+                setValue('name', value);
+              }}
+              onBlur={() => trigger('name')}
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field
+              control={TextArea}
+              label="Mô tả"
+              value={watch('description') ?? ''}
+              onChange={(__: any, { value }: any) => {
+                setValue('description', value);
+              }}
+            />
+          </Form.Group>
+        </Form>
       </Modal.Content>
+      <Modal.Actions>
+        <Button
+          positive
+          content="Xác nhận"
+          loading={fetching}
+          disabled={disabled}
+          onClick={handleSubmit((d) => onSubmit(d))}
+        />
+      </Modal.Actions>
     </Modal>
   );
 };

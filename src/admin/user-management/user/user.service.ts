@@ -1,4 +1,6 @@
+import { toast } from 'react-toastify';
 import { httpClient, apiLinks } from '@app/utils';
+import { getResponseError } from '@app/utils/helpers';
 
 import { Role } from '@admin/user-management/role/role.model';
 import { Group } from '@admin/user-management/group/group.model';
@@ -75,16 +77,40 @@ const getPermissionsResourceOfUser = async (
 };
 
 const createUser = async (data: UserCM): Promise<void> => {
-  await httpClient.post({
-    url: apiLinks.admin.userManagement.user.get,
-    data: {
-      ...data,
-      securityQuestion: {
-        id: '',
-        answer: '',
+  try {
+    await httpClient.post({
+      url: apiLinks.admin.userManagement.user.get,
+      data: {
+        ...data,
+        securityQuestion: {
+          id: '',
+          answer: '',
+        },
       },
-    },
-  });
+    });
+    toast.success('Tạo thành công');
+  } catch (error) {
+    // eslint-disable-next-line
+    toast.warn(getResponseError(error.response?.data));
+  }
+};
+
+const enableUser = async (idUser: string): Promise<void> => {
+  try {
+    await httpClient.put({
+      url: apiLinks.admin.userManagement.user.enable(idUser),
+    });
+    // eslint-disable-next-line
+  } catch (error) {}
+};
+
+const disableUser = async (idUser: string): Promise<void> => {
+  try {
+    await httpClient.put({
+      url: apiLinks.admin.userManagement.user.disable(idUser),
+    });
+    // eslint-disable-next-line
+  } catch (error) {}
 };
 
 const resetPassword = async (username: string): Promise<void> => {
@@ -96,12 +122,14 @@ const resetPassword = async (username: string): Promise<void> => {
       },
     });
     // eslint-disable-next-line
-  } catch (error) { }
+  } catch (error) {}
 };
 
 const userService = {
   getUsers,
   createUser,
+  enableUser,
+  disableUser,
   resetPassword,
   getGroupsOfUser,
   getRolesOfUser,

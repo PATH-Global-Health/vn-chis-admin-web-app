@@ -1,4 +1,7 @@
+import { toast } from 'react-toastify';
 import { httpClient, apiLinks } from '@app/utils';
+import { getResponseError } from '@app/utils/helpers';
+
 import { Permission } from '../permission/permission.model';
 import { Role } from '../role/role.model';
 import { User } from '../user/user.model';
@@ -16,23 +19,41 @@ const getGroups = async (): Promise<Group[]> => {
 };
 
 const createGroup = async (data: GroupCM): Promise<void> => {
-  await httpClient.post({
-    url: apiLinks.admin.userManagement.group.create,
-    data,
-  });
+  try {
+    await httpClient.post({
+      url: apiLinks.admin.userManagement.group.create,
+      data,
+    });
+    toast.success('Tạo thành công');
+  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const updateGroup = async (data: Group): Promise<void> => {
-  await httpClient.put({
-    url: `${apiLinks.admin.userManagement.group.update}/${data.id}`,
-    data,
-  });
+  try {
+    await httpClient.put({
+      url: `${apiLinks.admin.userManagement.group.update}/${data.id}`,
+      data,
+    });
+    toast.success('Cập nhật thành công');
+  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const deleteGroup = async (id: string): Promise<void> => {
-  await httpClient.delete({
-    url: `${apiLinks.admin.userManagement.group.delete}/${id}`,
-  });
+  try {
+    await httpClient.delete({
+      url: `${apiLinks.admin.userManagement.group.delete}/${id}`,
+    });
+    toast.success('Xoá thành công');
+  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const addUsersToGroup = async (

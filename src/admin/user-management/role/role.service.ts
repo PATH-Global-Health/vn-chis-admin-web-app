@@ -1,4 +1,7 @@
+import { toast } from 'react-toastify';
 import { httpClient, apiLinks } from '@app/utils';
+import { getResponseError } from '@app/utils/helpers';
+
 import { Permission } from '../permission/permission.model';
 import { User } from '../user/user.model';
 import { Role, RoleCM } from './role.model';
@@ -37,23 +40,41 @@ const removeUserToRole = async (
 };
 
 const createRole = async (data: RoleCM): Promise<void> => {
-  await httpClient.post({
-    url: apiLinks.admin.userManagement.role.create,
-    data,
-  });
+  try {
+    await httpClient.post({
+      url: apiLinks.admin.userManagement.role.create,
+      data,
+    });
+    toast.success('Tạo thành công');
+  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const updateRole = async (data: Role): Promise<void> => {
-  await httpClient.put({
-    url: apiLinks.admin.userManagement.role.update,
-    data,
-  });
+  try {
+    await httpClient.put({
+      url: apiLinks.admin.userManagement.role.update,
+      data,
+    });
+    toast.success('Cập nhật thành công');
+  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const deleteRole = async (id: string): Promise<void> => {
-  await httpClient.delete({
-    url: `${apiLinks.admin.userManagement.role.delete}/${id}`,
-  });
+  try {
+    await httpClient.delete({
+      url: `${apiLinks.admin.userManagement.role.delete}/${id}`,
+    });
+    toast.success('Xoá thành công');
+  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const getUsersOfRole = async (roleId: string): Promise<User[]> => {

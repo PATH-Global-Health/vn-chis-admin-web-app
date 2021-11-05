@@ -18,9 +18,9 @@ const CreateModal: React.FC<Props> = (props) => {
   const { open, onClose, onRefresh } = props;
   const { fetch, fetching } = useFetchApi();
 
-  const serviceTypeList = useSelector(
-    (state) => state.category.serviceType.serviceTypeList,
-  );
+  // const serviceTypeList = useSelector(
+  //   (state) => state.category.serviceType.serviceTypeList,
+  // );
   const getServiceTypesLoading = useSelector(
     (state) => state.category.serviceType.getServiceTypesLoading,
   );
@@ -50,7 +50,8 @@ const CreateModal: React.FC<Props> = (props) => {
       { name: 'Interval', label: 'Thời gian khám', inputType: 'number' },
       { name: 'Price', label: 'Giá', inputType: 'number' },
     ],
-    [serviceTypeList],
+    // [serviceTypeList],
+    [],
   );
 
   return (

@@ -141,9 +141,12 @@ const GroupPage: React.FC = () => {
       )}
       <GroupModal
         open={groupModal}
-        onClose={(): void => setGroupModal(false)}
-        onRefresh={getData}
         data={selected}
+        onClose={(): void => {
+          setGroupModal(false);
+          setSelected(undefined);
+        }}
+        onRefresh={getData}
       />
     </Grid>
   );
