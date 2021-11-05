@@ -72,11 +72,12 @@ const UserModal: React.FC<Props> = (props) => {
     });
     register('phoneNumber', {
       validate: (phoneNumber: string): any => {
-        if (phoneNumber) {
-          const exec = /(\d+)/.exec(phoneNumber);
-          if (exec === null || exec[0].length > 11 || exec[0].length < 10) {
-            return 'Số điện thoại chưa đúng định dạng (10 - 11 số)';
-          }
+        if (!phoneNumber) {
+          return 'Bắt buộc phải nhập số điện thoại';
+        }
+        const exec = /(\d+)/.exec(phoneNumber);
+        if (exec === null || exec[0].length > 11 || exec[0].length < 10) {
+          return 'Số điện thoại chưa đúng định dạng (10 - 11 số)';
         }
         return true;
       },
