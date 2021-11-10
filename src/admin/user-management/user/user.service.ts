@@ -137,26 +137,12 @@ const resetPassword = async (username: string): Promise<void> => {
   }
 };
 
-const syncAccountWithElastic = async (idUser: string): Promise<void> => {
-  try {
-    await httpClient.get({
-      url: apiLinks.admin.userManagement.user.sync(idUser),
-    });
-    toast.success('Đã đồng bộ tài khoản');
-    // eslint-disable-next-line
-  } catch (error) {
-    // eslint-disable-next-line
-    toast.warn(getResponseError(error.response?.data));
-  }
-};
-
 const userService = {
   getUsers,
   createUser,
   enableUser,
   disableUser,
   resetPassword,
-  syncAccountWithElastic,
   getGroupsOfUser,
   getRolesOfUser,
   getPermissionsUIOfUser,

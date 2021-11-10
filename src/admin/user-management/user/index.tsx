@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
-import { FiPlus, FiPocket, FiRefreshCcw, FiKey } from 'react-icons/fi';
-import { Grid, Tab } from 'semantic-ui-react';
+import { FiPlus, FiPocket, FiKey } from 'react-icons/fi';
+import { Grid, Tab, Label } from 'semantic-ui-react';
 import DataList from '@app/components/data-list';
 import SearchBar from '@app/components/SearchBar';
 import UserModal from '@admin/user-management/user/components/UserModal';
@@ -58,6 +58,9 @@ const panes = [
 
 const UserPage: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>('');
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(10);
+
   const [userModal, setUserModal] = useState<boolean>(false);
   const [createUnitWithUserModal, setCreateUnitWithUserModal] = useState<User | undefined>(undefined);
 
@@ -68,11 +71,11 @@ const UserPage: React.FC = () => {
     (state) => state.admin.userManagement.user,
   );
 
-  const { data } = user;
+  const { data, totalPages } = user;
 
   const getData = useCallback(() => {
-    dispatch(getUsers({ keyword: searchValue }));
-  }, [dispatch, searchValue]);
+    dispatch(getUsers({ keyword: searchValue, pageIndex, pageSize }));
+  }, [dispatch, searchValue, pageIndex, pageSize]);
   useEffect(getData, [getData]);
 
   useRefreshCallback(
@@ -97,6 +100,11 @@ const UserPage: React.FC = () => {
           title="Danh sách người dùng"
           data={data}
           loading={fetching || getUsersLoading}
+          totalPages={totalPages}
+          onPaginationChange={(p): void => {
+            setPageIndex(p.pageIndex);
+            setPageSize(p.pageSize);
+          }}
           listActions={[
             {
               title: 'Tạo người dùng',
@@ -106,16 +114,6 @@ const UserPage: React.FC = () => {
             },
           ]}
           itemActions={[
-            {
-              title: 'Đồng bộ',
-              color: 'teal',
-              icon: <FiRefreshCcw />,
-              onClick: (row): void => {
-                confirm('Đồng bộ tài khoản?', () => {
-                  fetch(userService.syncAccountWithElastic(row.id));
-                });
-              },
-            },
             {
               title: 'Gán cơ sở',
               color: 'purple',
@@ -141,7 +139,16 @@ const UserPage: React.FC = () => {
             }
           }}
           getRowKey={(d): string => d.id}
-          itemHeaderRender={(d): string => d.username}
+          itemHeaderRender={(d): JSX.Element => (
+            <>
+              {d.isElasticSynced && (
+                <Label color="green" basic horizontal>
+                  Đồng bộ
+                </Label>
+              )}
+              {d.username}
+            </>
+          )}
           itemContentRender={
             (d): string => (d?.email ? `Email: ${d.email}` : '')
           }
