@@ -80,13 +80,7 @@ const createUser = async (data: UserCM): Promise<void> => {
   try {
     await httpClient.post({
       url: apiLinks.admin.userManagement.user.get,
-      data: {
-        ...data,
-        securityQuestion: {
-          id: '',
-          answer: '',
-        },
-      },
+      data,
     });
     toast.success('Tạo thành công');
   } catch (error) {
