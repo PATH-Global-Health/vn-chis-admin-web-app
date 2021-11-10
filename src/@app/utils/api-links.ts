@@ -15,6 +15,8 @@ const apiLinks = {
         enable: (idUser: string): string => `${authUrl}/Users/${idUser}/Enable`,
         disable: (idUser: string): string =>
           `${authUrl}/Users/${idUser}/Disable`,
+        sync: (idUser: string): string =>
+          `${authUrl}/Users/${idUser}/Sync`,
         resetPassword: `${authUrl}/Users/Tools/ResetDefaultPassword`,
         getGroups: `${authUrl}/Users/Groups`,
         getRoles: `${authUrl}/Users/Roles`,

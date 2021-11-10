@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
-import { FiPlus, FiPocket, FiRefreshCcw } from 'react-icons/fi';
+import { FiPlus, FiPocket, FiRefreshCcw, FiKey } from 'react-icons/fi';
 import { Grid, Tab } from 'semantic-ui-react';
 import DataList from '@app/components/data-list';
 import SearchBar from '@app/components/SearchBar';
@@ -107,6 +107,16 @@ const UserPage: React.FC = () => {
           ]}
           itemActions={[
             {
+              title: 'Đồng bộ',
+              color: 'teal',
+              icon: <FiRefreshCcw />,
+              onClick: (row): void => {
+                confirm('Đồng bộ tài khoản?', () => {
+                  fetch(userService.syncAccountWithElastic(row.id));
+                });
+              },
+            },
+            {
               title: 'Gán cơ sở',
               color: 'purple',
               icon: <FiPocket />,
@@ -115,7 +125,7 @@ const UserPage: React.FC = () => {
             {
               title: 'Đổi mật khẩu',
               color: 'yellow',
-              icon: <FiRefreshCcw />,
+              icon: <FiKey />,
               onClick: (row): void => {
                 confirm('Reset mật khẩu?', () => {
                   fetch(userService.resetPassword(row.username));

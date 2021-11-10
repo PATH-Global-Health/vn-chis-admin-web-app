@@ -100,8 +100,12 @@ const enableUser = async (idUser: string): Promise<void> => {
     await httpClient.put({
       url: apiLinks.admin.userManagement.user.enable(idUser),
     });
+    toast.success('Đã bật tài khoản');
     // eslint-disable-next-line
-  } catch (error) {}
+  } catch (error) {
+    // eslint-disable-next-line
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const disableUser = async (idUser: string): Promise<void> => {
@@ -109,8 +113,12 @@ const disableUser = async (idUser: string): Promise<void> => {
     await httpClient.put({
       url: apiLinks.admin.userManagement.user.disable(idUser),
     });
+    toast.success('Đã tắt tài khoản');
     // eslint-disable-next-line
-  } catch (error) {}
+  } catch (error) {
+    // eslint-disable-next-line
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const resetPassword = async (username: string): Promise<void> => {
@@ -121,8 +129,25 @@ const resetPassword = async (username: string): Promise<void> => {
         username,
       },
     });
+    toast.success('Đã khôi phục mật khẩu cho tài khoản');
     // eslint-disable-next-line
-  } catch (error) {}
+  } catch (error) {
+    // eslint-disable-next-line
+    toast.warn(getResponseError(error.response?.data));
+  }
+};
+
+const syncAccountWithElastic = async (idUser: string): Promise<void> => {
+  try {
+    await httpClient.get({
+      url: apiLinks.admin.userManagement.user.sync(idUser),
+    });
+    toast.success('Đã đồng bộ tài khoản');
+    // eslint-disable-next-line
+  } catch (error) {
+    // eslint-disable-next-line
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const userService = {
@@ -131,6 +156,7 @@ const userService = {
   enableUser,
   disableUser,
   resetPassword,
+  syncAccountWithElastic,
   getGroupsOfUser,
   getRolesOfUser,
   getPermissionsUIOfUser,

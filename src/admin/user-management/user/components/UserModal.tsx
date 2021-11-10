@@ -5,7 +5,7 @@
 import React, { useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
-import { Modal, Form, Input, Button } from 'semantic-ui-react';
+import { Modal, Form, Input, Checkbox, Button } from 'semantic-ui-react';
 
 import { useSelector, useFetchApi } from '@app/hooks';
 import { validateEmpty } from '@app/utils/helpers';
@@ -90,6 +90,7 @@ const UserModal: React.FC<Props> = (props) => {
       validate: (password) =>
         validateEmpty(password, 'Bắt buộc phải nhập mật khẩu'),
     });
+    register('isElasticSynced');
   }, [register, watch]);
 
   return (
@@ -124,6 +125,7 @@ const UserModal: React.FC<Props> = (props) => {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
+              required
               control={Input}
               label="Số điện thoại"
               error={
@@ -162,6 +164,17 @@ const UserModal: React.FC<Props> = (props) => {
                 setValue('password', value);
               }}
               onBlur={() => trigger('password')}
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field
+              name="isElasticSynced"
+              control={Checkbox}
+              label="Đồng bộ"
+              checked={watch('isElasticSynced') ?? undefined}
+              onChange={(__: any) => {
+                setValue('isElasticSynced', !watch('isElasticSynced'));
+              }}
             />
           </Form.Group>
         </Form>

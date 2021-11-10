@@ -5,6 +5,7 @@ export interface User {
   phoneNumber: string;
   fullName: string;
   isDisabled: boolean;
+  isElasticSynced: boolean;
 }
 
 export interface UserCM extends Omit<User, 'id'> {
