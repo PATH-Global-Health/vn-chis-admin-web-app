@@ -105,6 +105,7 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
   const handleRemove = async (row: GroupRolePermission) => {
     if (selectedUser) {
       if (isGroup) {
+        console.log(row);
         // remove user from role
         await fetch(groupService.removeUserToGroup(selectedUser.id, row.id));
       }

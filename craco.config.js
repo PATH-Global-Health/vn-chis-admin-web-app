@@ -9,6 +9,7 @@ module.exports = {
       '@unit': path.resolve(__dirname, 'src/unit'),
       '@category': path.resolve(__dirname, 'src/category'),
       '@news': path.resolve(__dirname, 'src/news'),
+      '@form-assessment': path.resolve(__dirname, 'src/form-assessment'),
     },
   },
 };

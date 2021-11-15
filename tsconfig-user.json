@@ -17,6 +17,9 @@
       "@news/*": [
         "news/*"
       ],
+      "@form-assessment/*": [
+        "form-assessment/*"
+      ],
     }
   }
 }
