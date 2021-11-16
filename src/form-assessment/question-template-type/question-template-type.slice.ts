@@ -14,7 +14,7 @@ const initialState: State = {
 };
 
 const getQuestionTemplateType = createAsyncThunk(
-  'pqm/form/QuestionTemplateType/getQuestionTemplateType',
+  'formAssessment/questionTemplateType/getQuestionTemplateType',
   async () => {
     const result = await QuestionTemplateTypeService.getQuestionTemplateType();
     return result;
@@ -22,7 +22,7 @@ const getQuestionTemplateType = createAsyncThunk(
 );
 
 const slice = createSlice({
-  name: 'pqm/form/QuestionTemplateType',
+  name: 'formAssessment/questionTemplateType',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

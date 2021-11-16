@@ -10,6 +10,7 @@ import PostsPage from '@news/post';
 import ServicesPage from '@category/service';
 import QuestionTemplateTypesPage from '@form-assessment/question-template-type';
 import QuestionPage from '@form-assessment/question';
+import QuestionTemplatesPage from '@form-assessment/question-template';
 
 export enum GroupKey {
   // #region admin
@@ -48,10 +49,9 @@ export enum ComponentKey {
 
   // #region form assessment
   PQM_QUESTION = 'PQM_QUESTION',
+  PQM_QUESTION_TEMPLATE = 'PQM_QUESTION_TEMPLATE',
   PQM_QUESTION_TEMPLATE_TYPE = 'PQM_QUESTION_TEMPLATE_TYPE',
-
   // #endregion
-
 }
 
 export interface Component {
@@ -135,6 +135,11 @@ const componentTree: Component[] = [
         key: ComponentKey.PQM_QUESTION_TEMPLATE_TYPE,
         title: 'Loại biểu mẫu',
         component: <QuestionTemplateTypesPage />,
+      },
+      {
+        key: ComponentKey.PQM_QUESTION_TEMPLATE,
+        title: 'Biểu mẫu',
+        component: <QuestionTemplatesPage />,
       },
     ],
   },

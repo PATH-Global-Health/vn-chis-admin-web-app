@@ -14,7 +14,7 @@ const initialState: State = {
 };
 
 const getQuestion = createAsyncThunk(
-  'pqm/form/Question/getQuestion',
+  'formAssessment/question/getQuestion',
   async () => {
     const result = await QuestionService.getQuestion();
     return result;
@@ -22,7 +22,7 @@ const getQuestion = createAsyncThunk(
 );
 
 const slice = createSlice({
-  name: 'pqm/form/Question',
+  name: 'formAssessment/question',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

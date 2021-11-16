@@ -105,6 +105,16 @@ const apiLinks = {
       update: `${postUrl}/api/QuestionTemplateType`,
       delete: `${postUrl}/api/QuestionTemplateType`,
     },
+    questionTemplate: {
+      get: `${postUrl}/api/QuestionTemplate/Filter`,
+      create: `${postUrl}/api/QuestionTemplate`,
+      update: `${postUrl}/api/QuestionTemplate`,
+      delete: `${postUrl}/api/QuestionTemplate`,
+      addQuestion: `${postUrl}/api/QuestionTemplate/Questions`,
+      deleteQuestion: `${postUrl}/api/QuestionTemplate/Questions`,
+      addSurveyResult: `${postUrl}/api/QuestionTemplate/SurveyResult`,
+      deleteSurveyResult: `${postUrl}/api/QuestionTemplate/SurveyResult`
+    },
   },
 
   unit: {
