@@ -91,6 +91,22 @@ const apiLinks = {
       addParts: `${postUrl}/api/Post/Parts`,
     },
   },
+
+  form: {
+    question: {
+      get: `${postUrl}/api/Question`,
+      create: `${postUrl}/api/Question`,
+      update: `${postUrl}/api/Question`,
+      delete: `${postUrl}/api/Question`,
+    },
+    questionTemplateType: {
+      get: `${postUrl}/api/QuestionTemplateType`,
+      create: `${postUrl}/api/QuestionTemplateType`,
+      update: `${postUrl}/api/QuestionTemplateType`,
+      delete: `${postUrl}/api/QuestionTemplateType`,
+    },
+  },
+
   unit: {
     createUnitWithUser: (username: string): string => `${unitUrl}/Hospitals/HospitalByAdmin/${username}`,
   },

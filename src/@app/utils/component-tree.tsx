@@ -8,6 +8,8 @@ import CategoriesPage from '@news/category';
 import TagsPage from '@news/tag';
 import PostsPage from '@news/post';
 import ServicesPage from '@category/service';
+import QuestionTemplateTypesPage from '@form-assessment/question-template-type';
+import QuestionPage from '@form-assessment/question';
 
 export enum GroupKey {
   // #region admin
@@ -20,6 +22,10 @@ export enum GroupKey {
 
   // #region csyt
   CSYT_CATALOG = 'CSYT_CATALOG',
+  // #endregion
+
+  // #region form assessment
+  PQM_FORM_ASSESSMENT = 'PQM_FORM_ASSESSMENT',
   // #endregion
 }
 
@@ -40,6 +46,11 @@ export enum ComponentKey {
   CSYT_SERVICE = 'CSYT_SERVICE',
   CSYT_SERVICE_TYPE = 'CSYT_SERVICE_TYPE',
 
+  // #region form assessment
+  PQM_QUESTION = 'PQM_QUESTION',
+  PQM_QUESTION_TEMPLATE_TYPE = 'PQM_QUESTION_TEMPLATE_TYPE',
+
+  // #endregion
 
 }
 
@@ -107,6 +118,23 @@ const componentTree: Component[] = [
         key: ComponentKey.PQM_POST,
         title: 'Bài viết',
         component: <PostsPage />,
+      },
+    ],
+  },
+  {
+    key: GroupKey.PQM_FORM_ASSESSMENT,
+    title: 'Quản lí biểu mẫu đánh giá',
+    /* permissionCode: 'PQM_NEWS', */
+    childrenList: [
+      {
+        key: ComponentKey.PQM_QUESTION,
+        title: 'Câu hỏi',
+        component: <QuestionPage />,
+      },
+      {
+        key: ComponentKey.PQM_QUESTION_TEMPLATE_TYPE,
+        title: 'Loại biểu mẫu',
+        component: <QuestionTemplateTypesPage />,
       },
     ],
   },
