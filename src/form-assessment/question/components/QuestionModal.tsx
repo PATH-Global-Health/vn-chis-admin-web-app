@@ -6,6 +6,8 @@ import { Modal, Form, Input, Button, Checkbox, Grid, ButtonContent } from 'seman
 import { useFetchApi } from '@app/hooks';
 import QuestionService from '../question.service';
 import { Question, QuestionCM, Answer } from '../question.model';
+import { toast } from 'react-toastify';
+import { getResponseError } from '@app/utils/helpers';
 
 interface Props {
   open: boolean;
@@ -55,10 +57,21 @@ const CreateModal: React.FC<Props> = ({ open, data, onClose, onRefresh }) => {
         description: item?.description ?? '',
       }
     });
-    const data = { ...d, answers: answers };
-    await fetch(
-      QuestionService.createQuestion(data),
-    );
+    const requestData = { ...d, answers: answers };
+    try {
+      await fetch(
+        data
+          ? QuestionService.updateQuestion({
+            ...d,
+            id: data?.id ?? '',
+          })
+          : QuestionService.createQuestion(requestData),
+      );
+      toast.success(data ? 'Cập nhật thành công' : 'Đã tạo thành công');
+    }
+    catch (error) {
+      toast.warn('Đã xảy ra lỗi');
+    }
     onRefresh();
     onClose();
   };
@@ -106,7 +119,7 @@ const CreateModal: React.FC<Props> = ({ open, data, onClose, onRefresh }) => {
             />
           </Form.Group>
           {
-            inputFields.map((inputField, index) => (
+            !data && inputFields.map((inputField, index) => (
               <Form.Group >
                 <Form.Field
                   control={Input}
@@ -125,7 +138,7 @@ const CreateModal: React.FC<Props> = ({ open, data, onClose, onRefresh }) => {
               </Form.Group>
             ))
           }
-          <Grid.Row >
+          <Grid.Row style={{ display: data ? 'none' : 'block' }}>
             <Button content="Thêm lựa chọn" onClick={handleAddFields} />
           </Grid.Row>
           <Grid.Row style={{ display: 'flex', justifyContent: 'right' }} >
