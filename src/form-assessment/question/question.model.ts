@@ -15,3 +15,9 @@ export type QuestionCM = Omit<Question, 'id'>;
 export type QuestionUM = Omit<Question, 'answers'>;
 
 export type QuestionDM = Question;
+
+export type AnswerCM = Omit<Answer, 'id'>;
+
+export type AnswerUM = Answer;
+
+export type AnswerDM = Answer;

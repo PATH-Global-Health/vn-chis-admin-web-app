@@ -99,6 +99,12 @@ const apiLinks = {
       update: `${postUrl}/api/Question`,
       delete: `${postUrl}/api/Question`,
     },
+    answer: {
+      get: `${postUrl}/api/Answer`,
+      create: `${postUrl}/api/Answer`,
+      update: `${postUrl}/api/Answer`,
+      delete: `${postUrl}/api/Answer`,
+    },
     questionTemplateType: {
       get: `${postUrl}/api/QuestionTemplateType`,
       create: `${postUrl}/api/QuestionTemplateType`,

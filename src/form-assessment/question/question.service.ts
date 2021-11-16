@@ -1,6 +1,6 @@
 
 import { httpClient, apiLinks } from '@app/utils';
-import { Question, QuestionCM, QuestionUM, QuestionDM } from './question.model';
+import { Question, QuestionCM, QuestionUM, QuestionDM, AnswerCM, AnswerUM, AnswerDM } from './question.model';
 
 const getQuestion = async (): Promise<Question[]> => {
   const response = await httpClient.get({
@@ -31,11 +31,35 @@ const deleteQuestion = async (data: QuestionDM): Promise<void> => {
   });
 };
 
+const createAnswer = async (data: any): Promise<void> => {
+  await httpClient.post({
+    url: apiLinks.form.answer.create,
+    data,
+  });
+};
+
+const updateAnswer = async (data: AnswerUM): Promise<void> => {
+  await httpClient.put({
+    url: `${apiLinks.form.answer.update}/${data.id}`,
+    data,
+  });
+};
+
+const deleteAnswer = async (data: AnswerDM): Promise<void> => {
+  await httpClient.delete({
+    url: `${apiLinks.form.answer.delete}/${data.id}`,
+    data,
+  });
+};
+
 const QuestionService = {
   getQuestion,
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  createAnswer,
+  updateAnswer,
+  deleteAnswer,
 };
 
 export default QuestionService;
