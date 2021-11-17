@@ -43,6 +43,12 @@ const QuestionPage: React.FC = () => {
   useRefreshCallback(GroupKey.PQM_NEWS, ComponentKey.PQM_QUESTION_TEMPLATE_TYPE, getData);
   useEffect(getData, [getData]);
 
+  useEffect(() => {
+    if (selectedQuestion?.id) {
+      dispatch(setSelectedQuestion(questionList.find((q) => q.id === selectedQuestion.id)))
+    }
+  }, [questionList]);
+
   return (
     <>
       <Grid>

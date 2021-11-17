@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Header, Segment } from 'semantic-ui-react';
 import { QuestionTemplate } from '@form-assessment/question-template/question-template.model';

@@ -1,4 +1,6 @@
+import { toast } from 'react-toastify';
 import { httpClient, apiLinks } from '@app/utils';
+import { getResponseError } from '@app/utils/helpers';
 
 import {
   QuestionTemplateCM,
@@ -21,20 +23,29 @@ const getQuestionTemplates = async (params: QuestionTemplateFilter): Promise<Que
   return response.data as QuestionTemplateResponse;
 };
 
-const createQuestionTemplate = async (data: QuestionTemplateCM): Promise<string> => {
-  const result = await httpClient.post({
-    url: apiLinks.form.questionTemplate.create,
-    data,
-  });
-  return result.data as string;
+const createQuestionTemplate = async (data: QuestionTemplateCM): Promise<void> => {
+  try {
+    await httpClient.post({
+      url: apiLinks.form.questionTemplate.create,
+      data,
+    });
+  } catch (error) {
+    // eslint-disable-next-line
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
-const updateQuestionTemplate = async (data: QuestionTemplateUM): Promise<string> => {
-  const result = await httpClient.put({
-    url: `${apiLinks.form.questionTemplate.update}/${data.id}`,
-    data,
-  });
-  return result.data as string;
+const updateQuestionTemplate = async (data: QuestionTemplateUM): Promise<void> => {
+  try {
+    await httpClient.put({
+      url: `${apiLinks.form.questionTemplate.update}/${data.id}`,
+      data,
+    });
+    toast.success('Cập nhật thành công');
+  } catch (error) {
+    // eslint-disable-next-line
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const deleteQuestionTemplate = async (data: QuestionTemplateDM): Promise<void> => {

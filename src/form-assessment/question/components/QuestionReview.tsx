@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import moment from 'moment';
 
-import { Dimmer, Loader, Header, Segment } from 'semantic-ui-react';
+import { Dimmer, Loader} from 'semantic-ui-react';
 import {
   AnswerCM,
   AnswerUM,
@@ -71,17 +70,11 @@ interface Props {
 }
 
 const QuestionPreview: React.FC<Props> = ({ title, data, edit = false, loading = false, onRefresh }) => {
-  const { fetch, fetching } = useFetchApi();
-  const confirm = useConfirm();
-  const [description, setDescription] = useState<string>('');
   const [openCreate, setOpenCreate] = useState(false);
   const [updateDetails, setUpdateDetails] = useState<Answer>();
-  useEffect(() => {
-    if (data?.description) {
-      const parse = /data:(.*)/i.exec(data.description);
-      setDescription(parse ? parse[0] : '');
-    }
-  }, [data]);
+
+  const confirm = useConfirm();
+  const { fetch, fetching } = useFetchApi();
 
   return (
     <Wrapper>
@@ -93,7 +86,7 @@ const QuestionPreview: React.FC<Props> = ({ title, data, edit = false, loading =
         toggle
         title={title}
         data={data?.answers ?? []}
-        loading={loading}
+        loading={loading || fetching}
         listActions={[
           {
             title: 'Tạo loại biểu mẫu mới',
@@ -111,6 +104,7 @@ const QuestionPreview: React.FC<Props> = ({ title, data, edit = false, loading =
               confirm('Xác nhận xoá?', async () => {
                 await fetch(QuestionService.deleteAnswer(d));
                 toast.success('Xóa thành công');
+                onRefresh();
               });
             },
           },

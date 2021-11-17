@@ -73,7 +73,7 @@ const QuestionTemplatePage: React.FC = () => {
                     title: 'Tạo biểu mẫu mới',
                     color: 'green',
                     icon: <FiPlus />,
-                    onClick: (): void => {},
+                    onClick: (): void => setOpenCreate(true),
                   },
                 ]}
                 itemActions={[
@@ -92,7 +92,7 @@ const QuestionTemplatePage: React.FC = () => {
                     icon: <FiEdit3 />,
                     color: 'violet',
                     title: 'Sửa',
-                    onClick: (d): void => {},
+                    onClick: (d): void => setUpdateDetails(d),
                   },
                 ]}
                 itemHeaderRender={(d): string => d.title}
