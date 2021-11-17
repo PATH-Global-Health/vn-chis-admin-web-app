@@ -90,8 +90,7 @@ const CreateModal: React.FC<Props> = ({ open, data, onClose, onRefresh }) => {
   return (
     <Modal open={open || Boolean(data)} onClose={onClose}>
       <Modal.Header>
-        {data?.id ? 'Sửa ' : 'Tạo '}
-        Loại biểu mẫu
+        {data?.id ? 'Sửa câu hỏi' : 'Tạo câu hỏi mới'}
       </Modal.Header>
       <Modal.Content>
         <Form loading={fetching}>
