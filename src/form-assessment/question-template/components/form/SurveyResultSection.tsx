@@ -95,7 +95,7 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
           <Form.Field
             required
             control={TextArea}
-            label="Mô tả"
+            label="Đánh giá"
             error={errors?.description?.message ?? false}
             value={watch('description') || ''}
             onChange={(e: any, { value }: any) => {
@@ -147,7 +147,7 @@ const SurveyResultSection: React.FC<Props> = ({ data, onChange }) => {
         data={(surveyResultList || []).filter((s) => !s.isDeleted)}
         listActions={[
           {
-            title: 'Tạo biểu mẫu mới',
+            title: 'Tạo xếp loại mới',
             color: 'green',
             icon: <FiPlus />,
             onClick: (): void => setOpenCreate(true),
