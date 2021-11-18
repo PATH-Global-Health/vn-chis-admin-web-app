@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
-import { Modal, Form, Input, Button, Checkbox, Grid, ButtonContent } from 'semantic-ui-react';
+import { Modal, Form, Input, Button, Checkbox, Grid } from 'semantic-ui-react';
 
 import { useFetchApi } from '@app/hooks';
 import QuestionService from '../question.service';
-import { Question, QuestionCM, Answer } from '../question.model';
+import { Question, QuestionCM } from '../question.model';
 import { toast } from 'react-toastify';
-import { getResponseError } from '@app/utils/helpers';
 
 interface Props {
   open: boolean;
@@ -18,7 +17,6 @@ interface Props {
 
 const CreateModal: React.FC<Props> = ({ open, data, onClose, onRefresh }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const [numberInput, setNumeberInput] = useState<number>(3);
   const [inputFields, setInputFields] = useState<any[]>([
     { id: uuidv4(), score: 0, description: '' }
   ]);
@@ -49,7 +47,6 @@ const CreateModal: React.FC<Props> = ({ open, data, onClose, onRefresh }) => {
   const handleAddFields = () => {
     setInputFields([...inputFields, { id: uuidv4(), score: 0, description: '' }])
   }
-  const handleChange = (e: any) => setInputFields(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
   const onSubmit = async (d: QuestionCM): Promise<void> => {
     const answers = inputFields.map(item => {
       return {

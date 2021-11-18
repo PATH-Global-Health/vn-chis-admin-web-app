@@ -43,15 +43,15 @@ const QuestionTemplatePreview: React.FC<Props> = ({ data }) => {
       <Header>Xem biểu mẫu</Header>
       <Segment className="body">
         {data && data.questions.slice(0, 10).map((question, index) => (
-          <div>
+          <div key={`question_${index}`}>
             <div className="body__question">
               <span className="body__question-header">
                 Câu {index + 1}: 
               </span>
               {question.description}
             </div>
-            {question.answers.map((answer) => (
-              <div className="body__answer"> - {answer.description} ({answer.score} điểm)</div>
+            {question.answers.map((answer, jndex) => (
+              <div key={`answer_${jndex}`} className="body__answer"> - {answer.description} ({answer.score} điểm)</div>
             ))}
           </div>
         ))}

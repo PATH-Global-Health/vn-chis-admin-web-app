@@ -1,6 +1,6 @@
 
 import { httpClient, apiLinks } from '@app/utils';
-import { Question, QuestionCM, QuestionUM, QuestionDM, AnswerCM, AnswerUM, AnswerDM } from './question.model';
+import { Question, QuestionCM, QuestionUM, QuestionDM, AnswerUM, AnswerDM } from './question.model';
 
 const getQuestion = async (): Promise<Question[]> => {
   const response = await httpClient.get({

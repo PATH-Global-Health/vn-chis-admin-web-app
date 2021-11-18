@@ -18,7 +18,7 @@ export interface QuestionTemplateCM {
   questionTemplateTypeId: string;
 }
 
-export type QuestionTemplateUM = Omit<QuestionTemplate, 'questions' | 'surveyResults'>;
+export type QuestionTemplateUM = Omit<QuestionTemplate, 'surveyResults'>;
 
 export type QuestionTemplateDM = QuestionTemplate;
 

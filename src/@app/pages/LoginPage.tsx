@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Image } from 'semantic-ui-react';
+import { Card, Image, Message } from 'semantic-ui-react';
 import { FiInfo } from 'react-icons/fi';
 import styled from 'styled-components';
 
@@ -38,16 +38,16 @@ const LoginPage: React.FC = () => {
   const history = useHistory();
   const { login } = useAuth();
   const { loginLoading } = useSelector((state) => state.auth);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<any>(undefined);
 
   const handleLogin = async (data: LoginModel): Promise<void> => {
     try {
-      setFailed(false);
+      setFailed(undefined);
       const { username, password, remember } = data;
       await login(username, password, remember);
       setTimeout(() => history.push('/auth'), 0);
     } catch (error) {
-      setFailed(true);
+      setFailed(error);
     }
   };
 
@@ -59,6 +59,16 @@ const LoginPage: React.FC = () => {
     <StyledCard>
       <StyledImage src={logo} size="large" />
       <Card.Content>
+        {failed?.message && (
+          <Message
+            error
+            content={
+              failed.message.includes('400')
+              ? 'Tài khoản hoặc mặt khẩu không đúng'
+              : failed.message
+            }
+          />
+        )}
         <SimpleForm
           formFields={[
             {
@@ -79,11 +89,6 @@ const LoginPage: React.FC = () => {
           loading={loginLoading}
           confirmButtonLabel="Đăng nhập"
           onSubmit={handleLogin}
-          errors={
-            failed
-              ? { username: '', password: 'Sai mật khẩu hoặc tên đăng nhập' }
-              : undefined
-          }
         />
       </Card.Content>
       <Card.Content extra>

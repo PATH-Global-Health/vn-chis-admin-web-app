@@ -11,13 +11,13 @@ import QuestionSection from '@form-assessment/question-template/components/form/
 import Action from '@news/post/components/post-form/Action';
 
 import { useFetchApi, useConfirm } from '@app/hooks';
-import { SurveyResult } from '@form-assessment/survey-result/survey-result.model';
+import { SurveyResult, SurveyResultCM } from '@form-assessment/survey-result/survey-result.model';
 import { Question as QuestionModel } from '@form-assessment/question/question.model';
 import { QuestionTemplate, QuestionTemplateCM } from '@form-assessment/question-template/question-template.model';
 import questionTemplateService from '@form-assessment/question-template/question-template.service';
 
 const Wrapper = styled.div`
-  positive: relative;
+  position: relative;
 `;
 const ToolbarWrapper = styled.div`
   display: flex;
@@ -32,11 +32,18 @@ const ActionsWrapper = styled.div`
 `;
 
 interface ExtendQuestionModel extends QuestionModel {
+  isNew: boolean;
   isDeleted: boolean;
 }
 
-interface ExtendQuesttionTemplateCM extends Omit<QuestionTemplateCM, 'questions'> {
+interface ExtendSurveyResult extends SurveyResult {
+  isNew: boolean;
+  isDeleted: boolean;
+}
+
+interface ExtendQuesttionTemplateCM extends Omit<QuestionTemplateCM, 'questions' | 'surveyResults'> {
   questions: ExtendQuestionModel[];
+  surveyResults: ExtendSurveyResult[];
 }
 
 interface Props {
@@ -68,7 +75,53 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
     if (!error) {
       const payload = getValues();
       if (data?.id) {
+        await fetch(questionTemplateService.updateQuestionTemplate({
+          id: data.id,
+          title: payload.title,
+          description: payload.description,
+          questions: [],
+          questionTemplateTypeId: payload.questionTemplateTypeId,
+        }));
 
+        const questionDeletedList =
+          payload.questions
+            .filter((q) => !q.isNew && q.isDeleted)
+            .map((q): string => q.id);
+        await fetch(questionTemplateService.deleteQuestion({
+          id: data.id,
+          questions: questionDeletedList,
+        }));
+
+        const questionNewestList =
+          payload.questions
+            .filter((q) => q.isNew && !q.isDeleted)
+            .map((q) => q.id);
+        await fetch(questionTemplateService.addQuestion({
+          id: data.id,
+          questions: questionNewestList,
+        }));
+
+        const surveyResultDeletedList =
+          payload.surveyResults
+            .filter((q) => !q.isNew && q.isDeleted)
+            .map((q): string => q.id);
+        await fetch(questionTemplateService.deleteSurveyResult({
+          id: data.id,
+          surveyResults: surveyResultDeletedList,
+        }));
+
+        const surveyResultNewestList =
+          payload.surveyResults
+            .filter((s) => s.isNew && !s.isDeleted)
+            .map((s): SurveyResultCM => ({
+              fromScore: parseFloat(s.fromScore.toString()),
+              toScore: parseFloat(s.toScore.toString()),
+              description: s.description,
+            }));
+        await fetch(questionTemplateService.addSurveyResult({
+          id: data.id,
+          surveyResults: surveyResultNewestList,
+        }));
       } else {
         await fetch(questionTemplateService.createQuestionTemplate({
           ...payload,
@@ -83,12 +136,6 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
 
       onRefresh();
       onClose();
-      // const payload = getValues();
-      // await fetch(
-      //   data?.id
-      //     ? questionTemplateService.updateQuestionTemplate({ ...payload, id: data?.id ?? '' })
-      //     : questionTemplateService.createQuestionTemplate(payload),
-      // );
     }
   };
 
@@ -215,7 +262,7 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
                 <Form.Field
                   data={watch('surveyResults') || []}
                   control={SurveyResultSection}
-                  onChange={(d: SurveyResult[]) => {
+                  onChange={(d: ExtendSurveyResult[]) => {
                     setValue('surveyResults', d);
                   }}
                 />

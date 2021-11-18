@@ -8,10 +8,14 @@ import DataList from '@app/components/data-list';
 
 import { SurveyResult, SurveyResultCM } from '@form-assessment/survey-result/survey-result.model';
 
+interface ExtendSurveyResult extends SurveyResult {
+  isNew: boolean;
+  isDeleted: boolean;
+}
 
 interface Props {
   data: SurveyResult[];
-  onChange: (d: SurveyResultCM[]) => void;
+  onChange: (d: ExtendSurveyResult[]) => void;
 }
 
 interface ModalProps {
@@ -26,12 +30,11 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
     formState: { errors },
     register,
     reset,
-    
     watch,
     trigger,
     setValue,
     handleSubmit,
-  } = useForm<SurveyResultCM>({
+  } = useForm<ExtendSurveyResult>({
     defaultValues: {},
   });
 
@@ -110,11 +113,23 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
 
 const SurveyResultSection: React.FC<Props> = ({ data, onChange }) => {
   const [openCreate, setOpenCreate] = useState(false);
-  const [surveyResultList, setSurveyResultList] = useState<SurveyResult[]>([]);
+  const [surveyResultList, setSurveyResultList] = useState<ExtendSurveyResult[]>([]);
 
   useEffect(() => {
     if (data && data.length && data !== surveyResultList) {
-      setSurveyResultList((state) => ([...state, ...data]));
+      const _data = data.map((s) => ({
+        ...s,
+        isNew: false,
+        isDeleted: false,
+      }));
+
+      if (_data !== surveyResultList) {
+        setSurveyResultList((state) => _data.map((s) => ({
+          ...s,
+          isNew: false,
+          isDeleted: false,
+        })));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -128,8 +143,8 @@ const SurveyResultSection: React.FC<Props> = ({ data, onChange }) => {
   return (
     <>
       <DataList
-        title="Kết quả"
-        data={surveyResultList}
+        title="Xếp loại kết quả"
+        data={(surveyResultList || []).filter((s) => !s.isDeleted)}
         listActions={[
           {
             title: 'Tạo biểu mẫu mới',
@@ -144,7 +159,14 @@ const SurveyResultSection: React.FC<Props> = ({ data, onChange }) => {
             color: 'red',
             title: 'Xoá',
             onClick: (d): void => {
-              setSurveyResultList((state) => state.filter((s) => s.id !== d.id))
+              setSurveyResultList((state) =>
+                state.reduce((r: ExtendSurveyResult[], s: ExtendSurveyResult): ExtendSurveyResult[] => {
+                  if (s.id === d.id) {
+                    return [...r, { ...s, isDeleted: true }];
+                  }
+                  return [...r, s];
+                }, [])
+              );
             },
           },
         ]}
@@ -156,7 +178,9 @@ const SurveyResultSection: React.FC<Props> = ({ data, onChange }) => {
       <SurveyResultModal
         open={openCreate}
         onClose={() => setOpenCreate(false)}
-        onChange={(d) => setSurveyResultList((state) => ([...state, d]))}
+        onChange={(d) => setSurveyResultList((state) =>
+          ([...state, { ...d, id: uuidv4(), isNew: true, isDeleted: false }])
+        )}
       />
     </>
   );

@@ -10,7 +10,6 @@ import { UserInfo } from '@app/models/user-info';
 import { Permission } from '@app/models/permission';
 
 import authService from '@app/services/auth';
-import userService from '@admin/user-management/user/user.service';
 
 interface State {
   token: Token | null;
@@ -57,11 +56,11 @@ const getUserInfo = createAsyncThunk('auth/getUserInfo', async () => {
   return result;
 });
 
-const getPermissionsOfUser = createAsyncThunk<Permission[], string>(
-  'auth/getPermissionOfUser',
-  async (userId: string) => {
-    const result = await userService.getPermissionsUIOfUser(userId);
-    return result as Permission[];
+const getPermission = createAsyncThunk<Permission[], string>(
+  'auth/getPermission',
+  async (token: string) => {
+    const result = await authService.getPermission(token);
+    return result;
   },
 );
 
@@ -111,23 +110,23 @@ const slice = createSlice({
     }));
 
     // get permission of user
-    builder.addCase(getPermissionsOfUser.pending, (state) => ({
+    builder.addCase(getPermission.pending, (state) => ({
       ...state,
-      getPermissionsOfUserLoading: true,
+      getPermissionLoading: true,
     }));
-    builder.addCase(getPermissionsOfUser.fulfilled, (state, { payload }) => ({
+    builder.addCase(getPermission.fulfilled, (state, { payload }) => ({
       ...state,
       permissionList: payload,
-      getPermissionsOfUserLoading: false,
+      getPermissionLoading: false,
     }));
-    builder.addCase(getPermissionsOfUser.rejected, (state) => ({
+    builder.addCase(getPermission.rejected, (state) => ({
       ...state,
-      getPermissionsOfUserLoading: false,
+      getPermissionLoading: false,
     }));
   },
 });
 
-export { login, getUserInfo, getPermissionsOfUser };
+export { login, getUserInfo, getPermission };
 export const { setToken, logout } = slice.actions;
 
 export default slice.reducer;

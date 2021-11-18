@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Modal, Form, Input, Button } from 'semantic-ui-react';
 
 import { useFetchApi, useSelector } from '@app/hooks';
-import { Answer, AnswerCM } from '../question.model';
+import { AnswerCM } from '../question.model';
 import QuestionService from '../question.service';
 import { toast } from 'react-toastify';
 

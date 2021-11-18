@@ -56,25 +56,25 @@ const deleteQuestionTemplate = async (data: QuestionTemplateDM): Promise<void> =
 };
 
 const addQuestion = async (data: AddQuestionToQuestionTemplate): Promise<void> => {
-  await httpClient.post({
+  await httpClient.put({
     url: apiLinks.form.questionTemplate.addQuestion,
     data,
   });
 };
 const addSurveyResult = async (data: AddSurveyResultToQuestionTemplate): Promise<void> => {
-  await httpClient.post({
+  await httpClient.put({
     url: apiLinks.form.questionTemplate.addSurveyResult,
     data,
   });
 };
 const deleteQuestion = async (data: DeleteQuestionOfQuestionTemplate): Promise<void> => {
-  await httpClient.post({
+  await httpClient.delete({
     url: apiLinks.form.questionTemplate.deleteQuestion,
     data,
   });
 };
 const deleteSurveyResult = async (data: DeleteSurveyResultOfQuestionTemplate): Promise<void> => {
-  await httpClient.post({
+  await httpClient.delete({
     url: apiLinks.form.questionTemplate.deleteSurveyResult,
     data,
   });

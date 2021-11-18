@@ -35,13 +35,13 @@ const setPostCR: CR<PostPreview | undefined> = (state, action) => ({
   selectedPost: action.payload,
 });
 
-const getPosts = createAsyncThunk('pqm/news/post/getPosts', async () => {
+const getPosts = createAsyncThunk('news/post/getPosts', async () => {
   const result = await postService.getPosts();
   return result;
 });
 
 const getPartsOfSelectedPost = createAsyncThunk(
-  'pqm/news/post/getPartsOfSelectedPost',
+  'news/post/getPartsOfSelectedPost',
   async (postId: string) => {
     const result = await partService.getParts(postId);
     return result;
@@ -49,7 +49,7 @@ const getPartsOfSelectedPost = createAsyncThunk(
 );
 
 const slice = createSlice({
-  name: 'pqm/news/post',
+  name: 'news/post',
   initialState,
   reducers: {
     setPost: setPostCR,

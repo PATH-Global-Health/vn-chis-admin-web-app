@@ -14,7 +14,7 @@ const initialState: State = {
 };
 
 const getCategories = createAsyncThunk(
-  'pqm/post/category/getCategories',
+  'news/category/getCategories',
   async () => {
     const result = await categoryService.getCategories();
     return result;
@@ -22,7 +22,7 @@ const getCategories = createAsyncThunk(
 );
 
 const slice = createSlice({
-  name: 'pqm/post/category',
+  name: 'news/category',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

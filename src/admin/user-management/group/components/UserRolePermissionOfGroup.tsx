@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import naturalCompare from 'natural-compare';
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 import DataList from '@app/components/data-list';
@@ -58,30 +59,63 @@ const UserRolePermissionOfGroup: React.FC<Props> = (props) => {
     getPermissionsResourceOfGroupLoading,
   } = useSelector((state) => state.admin.userManagement.group);
 
-  const getData = useCallback(() => {
+  const title = useMemo(() => {
     if (selectedGroup) {
       if (isUser) {
-        dispatch(getUsersOfGroup(selectedGroup.id));
+        return `Người dùng của ${selectedGroup.name}`;
       }
       if (isRole) {
-        dispatch(getRoles());
-        dispatch(getRolesOfGroup(selectedGroup.id));
+        return `Vai trò của ${selectedGroup.name}`;
       }
       if (isPermissionUI) {
-        dispatch(getPermissionsUIOfGroup(selectedGroup.id));
+        return `Quyền UI của ${selectedGroup.name}`;
       }
       if (isPermissionResource) {
-        dispatch(getPermissionsResourceOfGroup(selectedGroup.id));
+        return `Quyền tài nguyên của ${selectedGroup.name}`;
       }
     }
+    return '';
+  }, [selectedGroup, isUser, isRole, isPermissionUI, isPermissionResource]);
+
+  const data = useMemo(() => {
+    if (isUser) {
+      return userOfGroupList;
+    }
+    if (isRole) {
+      return roleOfGroupList;
+    }
+    if (isPermissionUI) {
+      return permissionUIOfGroupList.reduce<Permission[]>(
+        (array, permission) => {
+          const permissionCode = permissionUIList.find((p) =>
+            permission?.code && permission.code === p.code,
+          );
+          if (array.find((p) =>
+              p?.code && permissionCode?.code && p.code === permissionCode.code,
+            )
+          ) {
+            return array;
+          }
+          return [...array, permission];
+        },
+        [],
+      );
+    }
+    if (isPermissionResource) {
+      return permissionResourceOfGroupList;
+    }
+    return [];
   }, [
-    isUser,
-    isRole,
+    userOfGroupList,
+    roleOfGroupList,
+    permissionUIOfGroupList,
+    permissionResourceOfGroupList,
     isPermissionUI,
     isPermissionResource,
-    selectedGroup,
-    dispatch,
+    isRole,
+    isUser,
   ]);
+
   const handleRemove = async (row: UserOrRoleType) => {
     if (selectedGroup) {
       if (isUser) {
@@ -92,15 +126,15 @@ const UserRolePermissionOfGroup: React.FC<Props> = (props) => {
         // remove role from group
         await fetch(groupService.removeRoleToGroup(row.id, selectedGroup.id));
       }
-      if (isPermissionUI) {
+      if (row?.code && isPermissionUI) {
         // remove permission ui from group
         const permission = permissionUIList.find((p) =>
-          (row?.code ?? '').includes(p.code),
+          row.code === p.code,
         );
         if (permission) {
           if (permission.types.length > 0) {
             const deletePromises = (permissionUIOfGroupList || [])
-              .filter((p) => (p?.code ?? '').includes(permission.code))
+              .filter((p) => p?.code && p.code === permission.code)
               .map((p) => {
                 return fetch(
                   permissionService.deletePermission(
@@ -116,7 +150,7 @@ const UserRolePermissionOfGroup: React.FC<Props> = (props) => {
           } else {
             // eslint-disable-next-line
             const _permission = (permissionUIOfGroupList || []).find((p) =>
-              (p?.code ?? '').includes(permission.code),
+              p?.code && p.code === permission.code,
             );
             if (_permission?.id) {
               await fetch(
@@ -148,63 +182,37 @@ const UserRolePermissionOfGroup: React.FC<Props> = (props) => {
     }
   };
 
-  const title = useMemo(() => {
+  const sortByAlphabet = (d: UserOrRoleType[]): UserOrRoleType[] => {
+    const result = d.slice(0);
+    return result.sort((a: UserOrRoleType, b: UserOrRoleType) =>
+      naturalCompare(a.name, b.name),
+    );
+  };
+
+  const getData = useCallback(() => {
     if (selectedGroup) {
       if (isUser) {
-        return `Người dùng của ${selectedGroup.name}`;
+        dispatch(getUsersOfGroup(selectedGroup.id));
       }
       if (isRole) {
-        return `Vai trò của ${selectedGroup.name}`;
+        dispatch(getRoles());
+        dispatch(getRolesOfGroup(selectedGroup.id));
       }
       if (isPermissionUI) {
-        return `Quyền UI của ${selectedGroup.name}`;
+        dispatch(getPermissionsUIOfGroup(selectedGroup.id));
       }
       if (isPermissionResource) {
-        return `Quyền tài nguyên của ${selectedGroup.name}`;
+        dispatch(getPermissionsResourceOfGroup(selectedGroup.id));
       }
     }
-    return '';
-  }, [selectedGroup, isUser, isRole, isPermissionUI, isPermissionResource]);
-  const data = useMemo(() => {
-    if (isUser) {
-      return userOfGroupList;
-    }
-    if (isRole) {
-      return roleOfGroupList;
-    }
-    if (isPermissionUI) {
-      return permissionUIOfGroupList.reduce<Permission[]>(
-        (array, permission) => {
-          const permissionCode = permissionUIList.find((p) =>
-            (permission?.code ?? '').includes(p.code),
-          );
-          if (
-            array.find((p) =>
-              (p?.code ?? '').includes(permissionCode?.code ?? ''),
-            )
-          ) {
-            return array;
-          }
-          return [...array, permission];
-        },
-        [],
-      );
-    }
-    if (isPermissionResource) {
-      return permissionResourceOfGroupList;
-    }
-    return [];
   }, [
-    userOfGroupList,
-    roleOfGroupList,
-    permissionUIOfGroupList,
-    permissionResourceOfGroupList,
+    isUser,
+    isRole,
     isPermissionUI,
     isPermissionResource,
-    isRole,
-    isUser,
+    selectedGroup,
+    dispatch,
   ]);
-
   useEffect(getData, [getData]);
 
   return (
@@ -212,7 +220,7 @@ const UserRolePermissionOfGroup: React.FC<Props> = (props) => {
       <DataList
         search
         title={title}
-        data={data as UserOrRoleType[]}
+        data={sortByAlphabet(data as UserOrRoleType[])}
         loading={
           fetching ||
           getUsersOfGroupLoading ||

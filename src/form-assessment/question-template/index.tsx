@@ -41,7 +41,7 @@ const QuestionTemplatePage: React.FC = () => {
     }));
   }, [dispatch, pageIndex, pageSize]);
 
-  useRefreshCallback(GroupKey.PQM_NEWS, ComponentKey.PQM_QUESTION_TEMPLATE_TYPE, getData);
+  useRefreshCallback(GroupKey.ADMIN_NEW_MANAGEMENT, ComponentKey.QUESTION_TEMPLATE_TYPE, getData);
   useEffect(getData, [getData]);
 
   return (
