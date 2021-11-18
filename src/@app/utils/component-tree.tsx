@@ -22,7 +22,7 @@ export enum GroupKey {
   // #endregion
 
   // #region csyt
-  CSYT_CATALOG = 'CSYT_CATALOG',
+  ADMIN_SERVICE_MANAGEMENT = 'ADMIN_SERVICE_MANAGEMENT',
   // #endregion
 
   // #region form assessment
@@ -67,7 +67,7 @@ const componentTree: Component[] = [
   {
     key: GroupKey.ADMIN_USER_MANAGEMENT,
     title: 'Quản lý người dùng',
-    permissionCode: 'ADMIN_USER_MANAGEMENT',
+    permissionCode: GroupKey.ADMIN_USER_MANAGEMENT,
     childrenList: [
       {
         key: ComponentKey.ADMIN_USER,
@@ -87,23 +87,23 @@ const componentTree: Component[] = [
     ],
   },
   {
-    key: GroupKey.CSYT_CATALOG,
+    key: GroupKey.ADMIN_SERVICE_MANAGEMENT,
     title: 'Quản lý dịch vụ',
-    permissionCode: 'ADMIN_SERVICE_MANAGEMENT',
+    permissionCode: GroupKey.ADMIN_SERVICE_MANAGEMENT,
     childrenList: [
 
       {
         key: ComponentKey.CSYT_SERVICE,
         title: 'Dịch vụ',
         component: <ServicesPage />,
-        /* permissionCode: 'CSYT_CATALOG_SERVICE', */
+        /* permissionCode: 'ADMIN_SERVICE_MANAGEMENT_SERVICE', */
       },
     ],
   },
   {
     key: GroupKey.ADMIN_NEW_MANAGEMENT,
     title: 'Quản lí bài viết',
-    permissionCode: 'ADMIN_NEW_MANAGEMENT',
+    permissionCode: GroupKey.ADMIN_NEW_MANAGEMENT,
     childrenList: [
       {
         key: ComponentKey.NEWS_CATEGORY,
@@ -125,7 +125,7 @@ const componentTree: Component[] = [
   {
     key: GroupKey.ADMIN_QUESTION_MANAGEMENT,
     title: 'Quản lí biểu mẫu đánh giá',
-    permissionCode: 'ADMIN_QUESTION_MANAGEMENT',
+    permissionCode: GroupKey.ADMIN_QUESTION_MANAGEMENT,
     childrenList: [
       {
         key: ComponentKey.QUESTION,

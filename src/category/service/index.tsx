@@ -29,7 +29,7 @@ const ServicesPage: React.FC = () => {
   const getData = useCallback(() => {
     dispatch(getServices());
   }, [dispatch]);
-  useRefreshCallback(GroupKey.CSYT_CATALOG, ComponentKey.CSYT_SERVICE, getData);
+  useRefreshCallback(GroupKey.ADMIN_SERVICE_MANAGEMENT, ComponentKey.CSYT_SERVICE, getData);
   useEffect(getData, [getData]);
 
   const [openCreate, setOpenCreate] = useState(false);

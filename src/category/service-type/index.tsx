@@ -56,7 +56,7 @@ const ServiceTypesPage: React.FC = () => {
     dispatch(getServiceTypes());
   }, [dispatch]);
   useRefreshCallback(
-    GroupKey.CSYT_CATALOG,
+    GroupKey.ADMIN_SERVICE_MANAGEMENT,
     ComponentKey.CSYT_SERVICE_TYPE,
     getData,
   );

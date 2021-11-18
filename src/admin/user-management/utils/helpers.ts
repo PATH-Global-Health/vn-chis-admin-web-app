@@ -55,7 +55,7 @@ const permissionUIList = [
   },
   {
     name: 'Facility - Truy cập',
-    code: 'FACILITY',
+    code: 'CHIS_FACILITY',
     types: ['ALL'],
   }, 
   {

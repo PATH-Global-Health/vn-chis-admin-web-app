@@ -22,6 +22,7 @@ import {
   selectGroup,
 } from '@admin/user-management/group/group.slice';
 import groupService from '@admin/user-management/group/group.service';
+import { toast } from 'react-toastify';
 
 const StyledPane = styled(Tab.Pane)`
   padding-top: 0 !important;
@@ -112,8 +113,10 @@ const GroupPage: React.FC = () => {
               color: 'red',
               icon: <FiTrash2 />,
               onClick: (row): void => {
-                confirm('Xác nhận xóa?', () => {
-                  fetch(groupService.deleteGroup(row.id));
+                confirm('Xác nhận xóa?', async () => {
+                  await fetch(groupService.deleteGroup(row.id));
+                  toast.success('Xoá thành công');
+                  getData();
                 });
               },
             },
