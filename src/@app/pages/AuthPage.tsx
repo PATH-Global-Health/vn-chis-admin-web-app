@@ -5,7 +5,6 @@ import { useAuth } from '@app/hooks';
 const AuthPage: React.FC = () => {
   const history = useHistory();
   const { isAuthenticated, logout } = useAuth();
-
   const isAuth = useMemo(() => isAuthenticated(), [isAuthenticated]);
 
   useEffect(() => {

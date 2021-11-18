@@ -64,6 +64,7 @@ const apiLinks = {
   authentication: {
     token: `${authUrl}/Users/Login`,
     userInfo: `${authUrl}/Users`,
+    getPermission: `${authUrl}/Users/Permissions/Ui`,
   },
   news: {
     tag: {

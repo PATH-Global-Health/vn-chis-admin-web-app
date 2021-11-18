@@ -40,14 +40,15 @@ const QuestionPage: React.FC = () => {
     dispatch(getQuestion());
   }, [dispatch]);
 
-  useRefreshCallback(GroupKey.PQM_NEWS, ComponentKey.PQM_QUESTION_TEMPLATE_TYPE, getData);
+  useRefreshCallback(GroupKey.ADMIN_NEW_MANAGEMENT, ComponentKey.QUESTION_TEMPLATE_TYPE, getData);
   useEffect(getData, [getData]);
 
   useEffect(() => {
     if (selectedQuestion?.id) {
       dispatch(setSelectedQuestion(questionList.find((q) => q.id === selectedQuestion.id)))
     }
-  }, [questionList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, selectedQuestion]);
 
   return (
     <>

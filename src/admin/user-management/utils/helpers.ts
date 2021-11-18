@@ -19,29 +19,69 @@ const methodList = [
 
 const permissionUIList = [
   {
+    name: 'Employee - Truy cập',
+    code: 'CHIS_EMPLOYEEE',
+    types: ['ALL'],
+  },
+  {
+    name: 'Customer - Truy cập',
+    code: 'CHIS_CUSTOMER',
+    types: ['ALL'],
+  },
+  {
+    name: 'Admin - Truy cập',
+    code: 'ADMIN',
+    types: ['ALL'],
+  },
+  {
+    name: 'Admin - Tài khoản',
+    code: 'ADMIN_USER_MANAGEMENT', 
+    types: ['ALL'],
+  },
+  {
+    name: 'Admin - Dịch vụ',
+    code: 'ADMIN_SERVICE_MANAGEMENT',
+    types: ['ALL'],
+  },
+  {
+    name: 'Admin - Bài viết',
+    code: 'ADMIN_NEW_MANAGEMENT',
+    types: ['ALL'],
+  },
+  {
+    name: 'Admin - Biểu mẫu đánh giá',
+    code: 'ADMIN_QUESTION_MANAGEMENT',
+    types: ['ALL'],
+  },
+  {
+    name: 'Facility - Truy cập',
+    code: 'FACILITY',
+    types: ['ALL'],
+  }, 
+  {
     name: 'Facility - Khách hàng',
     code: 'CSYT_CUSTOMER',
-    types: [],
+    types: ['ALL'],
   },
   {
     name: 'Facility - Danh mục',
     code: 'CSYT_CATALOG',
-    types: [],
+    types: ['ALL'],
   },
   {
     name: 'Facility - Lịch làm việc',
     code: 'CSYT_WORKING_SCHEDULE',
-    types: [],
+    types: ['ALL'],
   },
   {
     name: 'Facility - Lịch hẹn (Tư vấn/Xét nghiệm)',
     code: 'CSYT_EXAMINATION',
-    types: [],
+    types: ['ALL'],
   },
   {
     name: 'Facility - Thống kê',
     code: 'CSYT_EXAMINATION_STATISTIC',
-    types: [],
+    types: ['ALL'],
   },
 ];
 

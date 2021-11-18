@@ -21,7 +21,7 @@ const StyledSelect = styled(Select)`
 
 interface FormCM {
   code: string;
-  types: string[];
+  types: any;
 }
 
 interface Props {
@@ -67,7 +67,7 @@ const AddPermissionToGroupModal: React.FC<Props> = (props) => {
       const permission = permissionList.find((p) => code === p.code);
       if (permission) {
         if (types) {
-          const permissions = types.map((type) => ({
+          const permissions = types.map((type: any) => ({
             name: permission.name,
             code: `${permission.code}${type !== 'ALL' ? `_${type}` : ''}`,
             permissionType: PermissionType.ALLOW,
@@ -104,8 +104,8 @@ const AddPermissionToGroupModal: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    register('code', { required: 'Bắt buộc phải chọn quyền' });
-    register('types');
+    register('code', { required: 'Bắt buộc phải chọn chức năng' });
+    register('types', { required: 'Bắt buộc phải chọn quyền' });
   }, [register]);
 
   return (
@@ -119,7 +119,7 @@ const AddPermissionToGroupModal: React.FC<Props> = (props) => {
               fluid
               search
               deburr
-              error={errors?.code?.message ?? false}
+              error={!!errors.code?.message && errors.code.message}
               label="Chức năng"
               control={Select}
               options={(permissionList || []).map((p) => ({
@@ -133,12 +133,14 @@ const AddPermissionToGroupModal: React.FC<Props> = (props) => {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
+              required
               fluid
               search
               deburr
               clearable
               multiple
-              label="Loại quyền"
+              error={!!errors.types?.message && errors.types.message}
+              label="Quyền"
               control={StyledSelect}
               options={permissionUITypeList.filter((p) =>
                 permissionTypeList.includes(p.value),

@@ -14,7 +14,7 @@ const initialState: State = {
 };
 
 const getParts = createAsyncThunk(
-  'pqm/post/part/getParts',
+  'news/post/part/getParts',
   async (postId: string) => {
     const result = await partService.getParts(postId);
     return result;
@@ -22,7 +22,7 @@ const getParts = createAsyncThunk(
 );
 
 const slice = createSlice({
-  name: 'pqm/post/part',
+  name: 'news/post/part',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

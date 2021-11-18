@@ -52,7 +52,7 @@ const PostsPage: React.FC = () => {
     setUpdateDetails({ ...d, parts });
   };
 
-  useRefreshCallback(GroupKey.PQM_NEWS, ComponentKey.PQM_CATEGORY, getData);
+  useRefreshCallback(GroupKey.ADMIN_NEW_MANAGEMENT, ComponentKey.NEWS_CATEGORY, getData);
   useEffect(getData, [getData]);
 
   return (

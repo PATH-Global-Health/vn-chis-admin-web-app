@@ -18,7 +18,7 @@ export enum GroupKey {
   // #endregion
 
   // #region news
-  PQM_NEWS = 'PQM_NEWS',
+  ADMIN_NEW_MANAGEMENT = 'ADMIN_NEW_MANAGEMENT',
   // #endregion
 
   // #region csyt
@@ -26,7 +26,7 @@ export enum GroupKey {
   // #endregion
 
   // #region form assessment
-  PQM_FORM_ASSESSMENT = 'PQM_FORM_ASSESSMENT',
+  ADMIN_QUESTION_MANAGEMENT = 'ADMIN_QUESTION_MANAGEMENT',
   // #endregion
 }
 
@@ -38,9 +38,9 @@ export enum ComponentKey {
   // #endregion
 
   // #region news
-  PQM_CATEGORY = 'PQM_CATEGORY',
-  PQM_TAG = 'PQM_TAG',
-  PQM_POST = 'PQM_POST',
+  NEWS_CATEGORY = 'NEWS_CATEGORY',
+  NEWS_TAG = 'NEWS_TAG',
+  NEWS_POST = 'NEWS_POST',
   // #endregion
 
   // #region csyt
@@ -48,9 +48,9 @@ export enum ComponentKey {
   CSYT_SERVICE_TYPE = 'CSYT_SERVICE_TYPE',
 
   // #region form assessment
-  PQM_QUESTION = 'PQM_QUESTION',
-  PQM_QUESTION_TEMPLATE = 'PQM_QUESTION_TEMPLATE',
-  PQM_QUESTION_TEMPLATE_TYPE = 'PQM_QUESTION_TEMPLATE_TYPE',
+  QUESTION = 'QUESTION',
+  QUESTION_TEMPLATE = 'QUESTION_TEMPLATE',
+  QUESTION_TEMPLATE_TYPE = 'QUESTION_TEMPLATE_TYPE',
   // #endregion
 }
 
@@ -67,6 +67,7 @@ const componentTree: Component[] = [
   {
     key: GroupKey.ADMIN_USER_MANAGEMENT,
     title: 'Quản lý người dùng',
+    permissionCode: 'ADMIN_USER_MANAGEMENT',
     childrenList: [
       {
         key: ComponentKey.ADMIN_USER,
@@ -88,7 +89,7 @@ const componentTree: Component[] = [
   {
     key: GroupKey.CSYT_CATALOG,
     title: 'Quản lý dịch vụ',
-    //permissionCode: 'ADMIN_SERVICE_MANAGEMENT',
+    permissionCode: 'ADMIN_SERVICE_MANAGEMENT',
     childrenList: [
 
       {
@@ -100,44 +101,44 @@ const componentTree: Component[] = [
     ],
   },
   {
-    key: GroupKey.PQM_NEWS,
+    key: GroupKey.ADMIN_NEW_MANAGEMENT,
     title: 'Quản lí bài viết',
-    /* permissionCode: 'PQM_NEWS', */
+    permissionCode: 'ADMIN_NEW_MANAGEMENT',
     childrenList: [
       {
-        key: ComponentKey.PQM_CATEGORY,
+        key: ComponentKey.NEWS_CATEGORY,
         title: 'Thể loại',
         component: <CategoriesPage />,
       },
       {
-        key: ComponentKey.PQM_TAG,
+        key: ComponentKey.NEWS_TAG,
         title: 'Nhãn',
         component: <TagsPage />,
       },
       {
-        key: ComponentKey.PQM_POST,
+        key: ComponentKey.NEWS_POST,
         title: 'Bài viết',
         component: <PostsPage />,
       },
     ],
   },
   {
-    key: GroupKey.PQM_FORM_ASSESSMENT,
+    key: GroupKey.ADMIN_QUESTION_MANAGEMENT,
     title: 'Quản lí biểu mẫu đánh giá',
-    /* permissionCode: 'PQM_NEWS', */
+    permissionCode: 'ADMIN_QUESTION_MANAGEMENT',
     childrenList: [
       {
-        key: ComponentKey.PQM_QUESTION,
+        key: ComponentKey.QUESTION,
         title: 'Câu hỏi',
         component: <QuestionPage />,
       },
       {
-        key: ComponentKey.PQM_QUESTION_TEMPLATE_TYPE,
+        key: ComponentKey.QUESTION_TEMPLATE_TYPE,
         title: 'Loại biểu mẫu',
         component: <QuestionTemplateTypesPage />,
       },
       {
-        key: ComponentKey.PQM_QUESTION_TEMPLATE,
+        key: ComponentKey.QUESTION_TEMPLATE,
         title: 'Biểu mẫu',
         component: <QuestionTemplatesPage />,
       },

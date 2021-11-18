@@ -13,13 +13,13 @@ const initialState: State = {
   getTagsLoading: false,
 };
 
-const getTags = createAsyncThunk('pqm/post/tag/getTags', async () => {
+const getTags = createAsyncThunk('news/tag/getTags', async () => {
   const result = await tagService.getTags();
   return result;
 });
 
 const slice = createSlice({
-  name: 'pqm/category/tag',
+  name: 'news/tag',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

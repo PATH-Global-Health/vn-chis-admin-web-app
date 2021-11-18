@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import naturalCompare from 'natural-compare';
 import { v4 as uuidv4 } from 'uuid';
 
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
@@ -79,96 +80,6 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
   const [editPermissionUIModal, setEditPermssionUIModal] = 
     useState<Permission | undefined>(undefined);
 
-  const getData = useCallback(() => {
-    if (selectedUser) {
-      if (isGroup) {
-        dispatch(getGroupsOfUser(selectedUser.id));
-      }
-      if (isRole) {
-        dispatch(getRolesOfUser(selectedUser.id));
-      }
-      if (isPermissionUI) {
-        dispatch(getPermissionsUIOfUser(selectedUser.id));
-      }
-      if (isPermissionResource) {
-        dispatch(getPermissionsResourceOfUser(selectedUser.id));
-      }
-    }
-  }, [
-    dispatch,
-    selectedUser,
-    isGroup,
-    isRole,
-    isPermissionUI,
-    isPermissionResource,
-  ]);
-  const handleRemove = async (row: GroupRolePermission) => {
-    if (selectedUser) {
-      if (isGroup) {
-        console.log(row);
-        // remove user from role
-        await fetch(groupService.removeUserToGroup(selectedUser.id, row.id));
-      }
-      if (isRole) {
-        // remove user from role
-        await fetch(roleService.removeUserToRole(selectedUser.id, row.id));
-      }
-      if (isPermissionUI) {
-        // remove permission ui from user
-        const permission = permissionUIList.find((p) =>
-          (row?.code ?? '').includes(p.code),
-        );
-        if (permission) {
-          if (permission.types.length > 0) {
-            const deletePromises = (permissionUIOfUserList || [])
-              .filter((p) => (p?.code ?? '').includes(permission.code))
-              .map((p) => {
-                return fetch(
-                  permissionService.deletePermission(
-                    p.id,
-                    selectedUser.id,
-                    HolderType.USER,
-                    true,
-                    false,
-                  ),
-                );
-              });
-            await Promise.all(deletePromises);
-          } else {
-            // eslint-disable-next-line
-            const _permission = (permissionUIOfUserList || []).find((p) =>
-              (p?.code ?? '').includes(permission.code),
-            );
-            if (_permission?.id) {
-              await fetch(
-                permissionService.deletePermission(
-                  _permission.id,
-                  selectedUser.id,
-                  HolderType.USER,
-                  true,
-                  false,
-                ),
-              );
-            }
-          }
-        }
-      }
-      if (isPermissionResource) {
-        // remove permission resource from user
-        await fetch(
-          permissionService.deletePermission(
-            row.id,
-            selectedUser.id,
-            HolderType.USER,
-            false,
-            true,
-          ),
-        );
-      }
-      getData();
-    }
-  };
-
   const title = useMemo(() => {
     if (selectedUser) {
       if (isGroup) {
@@ -180,6 +91,7 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
     }
     return '';
   }, [isGroup, isRole, selectedUser]);
+  
   const data = useMemo(() => {
     if (isGroup) {
       return groupsOfUserList;
@@ -191,12 +103,11 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
       return permissionUIOfUserList.reduce<Permission[]>(
         (array, permission) => {
           const permissionCode = permissionUIList.find((p) =>
-            (permission?.code ?? '').includes(p.code),
+            permission?.code && permission.code === p.code,
           );
-          if (
-            array.find((p) =>
-              (p?.code ?? '').includes(permissionCode?.code ?? ''),
-            )
+
+          if (permissionCode?.code &&
+            array.find((p) => p?.code && p.code === permissionCode.code)
           ) {
             return array;
           }
@@ -220,6 +131,102 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
     permissionsResourceOfUserList,
   ]);
 
+  const handleRemove = async (row: GroupRolePermission) => {
+      if (selectedUser) {
+        if (isGroup) {
+          // remove user from role
+          await fetch(groupService.removeUserToGroup(selectedUser.id, row.id));
+        }
+        if (isRole) {
+          // remove user from role
+          await fetch(roleService.removeUserToRole(selectedUser.id, row.id));
+        }
+        if (row?.code && isPermissionUI) {
+          // remove permission ui from user
+          const permission = permissionUIList.find((p) =>
+            row.code === p.code,
+          );
+          if (permission) {
+            if (permission.types.length > 0) {
+              const deletePromises = (permissionUIOfUserList || [])
+                .filter((p) => p?.code && p.code === permission.code)
+                .map((p) => {
+                  return fetch(
+                    permissionService.deletePermission(
+                      p.id,
+                      selectedUser.id,
+                      HolderType.USER,
+                      true,
+                      false,
+                    ),
+                  );
+                });
+              await Promise.all(deletePromises);
+            } else {
+              // eslint-disable-next-line
+              const _permission = (permissionUIOfUserList || []).find((p) =>
+                p?.code && p.code === permission.code,
+              );
+              if (_permission?.id) {
+                await fetch(
+                  permissionService.deletePermission(
+                    _permission.id,
+                    selectedUser.id,
+                    HolderType.USER,
+                    true,
+                    false,
+                  ),
+                );
+              }
+            }
+          }
+        }     
+        if (row?.code && isPermissionResource) {
+          // remove permission resource from user
+          await fetch(
+            permissionService.deletePermission(
+              row.id,
+              selectedUser.id,
+              HolderType.USER,
+              false,
+              true,
+            ),
+          );
+        }
+        getData();
+      }
+  };
+
+  const sortByAlphabet = (d: GroupRolePermission[]): GroupRolePermission[] => {
+    const result = d.slice(0);
+    return result.sort((a: GroupRolePermission, b: GroupRolePermission) =>
+      naturalCompare(a.name, b.name),
+    );
+  };
+
+  const getData = useCallback(() => {
+    if (selectedUser) {
+      if (isGroup) {
+        dispatch(getGroupsOfUser(selectedUser.id));
+      }
+      if (isRole) {
+        dispatch(getRolesOfUser(selectedUser.id));
+      }
+      if (isPermissionUI) {
+        dispatch(getPermissionsUIOfUser(selectedUser.id));
+      }
+      if (isPermissionResource) {
+        dispatch(getPermissionsResourceOfUser(selectedUser.id));
+      }
+    }
+  }, [
+    dispatch,
+    selectedUser,
+    isGroup,
+    isRole,
+    isPermissionUI,
+    isPermissionResource,
+  ]);
   useEffect(getData, [getData]);
 
   return (
@@ -227,7 +234,7 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
       <DataList
         search
         title={title}
-        data={data as GroupRolePermission[]}
+        data={sortByAlphabet(data as GroupRolePermission[])}
         loading={
           fetching ||
           getUsersLoading ||

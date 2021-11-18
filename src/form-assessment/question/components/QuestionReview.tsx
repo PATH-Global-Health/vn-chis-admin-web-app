@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Dimmer, Loader} from 'semantic-ui-react';
 import {
-  AnswerCM,
-  AnswerUM,
   Answer,
   Question,
 } from '@form-assessment/question/question.model';

@@ -31,7 +31,7 @@ const CategorysPage: React.FC = () => {
     dispatch(getCategories());
   }, [dispatch]);
 
-  useRefreshCallback(GroupKey.PQM_NEWS, ComponentKey.PQM_CATEGORY, getData);
+  useRefreshCallback(GroupKey.ADMIN_NEW_MANAGEMENT, ComponentKey.NEWS_CATEGORY, getData);
   useEffect(getData, [getData]);
 
   return (
