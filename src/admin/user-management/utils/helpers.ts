@@ -20,7 +20,7 @@ const methodList = [
 const permissionUIList = [
   {
     name: 'Employee - Truy cập',
-    code: 'CHIS_EMPLOYEEE',
+    code: 'CHIS_EMPLOYEE',
     types: ['ALL'],
   },
   {
@@ -81,6 +81,21 @@ const permissionUIList = [
   {
     name: 'Facility - Thống kê',
     code: 'CSYT_EXAMINATION_STATISTIC',
+    types: ['ALL'],
+  },
+  {
+    name: 'PQM - Danh mục',
+    code: 'ADMIN_PQM_CATEGORY',
+    types: ['ALL'],
+  },
+  {
+    name: 'PQM - Dữ liệu tổng hợp',
+    code: 'PQM_AGGREGATED_VALUE',
+    types: ['ALL'],
+  },
+  {
+    name: 'PQM - Nhật ký lỗi',
+    code: 'ADMIN_PQM_ERROR_LOGGING',
     types: ['ALL'],
   },
 ];

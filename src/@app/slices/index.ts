@@ -5,6 +5,7 @@ import admin from '@admin/reducers';
 import category from '@category/reducers';
 import news from '@news/reducers';
 import formAssessment from '@form-assessment/reducers';
+import pqm from '@pqm/reducers';
 
 const slices = {
   auth,
@@ -12,7 +13,8 @@ const slices = {
   admin,
   category,
   news,
-  formAssessment
+  formAssessment,
+  pqm
 };
 
 export default slices;

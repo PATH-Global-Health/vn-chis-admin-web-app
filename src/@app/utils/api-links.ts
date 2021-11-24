@@ -5,7 +5,9 @@
 const authUrl = 'https://user-management.bakco.vn/api';
 const unitUrl = 'https://schedule-management.bakco.vn/api';
 const postUrl = 'https://mini-cms.bakco.vn';
-
+const pqmUrl =
+  process.env?.REACT_APP_PQM_ENDPOINT ?? 'https://pqm-core.hcdc.vn';
+  
 const apiLinks = {
   admin: {
     userManagement: {
@@ -92,7 +94,6 @@ const apiLinks = {
       addParts: `${postUrl}/api/Post/Parts`,
     },
   },
-
   form: {
     question: {
       get: `${postUrl}/api/Question`,
@@ -123,7 +124,122 @@ const apiLinks = {
       deleteSurveyResult: `${postUrl}/api/QuestionTemplate/SurveyResult`
     },
   },
-
+  pqm: {
+    category: {
+      categoryAlias: {
+        get: `${pqmUrl}/api/CategoryAliases`,
+        getAliasesOfCategory: (categoryId: string): string =>
+          `${pqmUrl}/api/CategoryAliases${
+            categoryId ? `?categoryId=${categoryId}` : ''
+          }`,
+        create: `${pqmUrl}/api/CategoryAliases/`,
+        update: `${pqmUrl}/api/CategoryAliases/`,
+        delete: `${pqmUrl}/api/CategoryAliases/`,
+      },
+      indicator: {
+        get: `${pqmUrl}/api/Indicators`,
+        create: `${pqmUrl}/api/Indicators/`,
+        update: `${pqmUrl}/api/Indicators/`,
+        delete: `${pqmUrl}/api/Indicators/`,
+      },
+      indicatorGroup: {
+        get: `${pqmUrl}/api/IndicatorGroups`,
+        create: `${pqmUrl}/api/IndicatorGroups/`,
+        update: `${pqmUrl}/api/IndicatorGroups/`,
+        delete: `${pqmUrl}/api/IndicatorGroups/`,
+      },
+      gender: {
+        get: `${pqmUrl}/api/Genders/`,
+        create: `${pqmUrl}/api/Genders/`,
+        update: `${pqmUrl}/api/Genders/`,
+        delete: `${pqmUrl}/api/Genders/`,
+      },
+      ageGroup: {
+        get: `${pqmUrl}/api/AgeGroups/`,
+        create: `${pqmUrl}/api/AgeGroups/`,
+        update: `${pqmUrl}/api/AgeGroups/`,
+        delete: `${pqmUrl}/api/AgeGroups/`,
+      },
+      keyPopulation: {
+        get: `${pqmUrl}/api/KeyPopulations/`,
+        create: `${pqmUrl}/api/KeyPopulations/`,
+        update: `${pqmUrl}/api/KeyPopulations/`,
+        delete: `${pqmUrl}/api/KeyPopulations/`,
+      },
+      siteType: {
+        get: `${pqmUrl}/api/SiteTypes`,
+        create: `${pqmUrl}/api/SiteTypes/`,
+        update: `${pqmUrl}/api/SiteTypes/`,
+        delete: `${pqmUrl}/api/SiteTypes/`,
+      },
+      province: {
+        get: `${pqmUrl}/api/Locations/Provinces/`,
+        create: `${pqmUrl}/api/Locations/Provinces/`,
+        update: `${pqmUrl}/api/Locations/Provinces/`,
+        delete: `${pqmUrl}/api/Locations/Provinces/`,
+      },
+      district: {
+        get: (code: string): string =>
+          `${pqmUrl}/api/Locations/Districts?provinceCode=${code}`,
+        create: `${pqmUrl}/api/Locations/Districts/`,
+        update: `${pqmUrl}/api/Locations/Districts/`,
+        delete: `${pqmUrl}/api/Locations/Districts/`,
+      },
+      site: {
+        get: (districtId: string): string =>
+          `${pqmUrl}/api/Locations/Sites?districtId=${districtId}`,
+        getByCode: (
+          pageIndex = 0,
+          pageSize = 10,
+          siteTypeId = '',
+          provinceCode = '',
+          districtCode = '',
+        ): string =>
+          `${pqmUrl}/api/Locations/Sites/ByCode?pageIndex=${pageIndex}&pageSize=${pageSize}&siteTypeId=${siteTypeId}&provinceCode=${provinceCode}&districtCode=${districtCode}`,
+        create: `${pqmUrl}/api/Locations/Sites/`,
+        update: `${pqmUrl}/api/Locations/Sites/`,
+        delete: `${pqmUrl}/api/Locations/Sites/`,
+      },
+    },
+    aggregatedValue: {
+      get: `${pqmUrl}/api/AggregatedValues`,
+      create: `${pqmUrl}/api/AggregatedValues/`,
+      update: `${pqmUrl}/api/AggregatedValues/`,
+      delete: `${pqmUrl}/api/AggregatedValues/`,
+      upload: `${pqmUrl}/api/AggregatedValues/ImportByExcel`,
+      populateData: `${pqmUrl}/api/AggregatedValues/PopulateData?all=true&makeDeletion=true`,
+      clearAllData: `${pqmUrl}/api/AggregatedValues/ClearAll`,
+    },
+    news: {
+      tag: {
+        get: `${postUrl}/api/Tag`,
+        create: `${postUrl}/api/Tag`,
+        update: `${postUrl}/api/Tag`,
+        delete: `${postUrl}/api/Tag`,
+      },
+      category: {
+        get: `${postUrl}/api/Category`,
+        create: `${postUrl}/api/Category`,
+        update: `${postUrl}/api/Category`,
+        delete: `${postUrl}/api/Category`,
+      },
+      part: {
+        get: `${postUrl}/api/Part`,
+        update: `${postUrl}/api/Part`,
+        delete: `${postUrl}/api/Part`,
+      },
+      post: {
+        get: `${postUrl}/api/Post`,
+        create: `${postUrl}/api/Post`,
+        update: `${postUrl}/api/Post`,
+        delete: `${postUrl}/api/Post`,
+        addParts: `${postUrl}/api/Post/Parts`,
+      },
+    },
+    errorLogging: {
+      get: `${pqmUrl}/api/ErrorLoggings`,
+    },
+  },
   unit: {
     createUnitWithUser: (username: string): string => `${unitUrl}/Hospitals/HospitalByAdmin/${username}`,
   },
