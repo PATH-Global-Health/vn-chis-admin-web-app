@@ -15,6 +15,7 @@ interface State {
   token: Token | null;
   tokenExpiredTime: Date | null;
   loginLoading: boolean;
+  changePasswordLoading: boolean;
   userInfo: UserInfo | null;
   getUserInfoLoading: boolean;
   permissionList: Permission[];
@@ -25,6 +26,7 @@ const initialState: State = {
   token: null,
   tokenExpiredTime: null,
   loginLoading: false,
+  changePasswordLoading: false,
   userInfo: null,
   getUserInfoLoading: false,
   permissionList: [],
@@ -32,6 +34,15 @@ const initialState: State = {
 };
 
 type CR<T> = CaseReducer<State, PayloadAction<T>>;
+
+const setTokenCR: CR<{
+  token: Token;
+  tokenExpiredTime: Date;
+}> = (state, action) => ({
+  ...state,
+  token: action.payload.token,
+  tokenExpiredTime: action.payload.tokenExpiredTime,
+});
 
 const login = createAsyncThunk<Token, { username: string; password: string }>(
   'auth/login',
@@ -42,14 +53,14 @@ const login = createAsyncThunk<Token, { username: string; password: string }>(
   },
 );
 
-const setTokenCR: CR<{
-  token: Token;
-  tokenExpiredTime: Date;
-}> = (state, action) => ({
-  ...state,
-  token: action.payload.token,
-  tokenExpiredTime: action.payload.tokenExpiredTime,
-});
+const changePassword = createAsyncThunk<boolean, { token: string, oldPassword: string; newPassword: string }>(
+  'auth/changePassword',
+  async (data: { token: string, oldPassword: string; newPassword: string }) => {
+    const { token, oldPassword, newPassword } = data;
+    const result = await authService.changePassword(token, { oldPassword, newPassword });
+    return result;
+  }
+)
 
 const getUserInfo = createAsyncThunk('auth/getUserInfo', async () => {
   const result = await authService.getUserInfo();
@@ -94,6 +105,20 @@ const slice = createSlice({
       loginLoading: false,
     }));
 
+    // change password
+    builder.addCase(changePassword.pending, (state) => ({
+      ...state,
+      changePasswordLoading: true,
+    }));
+    builder.addCase(changePassword.fulfilled, (state) => ({
+      ...state,
+      changePasswordLoading: false,
+    }));
+    builder.addCase(changePassword.rejected, (state) => ({
+      ...state,
+      changePasswordLoading: false,
+    }));
+
     // get user info
     builder.addCase(getUserInfo.pending, (state) => ({
       ...state,
@@ -126,7 +151,7 @@ const slice = createSlice({
   },
 });
 
-export { login, getUserInfo, getPermission };
+export { login, changePassword, getUserInfo, getPermission };
 export const { setToken, logout } = slice.actions;
 
 export default slice.reducer;

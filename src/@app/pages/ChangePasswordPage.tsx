@@ -3,10 +3,11 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
-import { FiInfo, FiKey } from 'react-icons/fi';
-import { Card, Form, Input, Image, Message, Checkbox, Button } from 'semantic-ui-react';
+import { FiArrowLeft, FiInfo } from 'react-icons/fi';
+import { Card, Form, Input, Image, Message, Button } from 'semantic-ui-react';
 
-import { useAuth, useSelector } from '@app/hooks';
+import { useSelector } from '@app/hooks';
+import authService from '@app/services/auth';
 
 import logo from '../assets/img/vk-logo.png';
 import packageJson from '../../../package.json';
@@ -44,29 +45,34 @@ const IconWrapper = styled.span`
   vertical-align: middle;
 `;
 
-interface LoginModel {
+interface ChangePasswordModel {
   username: string;
-  password: string;
-  remember: boolean;
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }
 
-const LoginPage: React.FC = () => {
+const ChangePasswordPage: React.FC = () => {
   const [failed, setFailed] = useState<any>(undefined);
 
   const {
     register,
     setValue,
     handleSubmit,
-  } = useForm<LoginModel>();
+  } = useForm<ChangePasswordModel>();
   const history = useHistory();
-  const { login } = useAuth();
-  const { loginLoading } = useSelector((state) => state.auth);
+  const { loginLoading, changePasswordLoading } = useSelector((state) => state.auth);
 
-  const handleLogin = async (data: LoginModel): Promise<void> => {
+  const handleChangePassword = async (data: ChangePasswordModel): Promise<void> => {
+    const { username, currentPassword, newPassword, confirmPassword } = data;
+    if (newPassword !== confirmPassword) {
+      setFailed({ message: 'Mật khẩu mới không khớp'});
+      return;
+    }
+
     try {
-      setFailed(undefined);
-      const { username, password, remember } = data;
-      await login(username, password, remember);
+      const token = await authService.login(username, currentPassword);
+      await authService.changePassword(token.access_token, { oldPassword: currentPassword, newPassword });
       setTimeout(() => history.push('/auth'), 0);
     } catch (error) {
       setFailed(error);
@@ -74,12 +80,10 @@ const LoginPage: React.FC = () => {
   };
 
   useEffect(() => {
-    window.document.title = 'CHIS-ADMIN';
-  }, []);
-  useEffect(() => {
     register('username');
-    register('password');
-    register('remember');
+    register('currentPassword');
+    register('newPassword');
+    register('confirmPassword');
   }, [register]);
 
   return (
@@ -99,7 +103,7 @@ const LoginPage: React.FC = () => {
         <Form>
           <Form.Group widths="equal">
             <Form.Field
-              placeholder="Tên đăng nhập"
+              label="Tên đăng nhập"
               control={Input}
               onChange={(__: any, { value }: any) => setValue('username', value)}
             />
@@ -107,33 +111,42 @@ const LoginPage: React.FC = () => {
           <Form.Group widths="equal">
             <Form.Field
               type="password"
-              placeholder="Mật khẩu"
+              label="Mật khẩu"
               control={Input}
-              onChange={(__: any, { value }: any) => setValue('password', value)}
+              onChange={(__: any, { value }: any) => setValue('currentPassword', value)}
             />
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
-              label="Nhớ mật khẩu"
-              control={Checkbox}
-              onChange={(__: any, { value }: any) => setValue('remember', value)}
+              type="password"
+              label="Mật khẩu mới"
+              control={Input}
+              onChange={(__: any, { value }: any) => setValue('newPassword', value)}
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field
+              type="password"
+              label="Nhập lại mật khẩu mới"
+              control={Input}
+              onChange={(__: any, { value }: any) => setValue('confirmPassword', value)}
             />
           </Form.Group>
           <ButtonWrapper widths="equal">
             <Form.Field
               fluid
               primary
-              loading={loginLoading}
-              content="Đăng nhập"
+              loading={loginLoading || changePasswordLoading}
+              content="Đổi mật khẩu"
               control={Button}
-              onClick={handleSubmit((d) => handleLogin(d))}
+              onClick={handleSubmit((d) => handleChangePassword(d))}
             />
           </ButtonWrapper>
-          <ChangePasswordWrapper onClick={() => history.push('/change-password')}>
+          <ChangePasswordWrapper onClick={() => history.push('/login')}>
             <IconWrapper>
-              <FiKey />
+              <FiArrowLeft />
             </IconWrapper>
-            Đổi mật khẩu
+            Trở về đăng nhập
           </ChangePasswordWrapper>
         </Form>
       </Card.Content>
@@ -147,4 +160,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default ChangePasswordPage;
