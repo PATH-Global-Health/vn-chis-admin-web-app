@@ -41,7 +41,7 @@ const SearchBar: React.FC<Props> = (props) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       onChange(searchValue);
-    }, [300]);
+    }, 300);
 
     return (): void => {
       clearTimeout(timeout);

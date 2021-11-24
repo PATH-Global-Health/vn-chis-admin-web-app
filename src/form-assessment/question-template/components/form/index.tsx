@@ -85,7 +85,7 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
 
         const questionDeletedList =
           payload.questions
-            .filter((q) => !q.isNew && q.isDeleted)
+            .filter((q) => q.isDeleted)
             .map((q): string => q.id);
         await fetch(questionTemplateService.deleteQuestion({
           id: data.id,
@@ -94,7 +94,7 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
 
         const questionNewestList =
           payload.questions
-            .filter((q) => q.isNew && !q.isDeleted)
+            .filter((q) => !q.isDeleted)
             .map((q) => q.id);
         await fetch(questionTemplateService.addQuestion({
           id: data.id,
@@ -103,8 +103,8 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
 
         const surveyResultDeletedList =
           payload.surveyResults
-            .filter((q) => !q.isNew && q.isDeleted)
-            .map((q): string => q.id);
+            .filter((s) => !s.isNew && s.isDeleted)
+            .map((s): string => s.id);
         await fetch(questionTemplateService.deleteSurveyResult({
           id: data.id,
           surveyResults: surveyResultDeletedList,

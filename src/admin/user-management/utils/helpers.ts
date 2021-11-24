@@ -20,7 +20,7 @@ const methodList = [
 const permissionUIList = [
   {
     name: 'Employee - Truy cập',
-    code: 'CHIS_EMPLOYEEE',
+    code: 'CHIS_EMPLOYEE',
     types: ['ALL'],
   },
   {

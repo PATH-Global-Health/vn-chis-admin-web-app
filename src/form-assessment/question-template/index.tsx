@@ -114,6 +114,7 @@ const QuestionTemplatePage: React.FC = () => {
           onClose={() => {
             setOpenCreate(false);
             setUpdateDetails(undefined);
+            setSelected(undefined);
           }}
           onRefresh={getData}
         />
