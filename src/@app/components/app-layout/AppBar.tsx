@@ -16,6 +16,15 @@ import logo from '../../assets/img/logo.png';
 const Wrapper = styled.div`
   padding: 8px;
 `;
+// const MenuWrapper = styled.div`
+//   display: flex;
+//   flex-direction: row;
+
+//   overflow-x: auto;
+//   overflow-y: false;
+//   scrollbar-width: thin;
+//   scrollbar-color: #6969dd #e0e0e0;
+// `;
 
 const AppBar: React.FC = () => {
   const { getUserInfoLoading } = useSelector((state) => state.auth);
@@ -31,40 +40,41 @@ const AppBar: React.FC = () => {
             <Loader />
           </Dimmer>
         </Menu.Item>
-        {componentTree.map((item) => {
-          if (item.permissionCode && !hasPermission(item.permissionCode))
-            return null;
+        {/* <MenuWrapper> */}
+          {componentTree.map((item) => {
+            if (item.hidden || (item.permissionCode && !hasPermission(item.permissionCode)))
+              return null;
 
-          const tmp = getGroup(item.key);
-          if (!tmp) return null;
-          if (item.childrenList) {
+            const tmp = getGroup(item.key);
+            if (!tmp) return null;
+            if (item.childrenList) {
+              return (
+                <MenuButton
+                  key={item.key}
+                  groupKey={tmp.key ?? ''}
+                  childrenList={item.childrenList.map((c) => ({
+                    key: c.key,
+                    permissionCode: c.permissionCode,
+                  }))}
+                />
+              );
+            }
             return (
-              <MenuButton
-                key={item.key}
-                groupKey={tmp.key ?? ''}
-                childrenList={item.childrenList.map((c) => ({
-                  key: c.key,
-                  permissionCode: c.permissionCode,
-                }))}
+              <Menu.Item
+                key={tmp?.key}
+                content={tmp?.title}
+                onClick={(): void => {
+                  dispatch(
+                    openComponentTab({
+                      groupKey: item.key,
+                      key: item.key,
+                    }),
+                  );
+                }}
               />
             );
-          }
-          return (
-            <Menu.Item
-              key={tmp?.key}
-              content={tmp?.title}
-              onClick={(): void => {
-                dispatch(
-                  openComponentTab({
-                    groupKey: item.key,
-                    key: item.key,
-                  }),
-                );
-              }}
-            />
-          );
-        })}
-
+          })}
+        {/* </MenuWrapper> */}
         <Menu.Menu position="right">
           <UserProfileButton />
         </Menu.Menu>

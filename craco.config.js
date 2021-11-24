@@ -10,6 +10,7 @@ module.exports = {
       '@category': path.resolve(__dirname, 'src/category'),
       '@news': path.resolve(__dirname, 'src/news'),
       '@form-assessment': path.resolve(__dirname, 'src/form-assessment'),
+      '@pqm': path.resolve(__dirname, 'src/pqm'),
     },
   },
 };

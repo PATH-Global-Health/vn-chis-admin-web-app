@@ -105,7 +105,6 @@ const RolePage: React.FC = () => {
               onClick: (row): void => {
                 confirm('Xác nhận xóa?', () => {
                   fetch(roleService.deleteRole(row.id));
-                  toast.success('Xoá thành công');
                   getData();
                 });
               },

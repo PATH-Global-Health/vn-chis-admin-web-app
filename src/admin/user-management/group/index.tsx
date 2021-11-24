@@ -115,7 +115,6 @@ const GroupPage: React.FC = () => {
               onClick: (row): void => {
                 confirm('Xác nhận xóa?', async () => {
                   await fetch(groupService.deleteGroup(row.id));
-                  toast.success('Xoá thành công');
                   getData();
                 });
               },

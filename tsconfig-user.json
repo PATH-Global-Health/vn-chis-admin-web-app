@@ -20,6 +20,9 @@
       "@form-assessment/*": [
         "form-assessment/*"
       ],
+      "@pqm/*": [
+        "pqm/*"
+      ],
     }
   }
 }
