@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  labels:
+    app: c-his-admin
+    env: staging
+  name: c-his-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: c-his-admin
+      env: staging
+  template:
+    metadata:
+      labels:
+        app: c-his-admin
+        env: staging
+        role: rolling-update
+        build_number: '<TAG>'
+    spec:
+      containers:
+      - image: bakcovn/c-his-admin:latest
+        imagePullPolicy: Always
+        name: c-his-admin
+      imagePullSecrets:
+      - name: regcred
+  strategy:
+    type: RollingUpdate
+  revisionHistoryLimit: 1
