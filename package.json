@@ -1,6 +1,6 @@
 {
-  "name": "pqm",
-  "version": "1.0.0",
+  "name": "chis-admin",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@draft-js-plugins/editor": "^4.1.0",
