@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import PageNotFound from '@app/pages/PageNotFound';
 import LoginPage from '@app/pages/LoginPage';
+import ChangePasswordPage from '@app/pages/ChangePasswordPage';
 import AuthPage from '@app/pages/AuthPage';
 import HomePage from '@app/pages/HomePage';
 import AppLayout from '@app/components/app-layout';
@@ -27,6 +28,10 @@ const routes: Route[] = [
   {
     component: LoginPage,
     path: '/login',
+  },
+  {
+    component: ChangePasswordPage,
+    path: '/change-password',
   },
   {
     component: HomePage,

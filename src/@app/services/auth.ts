@@ -1,4 +1,5 @@
 import { httpClient, apiLinks } from '@app/utils';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { Token } from '@app/models/token';
@@ -14,6 +15,23 @@ const login = async (username: string, password: string): Promise<Token> => {
     },
   });
   return response.data as Token;
+};
+
+const changePassword = async (token: string, data: { oldPassword: string; newPassword: string }): Promise<boolean> => {
+  const headerToken = token ? { Authorization: `bearer ${token}` } : null;
+  try {
+    axios({
+      method: 'PUT',
+      url: apiLinks.admin.userManagement.user.changePassword,
+      headers: { ...headerToken },
+      data,
+    });
+  
+    toast.success('Đổi mật khẩu thành công');
+    return true;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const getUserInfo = async (): Promise<UserInfo> => {
@@ -37,6 +55,7 @@ const authService = {
   login,
   getUserInfo,
   getPermission,
+  changePassword,
 };
 
 export default authService;

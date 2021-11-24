@@ -84,7 +84,7 @@ const useAuth = (): UseAuth => {
   ): Promise<void> => {
     // eslint-disable-next-line
     const token = unwrapResult(await dispatch<any>(li({ username, password }))) as Token;
-    const permissionList = await unwrapResult(await dispatch<any>(getPermission(token.access_token))) as Permission[];
+    const permissionList = unwrapResult(await dispatch<any>(getPermission(token.access_token))) as Permission[];
     const authorized = permissionList.find((p) => p?.code && p.code === ACCESS_PERMISSION);
     if (authorized) {
       if (remember) {
