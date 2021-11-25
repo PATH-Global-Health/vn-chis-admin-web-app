@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
-import { FiInfo, FiKey } from 'react-icons/fi';
+import { FiInfo } from 'react-icons/fi';
 import { Card, Form, Input, Image, Message, Checkbox, Button } from 'semantic-ui-react';
 
 import { useAuth, useSelector } from '@app/hooks';
@@ -26,18 +26,6 @@ const ButtonWrapper = styled(Form.Group)`
   display: flex;
   flex-direction: row;
   margin: 2em -0.5em 0.25em !important;
-`;
-const ChangePasswordWrapper = styled.div`
-  cursor: pointer;
-  color: grey;
-  font-size: 16px;
-  font-weight: 600;
-  text-align: center;
-  padding: 0.25em 0.75em;
-
-  &:hover {
-    color: black;
-  }
 `;
 const IconWrapper = styled.span`
   margin-right: 8px;
@@ -129,12 +117,6 @@ const LoginPage: React.FC = () => {
               onClick={handleSubmit((d) => handleLogin(d))}
             />
           </ButtonWrapper>
-          <ChangePasswordWrapper onClick={() => history.push('/change-password')}>
-            <IconWrapper>
-              <FiKey />
-            </IconWrapper>
-            Đổi mật khẩu
-          </ChangePasswordWrapper>
         </Form>
       </Card.Content>
       <Card.Content extra>
