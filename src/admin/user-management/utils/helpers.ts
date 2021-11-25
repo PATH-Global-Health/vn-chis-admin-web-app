@@ -90,12 +90,47 @@ const permissionUIList = [
   },
   {
     name: 'PQM - Dữ liệu tổng hợp',
-    code: 'PQM_AGGREGATED_VALUE',
+    code: 'ADMIN_PQM_AGGREGATED_VALUE',
     types: ['ALL'],
   },
   {
     name: 'PQM - Nhật ký lỗi',
     code: 'ADMIN_PQM_ERROR_LOGGING',
+    types: ['ALL'],
+  },
+  {
+    name: 'SMD - Dashboard',
+    code: 'SMD_DASHBOARD',
+    types: ['ALL'],
+  },
+  {
+    name: 'SMD - Quản lý',
+    code: 'SMD_MANAGEMENT',
+    types: ['ALL'],
+  },
+  {
+    name: 'SMD - Chỉ số',
+    code: 'SMD_INDICATOR',
+    types: ['ALL'],
+  },
+  {
+    name: 'SMD - Đóng gói',
+    code: 'SMD_PACKAGE',
+    types: ['ALL'],
+  },
+  {
+    name: 'SMD - KPI',
+    code: 'SMD_KPI',
+    types: ['ALL'],
+  },
+  {
+    name: 'SMD - Dự án',
+    code: 'SMD_PROJECT',
+    types: ['ALL'],
+  },
+  {
+    name: 'SMD - Báo cáo',
+    code: 'SMD_REPORT',
     types: ['ALL'],
   },
 ];

@@ -52,8 +52,8 @@ export enum GroupKey {
   // #region pqm
   ADMIN_PQM_CATEGORY = 'ADMIN_PQM_CATEGORY',
 
-  ADMIN_PQM_AGGREGATED_VALUE = 'PQM_AGGREGATED_VALUE',
-  ADMIN_PQM_AGGREGATED_VALUE_DETAIL = 'PQM_AGGREGATED_VALUE_DETAIL',
+  ADMIN_PQM_AGGREGATED_VALUE = 'ADMIN_PQM_AGGREGATED_VALUE',
+  ADMIN_PQM_AGGREGATED_VALUE_DETAIL = 'ADMIN_PQM_AGGREGATED_VALUE_DETAIL',
 
   ADMIN_PQM_ERROR_LOGGING = 'ADMIN_PQM_ERROR_LOGGING',
   ADMIN_PQM_ERROR_LOGGING_DETAIL = 'ADMIN_PQM_ERROR_LOGGING_DETAIL',
@@ -139,13 +139,12 @@ const componentTree: Component[] = [
         key: ComponentKey.CSYT_SERVICE,
         title: 'Dịch vụ',
         component: <ServicesPage />,
-        /* permissionCode: 'ADMIN_SERVICE_MANAGEMENT_SERVICE', */
       },
     ],
   },
   {
     key: GroupKey.ADMIN_NEW_MANAGEMENT,
-    title: 'Quản lí bài viết',
+    title: 'Quản lý bài viết',
     permissionCode: GroupKey.ADMIN_NEW_MANAGEMENT,
     childrenList: [
       {
@@ -167,7 +166,7 @@ const componentTree: Component[] = [
   },
   {
     key: GroupKey.ADMIN_QUESTION_MANAGEMENT,
-    title: 'Quản lí biểu mẫu đánh giá',
+    title: 'Quản lý biểu mẫu đánh giá',
     permissionCode: GroupKey.ADMIN_QUESTION_MANAGEMENT,
     childrenList: [
       {
