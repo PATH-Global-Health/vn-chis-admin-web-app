@@ -103,7 +103,7 @@ const ChangePasswordPage: React.FC = () => {
         <Form>
           <Form.Group widths="equal">
             <Form.Field
-              label="Tên đăng nhập"
+              label="Tên đăng nhập / Username"
               control={Input}
               onChange={(__: any, { value }: any) => setValue('username', value)}
             />
@@ -111,7 +111,7 @@ const ChangePasswordPage: React.FC = () => {
           <Form.Group widths="equal">
             <Form.Field
               type="password"
-              label="Mật khẩu"
+              label="Mật khẩu / Current password"
               control={Input}
               onChange={(__: any, { value }: any) => setValue('currentPassword', value)}
             />
@@ -119,7 +119,7 @@ const ChangePasswordPage: React.FC = () => {
           <Form.Group widths="equal">
             <Form.Field
               type="password"
-              label="Mật khẩu mới"
+              label="Mật khẩu mới / New password"
               control={Input}
               onChange={(__: any, { value }: any) => setValue('newPassword', value)}
             />
@@ -127,7 +127,7 @@ const ChangePasswordPage: React.FC = () => {
           <Form.Group widths="equal">
             <Form.Field
               type="password"
-              label="Nhập lại mật khẩu mới"
+              label="Nhập lại mật khẩu mới / Comfirm new password"
               control={Input}
               onChange={(__: any, { value }: any) => setValue('confirmPassword', value)}
             />
