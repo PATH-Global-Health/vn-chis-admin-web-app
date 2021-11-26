@@ -142,12 +142,6 @@ const ChangePasswordPage: React.FC = () => {
               onClick={handleSubmit((d) => handleChangePassword(d))}
             />
           </ButtonWrapper>
-          <ChangePasswordWrapper onClick={() => history.push('/login')}>
-            <IconWrapper>
-              <FiArrowLeft />
-            </IconWrapper>
-            Trở về đăng nhập
-          </ChangePasswordWrapper>
         </Form>
       </Card.Content>
       <Card.Content extra>
