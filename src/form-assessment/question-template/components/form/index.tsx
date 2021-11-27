@@ -232,6 +232,7 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
                 <Form.Field
                   width="4"
                   control={QuestionTemplateTypeSection}
+                  error={!!errors?.questionTemplateTypeId?.message && errors.questionTemplateTypeId.message}
                   data={watch('questionTemplateTypeId') || []}
                   onChange={(value: string[]): void => {
                     handleChange('questionTemplateTypeId', value || []);
@@ -241,7 +242,7 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
                   width="12"
                   control={Input}
                   placeholder="Tên biểu mẫu"
-                  error={errors?.title?.message ?? false}
+                  error={!!errors?.title?.message && errors.title.message}
                   value={watch('title') || ''}
                   onChange={(__: any, { value }: any) => {
                     handleChange('title', value, true);

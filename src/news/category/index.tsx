@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { FiPlus, FiEdit3, FiTrash2 } from 'react-icons/fi';
 import DataList from '@app/components/data-list';
-import CategoryModal from '@news/category/components/CategoryModal';
+import CreateModal from '@news/category/components/CreateModal';
+import UpdateModal from '@news/category/components/UpdateModal';
 
 import {
   useFetchApi,
@@ -12,9 +13,9 @@ import {
   useDispatch,
 } from '@app/hooks';
 import { GroupKey, ComponentKey } from '@app/utils/component-tree';
-import { Category } from './category.model';
-import { getCategories } from './category.slice';
-import categoryService from './category.service';
+import { Category } from '@news/category/category.model';
+import { getCategories } from '@news/category/category.slice';
+import categoryService from '@news/category/category.service';
 
 const CategorysPage: React.FC = () => {
   const { categoryList, getCategoriesLoading } = useSelector(
@@ -73,13 +74,15 @@ const CategorysPage: React.FC = () => {
         getRowKey={(d): string => d.id}
       />
 
-      <CategoryModal
+      <CreateModal
         open={openCreate}
+        onClose={(): void => setOpenCreate(false)}
+        onRefresh={getData}
+      />
+
+      <UpdateModal
         data={updateDetails}
-        onClose={(): void => {
-          setOpenCreate(false);
-          setUpdateDetails(undefined);
-        }}
+        onClose={(): void => setUpdateDetails(undefined)}
         onRefresh={getData}
       />
     </>

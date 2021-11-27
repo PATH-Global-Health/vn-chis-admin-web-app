@@ -102,8 +102,8 @@ const RolePage: React.FC = () => {
               color: 'red',
               icon: <FiTrash2 />,
               onClick: (row): void => {
-                confirm('Xác nhận xóa?', () => {
-                  fetch(roleService.deleteRole(row.id));
+                confirm('Xác nhận xóa?', async () => {
+                  await fetch(roleService.deleteRole(row.id));
                   getData();
                 });
               },

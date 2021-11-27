@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { FiPlus, FiEdit3, FiTrash2 } from 'react-icons/fi';
 import DataList from '@app/components/data-list';
-import TagModal from '@news/tag/components/TagModal';
+import CreateModal from '@news/tag/components/CreateModal';
+import UpdateModal from '@news/tag/components/UpdateModal';
 
 import {
   useFetchApi,
@@ -12,9 +13,9 @@ import {
   useDispatch,
 } from '@app/hooks';
 import { GroupKey, ComponentKey } from '@app/utils/component-tree';
-import { Tag } from './tag.model';
-import { getTags } from './tag.slice';
-import tagService from './tag.service';
+import { Tag } from '@news/tag/tag.model';
+import { getTags } from '@news/tag/tag.slice';
+import tagService from '@news/tag/tag.service';
 
 const TagsPage: React.FC = () => {
   const { tagList, getTagsLoading } = useSelector(
@@ -73,13 +74,15 @@ const TagsPage: React.FC = () => {
         getRowKey={(d): string => d.id}
       />
 
-      <TagModal
+      <CreateModal
         open={openCreate}
+        onClose={(): void => setOpenCreate(false)}
+        onRefresh={getData}
+      />
+
+      <UpdateModal
         data={updateDetails}
-        onClose={(): void => {
-          setOpenCreate(false);
-          setUpdateDetails(undefined);
-        }}
+        onClose={(): void => setUpdateDetails(undefined)}
         onRefresh={getData}
       />
     </>
