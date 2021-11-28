@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
-import { Modal, Form, Input, Button, TextArea } from 'semantic-ui-react';
+import { Modal, Form, Input, Button, TextArea, Message } from 'semantic-ui-react';
 import DataList from '@app/components/data-list';
 
 import { SurveyResult, SurveyResultCM } from '@form-assessment/survey-result/survey-result.model';
@@ -25,20 +25,42 @@ interface ModalProps {
 }
 
 const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) => {
+  const [error, setError] = useState(false);
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const {
     formState: { errors },
-    register,
+    control,
     reset,
     watch,
-    trigger,
-    setValue,
     handleSubmit,
   } = useForm<ExtendSurveyResult>({
     defaultValues: {},
   });
 
   const disabled = !!errors.fromScore || !!errors.toScore || !!errors.description;
+  const rules = {
+    fromScore: {
+      required: 'Bắt buộc nhập từ điểm',
+    },
+    toScore: {
+      required: 'Bắt buộc nhập đến điểm',
+    },
+    description: {
+      required: 'Bắt buộc nhập mô tả',
+    }
+  }
+
+  const validateScore = () => {
+    var fromScore = watch('fromScore');
+    var toScore = watch('toScore');
+    console.log(fromScore, toScore, fromScore > toScore);
+    if (fromScore && toScore && fromScore > toScore) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }
 
   const onSubmit = (d: SurveyResultCM) => {
     onChange({
@@ -49,15 +71,6 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
     reset();
   }
 
-  useEffect(() => {
-    register('fromScore', {
-      required: 'Bắt buộc nhập từ điểm',
-      validate: (score) => score > watch('toScore') ? 'Từ điểm phải lớn hơn tới điểm' : true,
-    });
-    register('toScore', { required: 'Bắt buộc nhập đến điểm' });
-    register('description', { required: 'Bắt buộc nhập mô tả' });
-  }, [register, watch]);
-
   return (
     <Modal open={open} onClose={onClose}>
     <Modal.Header>
@@ -65,44 +78,73 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
     </Modal.Header>
     <Modal.Content>
       <Form onSubmit={handleSubmit((d) => onSubmit(d))}>
+        {error && (
+          <Message negative>
+            <strong>Từ điểm phải lớn hơn tới điểm</strong>
+          </Message>
+        )}
         <Form.Group widths="equal">
-          <Form.Field
-            required
-            type="number"
-            control={Input}
-            label="Từ điểm"
-            error={errors?.fromScore?.message ?? false}
-            value={watch('fromScore') || ''}
-            onChange={(e: any, { value }: any) => {
-              setValue('fromScore', value);
-              trigger('fromScore');
-            }}
+          <Controller
+            control={control}
+            name="fromScore"
+            defaultValue=""
+            rules={rules.fromScore}
+            render={({ onChange, onBlur, value }): React.ReactElement => (
+              <Form.Field
+                required
+                type="number"
+                control={Input}
+                label="Từ điểm"
+                error={!!errors?.fromScore?.message && errors.fromScore.message}
+                value={value}
+                onChange={onChange}
+                onBlur={() => {
+                  onBlur();
+                  validateScore();
+                }}
+              />
+            )}
           />
-          <Form.Field
-            required
-            type="number"
-            control={Input}
-            label="Đến điểm"
-            error={errors?.toScore?.message ?? false}
-            value={watch('toScore') || ''}
-            onChange={(e: any, { value }: any) => {
-              setValue('toScore', value);
-              trigger('toScore');
-            }}
+          <Controller
+            control={control}
+            name="toScore"
+            defaultValue=""
+            rules={rules.toScore}
+            render={({ onChange, onBlur, value }): React.ReactElement => (
+              <Form.Field
+                required
+                type="number"
+                control={Input}
+                label="Đến điểm"
+                error={!!errors?.toScore?.message && errors.toScore.message}
+                value={value}
+                onChange={onChange}
+                onBlur={() => {
+                  onBlur();
+                  validateScore();
+                }}
+              />
+            )}
           />
         </Form.Group>
         <Form.Group widths="equal">
-          <Form.Field
-            required
-            control={TextArea}
-            label="Đánh giá"
-            error={errors?.description?.message ?? false}
-            value={watch('description') || ''}
-            onChange={(e: any, { value }: any) => {
-              setValue('description', value);
-              trigger('description');
-            }}
-          />
+        <Controller
+              control={control}
+              name="description"
+              defaultValue=""
+              rules={rules.description}
+              render={({ onChange, onBlur, value }): React.ReactElement => (
+                <Form.Field
+                  required
+                  control={TextArea}
+                  label="Đánh giá"
+                  error={!!errors?.description?.message && errors.description.message}
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                />
+              )}
+            />
         </Form.Group>
         <Button primary disabled={disabled} content="Xác nhận" />
       </Form>

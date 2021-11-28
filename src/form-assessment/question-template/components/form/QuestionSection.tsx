@@ -162,7 +162,10 @@ const QuestionSection: React.FC<PropsQuestionSection> = ({ data, onChange }) => 
 
   useEffect(() => {
     if (questionList && questionList.length > 0 && questionList !== data) {
-      onChange(questionList);
+      onChange(questionList.map((quest, index) => ({
+        ...quest,
+        order: index,
+      })));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionList]);
@@ -175,11 +178,11 @@ const QuestionSection: React.FC<PropsQuestionSection> = ({ data, onChange }) => 
         </Header>
         <ActionsWrapper>
           <Action
-              title="Thêm câu hỏi"
-              icon={<FiPlus />}
-              color="green"
-              onClick={() => setModalAddQuestion(true)}
-            />
+            title="Thêm câu hỏi"
+            icon={<FiPlus />}
+            color="green"
+            onClick={() => setModalAddQuestion(true)}
+          />
         </ActionsWrapper>
       </ToolbarWrapper>
       <DragDropContext onDragEnd={onDrag}>

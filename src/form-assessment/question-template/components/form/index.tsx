@@ -67,7 +67,7 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
     defaultValues: {},
   });
 
-  const error = !!errors.title;
+  const error = !!errors.questionTemplateTypeId || !!errors.title || !!errors.questions || !!errors.surveyResults;
   const confirm = useConfirm();
   const { fetch, fetching } = useFetchApi();
 
@@ -233,9 +233,9 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
                   width="4"
                   control={QuestionTemplateTypeSection}
                   error={!!errors?.questionTemplateTypeId?.message && errors.questionTemplateTypeId.message}
-                  data={watch('questionTemplateTypeId') || []}
+                  data={watch('questionTemplateTypeId') || ''}
                   onChange={(value: string[]): void => {
-                    handleChange('questionTemplateTypeId', value || []);
+                    handleChange('questionTemplateTypeId', value || '');
                   }}
                 />
                 <Form.Field

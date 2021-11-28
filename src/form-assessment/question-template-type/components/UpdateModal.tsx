@@ -3,11 +3,11 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import React, { useEffect } from 'react';
 
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Modal, Form, Button, TextArea } from 'semantic-ui-react';
 
 import { useFetchApi } from '@app/hooks';
-import { QuestionTemplateType, QuestionTemplateTypeUM } from '@form-assessment/question-template-type/question-template-type.model';
+import { QuestionTemplateType, QuestionTemplateTypeCM } from '@form-assessment/question-template-type/question-template-type.model';
 import questionTemplateTypeService from '@form-assessment/question-template-type/question-template-type.service';
 
 interface Props {
@@ -20,19 +20,17 @@ const UpdateModal: React.FC<Props> = ({ data, onClose, onRefresh }) => {
   const { fetch, fetching } = useFetchApi();
   const {
     formState: { errors },
-    register,
-    watch,
+    control,
     reset,
-    trigger,
-    setValue,
     handleSubmit,
-  } = useForm<QuestionTemplateTypeUM>({
-    defaultValues: {},
-  });
+  } = useForm<QuestionTemplateTypeCM>({ defaultValues: data || {} });
 
   const disabled = !!errors?.description?.message;
+  const rules = {
+    description: { required: 'Bắt buộc phải nhập mô tả' }
+  };
 
-  const onSubmit = async (d: QuestionTemplateTypeUM): Promise<void> => {
+  const onSubmit = async (d: QuestionTemplateTypeCM): Promise<void> => {
     if (data?.id) {
       await fetch(questionTemplateTypeService.updateQuestionTemplateType({ ...d, id: data.id}));
       onRefresh();
@@ -40,11 +38,6 @@ const UpdateModal: React.FC<Props> = ({ data, onClose, onRefresh }) => {
       reset({});
     }
   };
-
-  useEffect(() => {
-    register('description', { required: 'Bắt buộc phải nhập mô tả' });
-  }, [register]);
-
 
   useEffect(() => {
     if (data?.id) {
@@ -58,16 +51,22 @@ const UpdateModal: React.FC<Props> = ({ data, onClose, onRefresh }) => {
       <Modal.Content>
         <Form>
           <Form.Group widths="equal">
-            <Form.Field
-              required
-              control={TextArea}
-              label="Mô tả"
-              error={!!errors?.description?.message && errors.description.message}
-              value={watch('description') ?? ''}
-              onChange={(__: any, { value }: any) => {
-                setValue('description', value);
-              }}
-              onBlur={() => trigger('description')}
+            <Controller
+              control={control}
+              name="description"
+              defaultValue=""
+              rules={rules.description}
+              render={({ onChange, onBlur, value }): React.ReactElement => (
+                <Form.Field
+                  required
+                  control={TextArea}
+                  label="Mô tả"
+                  error={!!errors?.description?.message && errors.description.message}
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                />
+              )}
             />
           </Form.Group>
         </Form>
