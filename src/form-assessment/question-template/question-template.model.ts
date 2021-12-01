@@ -1,4 +1,4 @@
-import { Question } from '@form-assessment/question/question.model';
+import { Question, QuestionForQuestionTemplateCM } from '@form-assessment/question/question.model';
 import { SurveyResult, SurveyResultCM } from '@form-assessment/survey-result/survey-result.model';
 
 export interface QuestionTemplate {
@@ -13,7 +13,7 @@ export interface QuestionTemplate {
 export interface QuestionTemplateCM {
   title: string;
   description: string;
-  questions: string[];
+  questions: QuestionForQuestionTemplateCM[];
   surveyResults: SurveyResultCM[],
   questionTemplateTypeId: string;
 }
