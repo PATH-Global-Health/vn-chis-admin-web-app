@@ -1,6 +1,7 @@
+import { toast } from 'react-toastify';
 import { httpClient, apiLinks } from '@app/utils';
-
-import { Tag, TagCM, TagUM, TagDM } from './tag.model';
+import { getResponseError } from '@app/utils/helpers';
+import { Tag, TagCM, TagUM, TagDM } from '@news/tag/tag.model';
 
 const getTags = async (): Promise<Tag[]> => {
   const response = await httpClient.get({
@@ -25,10 +26,16 @@ const updateTag = async (data: TagUM): Promise<void> => {
 };
 
 const deleteTag = async (data: TagDM): Promise<void> => {
-  await httpClient.delete({
-    url: `${apiLinks.news.tag.delete}/${data.id}`,
-    data,
-  });
+  try {
+    await httpClient.delete({
+      url: `${apiLinks.news.tag.delete}/${data.id}`,
+      data,
+    });
+    toast.success('Xoá thành công');
+  } catch (error) {
+    // eslint-disable-next-line
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const genderService = {

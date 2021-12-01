@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { FiPlus, FiEdit3, FiTrash2 } from 'react-icons/fi';
 import DataList from '@app/components/data-list';
-import QuestionTemplateTypeModal from '@form-assessment/question-template-type/components/QuestionTemplateTypeModal';
+import CreateModal from '@form-assessment/question-template-type/components/CreateModal';
+import UpdateModal from '@form-assessment/question-template-type/components/UpdateModal';
 
 import {
   useFetchApi,
@@ -73,13 +74,15 @@ const QuestionTemplateTypesPage: React.FC = () => {
         getRowKey={(d): string => d.id}
       />
 
-      <QuestionTemplateTypeModal
+      <CreateModal
         open={openCreate}
+        onClose={(): void => setOpenCreate(false)}
+        onRefresh={getData}
+      />
+
+      <UpdateModal
         data={updateDetails}
-        onClose={(): void => {
-          setOpenCreate(false);
-          setUpdateDetails(undefined);
-        }}
+        onClose={(): void => setUpdateDetails(undefined)}
         onRefresh={getData}
       />
     </>

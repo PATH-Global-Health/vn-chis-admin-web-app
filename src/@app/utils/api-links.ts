@@ -7,7 +7,8 @@ const unitUrl = 'https://schedule-management.bakco.vn/api';
 const postUrl = 'https://mini-cms.bakco.vn';
 const pqmUrl =
   process.env?.REACT_APP_PQM_ENDPOINT ?? 'https://pqm-core.hcdc.vn';
-  
+// const csytGateway = 'https://schedule-management.bakco.vn/api';
+const smdUrl = 'http://119.82.130.133:32340/api';
 const apiLinks = {
   admin: {
     userManagement: {
@@ -243,6 +244,20 @@ const apiLinks = {
   },
   unit: {
     createUnitWithUser: (username: string): string => `${unitUrl}/Hospitals/HospitalByAdmin/${username}`,
+    get: `${unitUrl}/Hospitals`,
+    getLogo: `${unitUrl}/Hospitals/Logo`,
+    updateLogo: `${unitUrl}/Hospitals/Logo`,
+    create: `${unitUrl}/Hospitals/CreateOrganization`,
+    update: `${unitUrl}/Hospitals`,
+    delete: `${unitUrl}/Hospitals/`,
+    setTesting: `${unitUrl}/Hospitals/SetTestingFacility`,
+    setPrEP: `${unitUrl}/Hospitals/SetPrEPFacility`,
+    setARV: `${unitUrl}/Hospitals/SetARTFacility`,
+    unitTypes: `${
+      process.env.NODE_ENV !== 'development' ? unitUrl : smdUrl
+    }/UnitTypes`,
+    hospitals: `${unitUrl}/Hospitals/`,
+    referHospitals: `${unitUrl}/Hospitals/FilterByFunctionFacility`,
   },
   service: {
     get: `${unitUrl}/Services`,

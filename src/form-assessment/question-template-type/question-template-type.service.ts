@@ -1,5 +1,7 @@
 
+import { toast } from 'react-toastify';
 import { httpClient, apiLinks } from '@app/utils';
+import { getResponseError } from '@app/utils/helpers';
 import { QuestionTemplateType, QuestionTemplateTypeCM, QuestionTemplateTypeUM, QuestionTemplateTypeDM } from './question-template-type.model';
 
 const getQuestionTemplateType = async (): Promise<QuestionTemplateType[]> => {
@@ -25,10 +27,16 @@ const updateQuestionTemplateType = async (data: QuestionTemplateTypeUM): Promise
 };
 
 const deleteQuestionTemplateType = async (data: QuestionTemplateTypeDM): Promise<void> => {
-  await httpClient.delete({
-    url: `${apiLinks.form.questionTemplateType.delete}/${data.id}`,
-    data,
-  });
+  try {
+    await httpClient.delete({
+      url: `${apiLinks.form.questionTemplateType.delete}/${data.id}`,
+      data,
+    });
+    toast.success('Xoá thành công');
+  } catch (error) {
+    // eslint-disable-next-line
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const questionTemplateTypeService = {

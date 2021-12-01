@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { FiPlus, FiEdit3, FiTrash2 } from 'react-icons/fi';
+import { Grid } from 'semantic-ui-react';
 import DataList from '@app/components/data-list';
 import QuestionModal from '@form-assessment/question/components/QuestionModal';
+import AnswerTable from '@form-assessment/question/components/AnswerTable';
 
 import {
   useFetchApi,
@@ -12,43 +14,35 @@ import {
   useDispatch,
 } from '@app/hooks';
 import { GroupKey, ComponentKey } from '@app/utils/component-tree';
-import { Question } from './question.model';
-import { getQuestion, setSelectedQuestion } from './question.slice';
-import QuestionService from './question.service'
-import { toast } from 'react-toastify';
-import { Grid } from 'semantic-ui-react';
-import QuestionPreview from './components/QuestionReview';
-
+import { Question } from '@form-assessment/question/question.model';
+import { getQuestion, setSelectedQuestion } from '@form-assessment/question/question.slice';
+import questionService from '@form-assessment/question/question.service';
 
 const QuestionPage: React.FC = () => {
+  const [openCreate, setOpenCreate] = useState(false);
+  const [updateDetails, setUpdateDetails] = useState<Question>();
+
+  const confirm = useConfirm();
+  const dispatch = useDispatch();
+  const { fetch, fetching } = useFetchApi();
   const {
     questionList,
     selectedQuestion,
     getQuestionLoading,
-    getSelectedQuestionLoading
   } = useSelector(
     (state) => state.formAssessment.question,
   );
-  const { fetch, fetching } = useFetchApi();
-  const confirm = useConfirm();
-  const dispatch = useDispatch();
-
-  const [openCreate, setOpenCreate] = useState(false);
-  const [updateDetails, setUpdateDetails] = useState<Question>();
 
   const getData = useCallback(() => {
     dispatch(getQuestion());
   }, [dispatch]);
-
-  useRefreshCallback(GroupKey.ADMIN_NEW_MANAGEMENT, ComponentKey.QUESTION_TEMPLATE_TYPE, getData);
   useEffect(getData, [getData]);
 
-  useEffect(() => {
-    if (selectedQuestion?.id) {
-      dispatch(setSelectedQuestion(questionList.find((q) => q.id === selectedQuestion.id)))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, selectedQuestion]);
+  useRefreshCallback(
+    GroupKey.ADMIN_NEW_MANAGEMENT,
+    ComponentKey.QUESTION,
+    getData
+  );
 
   return (
     <>
@@ -72,23 +66,25 @@ const QuestionPage: React.FC = () => {
 
               itemActions={[
                 {
+                  icon: <FiEdit3 />,
+                  color: 'violet',
+                  title: 'Sửa',
+                  onClick: (d): void => setUpdateDetails(d),
+                },
+                {
                   icon: <FiTrash2 />,
                   color: 'red',
                   title: 'Xoá',
                   onClick: (d): void => {
                     confirm('Xác nhận xoá?', async () => {
-                      await fetch(QuestionService.deleteQuestion(d));
-                      toast.success('Xóa thành công');
+                      if (selectedQuestion?.id && selectedQuestion.id === d.id) {
+                        dispatch(setSelectedQuestion(undefined));
+                      }
+                      
+                      await fetch(questionService.deleteQuestion(d));
                       getData();
                     });
                   },
-                },
-
-                {
-                  icon: <FiEdit3 />,
-                  color: 'violet',
-                  title: 'Sửa',
-                  onClick: (d): void => setUpdateDetails(d),
                 },
               ]}
               onRowClick={(d) => {
@@ -104,12 +100,7 @@ const QuestionPage: React.FC = () => {
           </Grid.Column>
           {selectedQuestion?.id && (
             <Grid.Column width="8">
-              <QuestionPreview
-                title="Các lựa chọn của câu hỏi"
-                loading={getSelectedQuestionLoading}
-                data={selectedQuestion}
-                onRefresh={getData}
-              />
+              <AnswerTable />
             </Grid.Column>
           )}
         </Grid.Row>

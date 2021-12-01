@@ -5,6 +5,7 @@ export interface Answer {
 }
 export interface Question {
   id: string;
+  order?: number;
   description: string;
   isMultipleChoice: boolean,
   answers: any[];
@@ -16,7 +17,12 @@ export type QuestionUM = Omit<Question, 'answers'>;
 
 export type QuestionDM = Question;
 
-export type AnswerCM = Omit<Answer, 'id'>;
+export type SingleAnwserCM = Omit<Answer, 'id'>;
+
+export interface MultipleAnswerCM {
+  questionId: string;
+  answers: SingleAnwserCM[];
+}
 
 export type AnswerUM = Answer;
 

@@ -4,7 +4,6 @@ import { Dropdown } from 'semantic-ui-react';
 
 import { useDispatch, useSelector } from '@app/hooks';
 import { getQuestionTemplateType } from '@form-assessment/question-template-type/question-template-type.slice';
-import { BLANK_FIELD } from '@app/utils/constants';
 
 const Wrapper = styled.div`
   & i.icon {
@@ -38,13 +37,20 @@ const QuestionTemplateTypeSection: React.FC<Props> = ({ data, onChange }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => onChange(value), [value]);
-  // useEffect(() => {
-  //   if (data) {
-  //     setValue(data);
-  //   }
-  // }, [data]);
+
+  useEffect(() => {
+    if (data !== value) {
+      onChange(value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+  
+  useEffect(() => {
+    if (data) {
+      setValue(data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <Wrapper>
@@ -57,17 +63,11 @@ const QuestionTemplateTypeSection: React.FC<Props> = ({ data, onChange }) => {
         placeholder="Loại"
         className="icon"
         value={value}
-        options={(questionTemplateTypeList || []).reduce(
-          (_, o) => {
-            return [
-              ..._,
-              {
-                text: o?.description ?? '',
-                value: o?.id ?? '',
-              },
-            ];
-          },
-          [{ text: BLANK_FIELD, value: '' }],
+        options={(questionTemplateTypeList || []).map(
+          (type) => ({
+            text: type?.description ?? '',
+            value: type?.id ?? '',
+          }),
         )}
         onChange={(e: any, { value: v }: any) => {
           setValue(v);

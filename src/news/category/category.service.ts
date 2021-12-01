@@ -1,6 +1,8 @@
 
+import { toast } from 'react-toastify';
 import { httpClient, apiLinks } from '@app/utils';
-import { Category, CategoryCM, CategoryUM, CategoryDM } from './category.model';
+import { getResponseError } from '@app/utils/helpers';
+import { Category, CategoryCM, CategoryUM, CategoryDM } from '@news/category/category.model';
 
 const getCategories = async (): Promise<Category[]> => {
   const response = await httpClient.get({
@@ -25,10 +27,16 @@ const updateCategory = async (data: CategoryUM): Promise<void> => {
 };
 
 const deleteCategory = async (data: CategoryDM): Promise<void> => {
-  await httpClient.delete({
-    url: `${apiLinks.news.category.delete}/${data.id}`,
-    data,
-  });
+  try {
+    await httpClient.delete({
+      url: `${apiLinks.news.category.delete}/${data.id}`,
+      data,
+    });
+    toast.success('Xoá thành công');
+  } catch (error) {
+    // eslint-disable-next-line
+    toast.warn(getResponseError(error.response?.data));
+  }
 };
 
 const genderService = {

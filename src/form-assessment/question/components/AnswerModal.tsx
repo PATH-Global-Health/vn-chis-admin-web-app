@@ -1,73 +1,67 @@
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
-import { Modal, Form, Input, Button } from 'semantic-ui-react';
+import { Modal, Form, Input, TextArea, Button } from 'semantic-ui-react';
 
-import { useFetchApi, useSelector } from '@app/hooks';
-import { AnswerCM } from '../question.model';
-import QuestionService from '../question.service';
-import { toast } from 'react-toastify';
-
+// import { useFetchApi, useSelector } from '@app/hooks';
+import { Answer, SingleAnwserCM, AnswerUM } from '@form-assessment/question/question.model';
+// import questionService from '@form-assessment/question/question.service';
 
 interface Props {
   open: boolean;
-  data?: any;
+  data?: Answer;
+  onChange: (d: SingleAnwserCM) => void;
   onClose: () => void;
   onRefresh: () => void;
 }
 
-const AnswerModal: React.FC<Props> = ({ open, data, onClose, onRefresh }) => {
+const AnswerModal: React.FC<Props> = ({ open, data, onChange, onClose, onRefresh }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const {
     formState: { errors },
-    register,
+    control,
     reset,
-    watch,
-    trigger,
-    setValue,
     handleSubmit,
-  } = useForm<AnswerCM>({
-    defaultValues: {},
-  });
-  const {
-    selectedQuestion,
-  } = useSelector(
-    (state) => state.formAssessment.question,
-  );
-  const { fetch, fetching } = useFetchApi();
+  } = useForm<SingleAnwserCM | AnswerUM>();
+
+  // const { fetch, fetching } = useFetchApi();
+  // const { selectedQuestion } = useSelector(
+  //   (state) => state.formAssessment.question,
+  // );
 
   const disabled = !!errors.description;
+  const rules = {
+    description: { required: 'Bắt buộc phải nhập mô tả lựa chọn' },
+    score: {
+      required: 'Bắt buộc phải nhập điểm',
+      validate: (value: string) => (value || '').replace(/[^0-9]/g,'') !== '' ? true : 'Bắt buộc phải nhập số',
+    },
+  };
 
-  const onSubmit = async (d: AnswerCM): Promise<void> => {
-    const requestData = {
-      questionId: selectedQuestion?.id,
-      answers: [
-        d
-      ]
-    }
-    try {
-      await fetch(
-        data
-          ? QuestionService.updateAnswer({
-            ...d,
-            id: data?.id ?? '',
-          })
-          : QuestionService.createAnswer(requestData),
-      );
-      toast.success('Thành công')
-    } catch (error) {
-      toast.warning('Thất bại')
-    }
+  const onSubmit = async (d: SingleAnwserCM): Promise<void> => {
+    await onChange(d);
     onRefresh();
     onClose();
+    reset({});
+    // await fetch(
+    //   data?.id
+    //     ? questionService.updateAnswer({
+    //       ...d,
+    //       id: data?.id ?? '',
+    //       score: parseFloat(d.score as unknown as string),
+    //     })
+    //     : questionService.createAnswer({
+    //       questionId: selectedQuestion?.id ?? '',
+    //       answers: [{
+    //         ...d,
+    //         score: parseFloat(d.score as unknown as string),
+    //       }],
+    //     }),
+    // );
   };
 
   useEffect(() => {
-    register('description', { required: 'Bắt buộc nhập mô tả lựa chọn' });
-    register('score');
-  }, [register]);
-  useEffect(() => {
-    if (data) {
+    if (data?.id) {
       reset(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,37 +70,60 @@ const AnswerModal: React.FC<Props> = ({ open, data, onClose, onRefresh }) => {
   return (
     <Modal open={open || Boolean(data)} onClose={onClose}>
       <Modal.Header>
-        {data?.id ? 'Sửa lựa chọn ' : 'Thêm lựa chọn mới '}
+        {data?.id ? 'Sửa ' : 'Thêm '} câu hỏi
       </Modal.Header>
       <Modal.Content>
-        <Form loading={fetching} onSubmit={handleSubmit((d) => onSubmit(d))}>
-          <Form.Group >
-            <Form.Field
-              control={Input}
-              label="Mô tả"
-              width={14}
-              error={errors?.description?.message ?? false}
-              value={watch('description') || ''}
-              onChange={(e: any, { value }: any) => {
-                setValue('description', value);
-                trigger('description');
-              }}
-            />
-            <Form.Field
-              control={Input}
-              label="Điểm"
-              width={2}
-              error={errors?.score?.message ?? false}
-              value={watch('score') || 0}
-              onChange={(e: any, { value }: any) => {
-                setValue('score', parseFloat(value));
-                trigger('score');
-              }}
+        <Form>
+          <Form.Group widths="equal">
+            <Controller
+              control={control}
+              name="score"
+              defaultValue=""
+              rules={rules.score}
+              render={({ onChange, onBlur, value }): React.ReactElement => (
+                <Form.Field
+                  required
+                  type="number"
+                  control={Input}
+                  label="Điểm"
+                  error={!!errors?.score?.message && errors.score.message}
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                />
+              )}
             />
           </Form.Group>
-          <Button primary disabled={disabled} content="Xác nhận" />
+          <Form.Group widths="equal">
+            <Controller
+              control={control}
+              name="description"
+              defaultValue=""
+              rules={rules.description}
+              render={({ onChange, onBlur, value }): React.ReactElement => (
+                <Form.Field
+                  required
+                  control={TextArea}
+                  label="Mô tả"
+                  error={!!errors?.description?.message && errors.description.message}
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                />
+              )}
+            />
+          </Form.Group>
         </Form>
       </Modal.Content>
+      <Modal.Actions>
+        <Button
+          positive
+          content="Xác nhận"
+          // loading={fetching}
+          disabled={disabled}
+          onClick={handleSubmit((d) => onSubmit(d))}
+        />
+      </Modal.Actions>
     </Modal>
   );
 };
