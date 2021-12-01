@@ -135,7 +135,7 @@ const componentTree: Component[] = [
   },
   {
     key: GroupKey.ADMIN_SERVICE_MANAGEMENT,
-    title: "Quản lý dịch vụ",
+    title: "Dịch vụ & Cơ sở",
     permissionCode: GroupKey.ADMIN_SERVICE_MANAGEMENT,
     childrenList: [
       {

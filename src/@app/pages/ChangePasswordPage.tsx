@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
 
-import { FiArrowLeft, FiInfo } from 'react-icons/fi';
-import { Card, Form, Input, Image, Message, Button } from 'semantic-ui-react';
+import { FiInfo } from "react-icons/fi";
+import { Card, Form, Input, Image, Message, Button } from "semantic-ui-react";
 
-import { useSelector } from '@app/hooks';
-import authService from '@app/services/auth';
+import { useSelector } from "@app/hooks";
+import authService from "@app/services/auth";
 
-import logo from '../assets/img/vk-logo.png';
-import packageJson from '../../../package.json';
+import logo from "../assets/img/vk-logo.png";
+import packageJson from "../../../package.json";
 
 const StyledCard = styled(Card)`
   width: 450px !important;
@@ -28,18 +28,18 @@ const ButtonWrapper = styled(Form.Group)`
   flex-direction: row;
   margin: 2em -0.5em 0.25em !important;
 `;
-const ChangePasswordWrapper = styled.div`
-  cursor: pointer;
-  color: grey;
-  font-size: 16px;
-  font-weight: 600;
-  text-align: center;
-  padding: 0.25em 0.75em;
+// const ChangePasswordWrapper = styled.div`
+//   cursor: pointer;
+//   color: grey;
+//   font-size: 16px;
+//   font-weight: 600;
+//   text-align: center;
+//   padding: 0.25em 0.75em;
 
-  &:hover {
-    color: black;
-  }
-`;
+//   &:hover {
+//     color: black;
+//   }
+// `;
 const IconWrapper = styled.span`
   margin-right: 8px;
   vertical-align: middle;
@@ -55,35 +55,38 @@ interface ChangePasswordModel {
 const ChangePasswordPage: React.FC = () => {
   const [failed, setFailed] = useState<any>(undefined);
 
-  const {
-    register,
-    setValue,
-    handleSubmit,
-  } = useForm<ChangePasswordModel>();
+  const { register, setValue, handleSubmit } = useForm<ChangePasswordModel>();
   const history = useHistory();
-  const { loginLoading, changePasswordLoading } = useSelector((state) => state.auth);
+  const { loginLoading, changePasswordLoading } = useSelector(
+    (state) => state.auth
+  );
 
-  const handleChangePassword = async (data: ChangePasswordModel): Promise<void> => {
+  const handleChangePassword = async (
+    data: ChangePasswordModel
+  ): Promise<void> => {
     const { username, currentPassword, newPassword, confirmPassword } = data;
     if (newPassword !== confirmPassword) {
-      setFailed({ message: 'Mật khẩu mới không khớp'});
+      setFailed({ message: "Mật khẩu mới không khớp" });
       return;
     }
 
     try {
       const token = await authService.login(username, currentPassword);
-      await authService.changePassword(token.access_token, { oldPassword: currentPassword, newPassword });
-      setTimeout(() => history.push('/auth'), 0);
+      await authService.changePassword(token.access_token, {
+        oldPassword: currentPassword,
+        newPassword,
+      });
+      setTimeout(() => history.push("/auth"), 0);
     } catch (error) {
       setFailed(error);
     }
   };
 
   useEffect(() => {
-    register('username');
-    register('currentPassword');
-    register('newPassword');
-    register('confirmPassword');
+    register("username");
+    register("currentPassword");
+    register("newPassword");
+    register("confirmPassword");
   }, [register]);
 
   return (
@@ -94,9 +97,9 @@ const ChangePasswordPage: React.FC = () => {
           <Message
             error
             content={
-              failed.message.includes('400')
-              ? 'Tài khoản hoặc mặt khẩu không đúng'
-              : failed.message
+              failed.message.includes("400")
+                ? "Tài khoản hoặc mặt khẩu không đúng"
+                : failed.message
             }
           />
         )}
@@ -105,7 +108,9 @@ const ChangePasswordPage: React.FC = () => {
             <Form.Field
               label="Tên đăng nhập / Username"
               control={Input}
-              onChange={(__: any, { value }: any) => setValue('username', value)}
+              onChange={(__: any, { value }: any) =>
+                setValue("username", value)
+              }
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -113,7 +118,9 @@ const ChangePasswordPage: React.FC = () => {
               type="password"
               label="Mật khẩu / Current password"
               control={Input}
-              onChange={(__: any, { value }: any) => setValue('currentPassword', value)}
+              onChange={(__: any, { value }: any) =>
+                setValue("currentPassword", value)
+              }
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -121,7 +128,9 @@ const ChangePasswordPage: React.FC = () => {
               type="password"
               label="Mật khẩu mới / New password"
               control={Input}
-              onChange={(__: any, { value }: any) => setValue('newPassword', value)}
+              onChange={(__: any, { value }: any) =>
+                setValue("newPassword", value)
+              }
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -129,7 +138,9 @@ const ChangePasswordPage: React.FC = () => {
               type="password"
               label="Nhập lại mật khẩu mới / Comfirm new password"
               control={Input}
-              onChange={(__: any, { value }: any) => setValue('confirmPassword', value)}
+              onChange={(__: any, { value }: any) =>
+                setValue("confirmPassword", value)
+              }
             />
           </Form.Group>
           <ButtonWrapper widths="equal">
