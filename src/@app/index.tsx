@@ -1,14 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import { Provider } from 'react-redux';
+import { Provider } from "react-redux";
 
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import store from './store';
+import store from "./store";
+import "./i18n/i18n";
 
-import AppRouter from './routers/AppRouter';
-import ConfirmModal from './components/ConfirmModal';
+import AppRouter from "./routers/AppRouter";
+import ConfirmModal from "./components/ConfirmModal";
 
 const App: React.FC = () => {
   return (
