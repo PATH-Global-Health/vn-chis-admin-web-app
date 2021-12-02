@@ -1,14 +1,12 @@
-// const url = window.location.href;
-// const isDev =
-//   url.indexOf('abcde') > -1 || process.env.NODE_ENV === 'development';
+// const isDev = process.env.NODE_ENV === 'development';
+const gatewayUrl = 'https://api.chis.vn/v1';
 
-const authUrl = 'https://user-management.bakco.vn/api';
-const unitUrl = 'https://schedule-management.bakco.vn/api';
-const postUrl = 'https://mini-cms.bakco.vn';
+const authUrl = `${gatewayUrl}/auth`;
+const unitUrl = `${gatewayUrl}/schedule`;
+const postUrl = `${gatewayUrl}/mini-cms`;
 const pqmUrl =
   process.env?.REACT_APP_PQM_ENDPOINT ?? 'https://pqm-core.hcdc.vn';
-// const csytGateway = 'https://schedule-management.bakco.vn/api';
-const smdUrl = 'http://119.82.130.133:32340/api';
+
 const apiLinks = {
   admin: {
     userManagement: {
@@ -253,9 +251,7 @@ const apiLinks = {
     setTesting: `${unitUrl}/Hospitals/SetTestingFacility`,
     setPrEP: `${unitUrl}/Hospitals/SetPrEPFacility`,
     setARV: `${unitUrl}/Hospitals/SetARTFacility`,
-    unitTypes: `${
-      process.env.NODE_ENV !== 'development' ? unitUrl : smdUrl
-    }/UnitTypes`,
+    unitTypes: `${unitUrl}/UnitTypes`,
     hospitals: `${unitUrl}/Hospitals/`,
     referHospitals: `${unitUrl}/Hospitals/FilterByFunctionFacility`,
   },
