@@ -189,7 +189,7 @@ const UpdateModal: React.FC<Props> = (props) => {
                 ref={register({
                   required: {
                     value: true,
-                    message: t("No name entered sub facility"),
+                    message: t("No name entered Facility"),
                   },
                   minLength: { value: 3, message: t("Minimum 3 characters") },
                   maxLength: { value: 50, message: t("Maximum 50 characters") },
