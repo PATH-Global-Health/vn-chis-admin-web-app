@@ -82,11 +82,9 @@ const CreateModal: React.FC<Props> = (props) => {
         />
       );
     } catch (error) {
+      console.log(error);
       toast(
-        <ToastComponent
-          content={t("Create a failed sub facility")}
-          type="failed"
-        />
+        <ToastComponent content={t("Create a failed Facility")} type="failed" />
       );
     }
   };

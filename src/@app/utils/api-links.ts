@@ -247,7 +247,7 @@ const apiLinks = {
     updateLogo: `${unitUrl}/Hospitals/Logo`,
     create: `${unitUrl}/Hospitals/CreateOrganization`,
     update: `${unitUrl}/Hospitals`,
-    delete: `${unitUrl}/Hospitals/`,
+    delete: `${unitUrl}/Hospitals/RemoveUnit`,
     setTesting: `${unitUrl}/Hospitals/SetTestingFacility`,
     setPrEP: `${unitUrl}/Hospitals/SetPrEPFacility`,
     setARV: `${unitUrl}/Hospitals/SetARTFacility`,
