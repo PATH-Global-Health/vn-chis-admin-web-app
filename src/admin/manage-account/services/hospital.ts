@@ -88,8 +88,8 @@ const setARVFacility = async (id: string, isARTFacility: boolean): Promise<void>
 const deleteHospital = async (id: string): Promise<void> => {
   try {
     await httpClient.delete({
-      url: apiLinks.unit.hospitals,
-      params: { id },
+      url: apiLinks.unit.delete + `/${id}`,
+      // params: { id },
     });
   } catch (error) {
     console.log(error);
