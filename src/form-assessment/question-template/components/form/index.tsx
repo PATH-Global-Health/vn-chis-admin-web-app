@@ -12,7 +12,7 @@ import Action from '@news/post/components/post-form/Action';
 
 import { useFetchApi, useConfirm } from '@app/hooks';
 import { SurveyResult, SurveyResultCM } from '@form-assessment/survey-result/survey-result.model';
-import { Question as QuestionModel } from '@form-assessment/question/question.model';
+import { Question as QuestionModel, QuestionForQuestionTemplateCM } from '@form-assessment/question/question.model';
 import { QuestionTemplate, QuestionTemplateCM } from '@form-assessment/question-template/question-template.model';
 import questionTemplateService from '@form-assessment/question-template/question-template.service';
 
@@ -125,7 +125,10 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
       } else {
         await fetch(questionTemplateService.createQuestionTemplate({
           ...payload,
-          questions: payload.questions.map((q) => q.id),
+          questions: payload.questions.map((q, i): QuestionForQuestionTemplateCM => ({
+            order: i,
+            questionId: q.id
+          })),
           surveyResults: payload.surveyResults.map((s) => ({
             description: s.description,
             fromScore: parseFloat(s.fromScore.toString()),

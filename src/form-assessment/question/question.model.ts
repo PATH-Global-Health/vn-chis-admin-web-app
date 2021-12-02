@@ -17,6 +17,11 @@ export type QuestionUM = Omit<Question, 'answers'>;
 
 export type QuestionDM = Question;
 
+export interface QuestionForQuestionTemplateCM {
+  order: number;
+  questionId: string;
+}
+
 export type SingleAnwserCM = Omit<Answer, 'id'>;
 
 export interface MultipleAnswerCM {
