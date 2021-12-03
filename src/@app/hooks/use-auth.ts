@@ -43,7 +43,7 @@ const useAuth = (): UseAuth => {
       dispatch<any>(getPermission(token.access_token))
         .then((action: any) => {
           const { payload: permissionList } = action;
-            const authorized = permissionList.find((p: any) => p?.code && p.code === ACCESS_PERMISSION);
+            const authorized = permissionList?.find((p: any) => p?.code && p.code === ACCESS_PERMISSION);
             if (!authorized) {
               toast.warning('Phiên đăng nhập đã hết, vui lòng đăng nhập lại', {
                 toastId: 'token-expired',
