@@ -75,7 +75,7 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
     permissionUIOfUserList,
     getPermissionUIOfUserLoading,
     permissionsResourceOfUserList,
-    getPermissionResourceOfUserLoading,
+    getPermissionsResourceOfUserLoading,
   } = useSelector((state) => state.admin.userManagement.user);
 
   const [addGroupRoleModal, setAddGroupRoleModal] = useState(false);
@@ -245,7 +245,7 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
           getGroupsOfUserLoading ||
           getRolesOfUserLoading ||
           getPermissionUIOfUserLoading ||
-          getPermissionResourceOfUserLoading
+          getPermissionsResourceOfUserLoading
         }
         listActions={[
           {

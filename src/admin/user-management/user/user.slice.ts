@@ -21,7 +21,7 @@ interface State {
   permissionUIOfUserList: Permission[];
   getPermissionUIOfUserLoading: boolean;
   permissionsResourceOfUserList: Permission[];
-  getPermissionResourceOfUserLoading: boolean;
+  getPermissionsResourceOfUserLoading: boolean;
   permissionsDataOfUserList: Permission[];
   getPermissionDataOfUserLoading: boolean;
 }
@@ -40,7 +40,7 @@ const initialState: State = {
   permissionUIOfUserList: [],
   getPermissionUIOfUserLoading: false,
   permissionsResourceOfUserList: [],
-  getPermissionResourceOfUserLoading: false,
+  getPermissionsResourceOfUserLoading: false,
   permissionsDataOfUserList: [],
   getPermissionDataOfUserLoading: false,
 };
@@ -153,19 +153,19 @@ const slice = createSlice({
     }));
     builder.addCase(getPermissionsResourceOfUser.pending, (state) => ({
       ...state,
-      getPermissionResourceOfUserLoading: true,
+      getPermissionsResourceOfUserLoading: true,
     }));
     builder.addCase(
       getPermissionsResourceOfUser.fulfilled,
       (state, { payload }) => ({
         ...state,
-        getPermissionResourceOfUserLoading: false,
+        getPermissionsResourceOfUserLoading: false,
         permissionsResourceOfUserList: payload,
       }),
     );
     builder.addCase(getPermissionsResourceOfUser.rejected, (state) => ({
       ...state,
-      getPermissionResourceOfUserLoading: false,
+      getPermissionsResourceOfUserLoading: false,
     }));
   },
 });
