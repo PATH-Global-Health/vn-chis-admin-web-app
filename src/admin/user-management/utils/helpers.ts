@@ -149,6 +149,14 @@ const permissionDataTypeList = [
   { value: PermissionDataType.WRITE, text: 'Ghi' },
 ];
 
+
+const permissionTypeColorList = [
+  { name: 'GET', color: 'blue' },
+  { name: 'POST', color: 'green' },
+  { name: 'PUT', color: 'orange' },
+  { name: 'DELETE', color: 'red' },
+]
+
 const searchWithDeburr = (options: Option[], query: string): Option[] => {
   return (options || []).filter((option: Option) =>
     deburr(option?.text ?? '').includes(deburr(query)),
@@ -181,6 +189,7 @@ export {
   permissionTypeList,
   permissionUITypeList,
   permissionDataTypeList,
+  permissionTypeColorList,
   searchWithDeburr,
   parseTypeFromPermissionUI,
   parseCodeFromPermissionUI,

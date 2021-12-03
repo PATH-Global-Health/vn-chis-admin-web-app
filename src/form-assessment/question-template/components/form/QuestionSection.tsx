@@ -123,7 +123,6 @@ const QuestionSection: React.FC<PropsQuestionSection> = ({ data, onChange }) => 
     _questionList[source.index] = {
       ..._questionList[source.index],
     };
-    console.log(questionList, _questionList);
     setQuestionList(_questionList);
   };
 

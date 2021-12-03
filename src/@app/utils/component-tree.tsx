@@ -1,8 +1,9 @@
 import React, { ReactNode } from "react";
 
-import UserPage from "@admin/user-management/user";
-import GroupPage from "@admin/user-management/group";
-import RolePage from "@admin/user-management/role";
+import UserPage from '@admin/user-management/user';
+import GroupPage from '@admin/user-management/group';
+import RolePage from '@admin/user-management/role';
+import PermissionPage from '@admin/user-management/permission';
 
 import CategoriesPage from "@news/category";
 import TagsPage from "@news/tag";
@@ -65,9 +66,11 @@ export enum GroupKey {
 
 export enum ComponentKey {
   // #region admin
-  ADMIN_USER = "ADMIN_USER",
-  ADMIN_GROUP = "ADMIN_GROUP",
-  ADMIN_ROLE = "ADMIN_ROLE",
+  ADMIN_USER = 'ADMIN_USER',
+  ADMIN_GROUP = 'ADMIN_GROUP',
+  ADMIN_ROLE = 'ADMIN_ROLE',
+  ADMIN_PERMISSION_UI = 'ADMIN_PERMISSION_UI',
+  ADMIN_PERMISSION_RESOURCE = 'ADMIN_PERMISSION_RESOURCE',
   // #endregion
 
   // #region news
@@ -130,6 +133,16 @@ const componentTree: Component[] = [
         key: ComponentKey.ADMIN_ROLE,
         title: "Vai trò",
         component: <RolePage />,
+      },
+      {
+        key: ComponentKey.ADMIN_PERMISSION_UI,
+        title: 'Quyền UI',
+        component: <PermissionPage isPermissionUI />,
+      },
+      {
+        key: ComponentKey.ADMIN_PERMISSION_RESOURCE,
+        title: 'Quyền Resource',
+        component: <PermissionPage isPermissionResource />,
       },
     ],
   },

@@ -6,6 +6,7 @@ export interface Permission {
   code?: string;
   // Permission Resource
   method?: string;
+  normalizedMethod?: string;
   url?: string;
   permissionType?: number;
   // Permission Data

@@ -1,6 +1,10 @@
 // const isDev = process.env.NODE_ENV === 'development';
 const gatewayUrl = 'https://api.chis.vn/v1';
 
+// const authUrl = 'https://user-management.bakco.vn/api';
+// const unitUrl = 'https://schedule-management.bakco.vn/api';
+// const postUrl = 'https://mini-cms.bakco.vn';
+
 const authUrl = `${gatewayUrl}/auth`;
 const unitUrl = `${gatewayUrl}/schedule`;
 const postUrl = `${gatewayUrl}/mini-cms`;
@@ -70,58 +74,59 @@ const apiLinks = {
   },
   news: {
     tag: {
-      get: `${postUrl}/api/Tag`,
-      create: `${postUrl}/api/Tag`,
-      update: `${postUrl}/api/Tag`,
-      delete: `${postUrl}/api/Tag`,
+      get: `${postUrl}/Tag`,
+      create: `${postUrl}/Tag`,
+      update: `${postUrl}/Tag`,
+      delete: `${postUrl}/Tag`,
     },
     category: {
-      get: `${postUrl}/api/Category`,
-      create: `${postUrl}/api/Category`,
-      update: `${postUrl}/api/Category`,
-      delete: `${postUrl}/api/Category`,
+      get: `${postUrl}/Category`,
+      create: `${postUrl}/Category`,
+      update: `${postUrl}/Category`,
+      delete: `${postUrl}/Category`,
     },
     part: {
-      get: `${postUrl}/api/Part`,
-      update: `${postUrl}/api/Part`,
-      delete: `${postUrl}/api/Part`,
+      get: `${postUrl}/Part`,
+      update: `${postUrl}/Part`,
+      delete: `${postUrl}/Part`,
     },
     post: {
-      get: `${postUrl}/api/Post`,
-      create: `${postUrl}/api/Post`,
-      update: `${postUrl}/api/Post`,
-      delete: `${postUrl}/api/Post`,
-      addParts: `${postUrl}/api/Post/Parts`,
+      get: `${postUrl}/Post`,
+      create: `${postUrl}/Post`,
+      update: `${postUrl}/Post`,
+      delete: `${postUrl}/Post`,
+      addParts: `${postUrl}/Post/Parts`,
     },
   },
   form: {
     question: {
-      get: `${postUrl}/api/Question`,
-      create: `${postUrl}/api/Question`,
-      update: `${postUrl}/api/Question`,
-      delete: `${postUrl}/api/Question`,
+      get: `${postUrl}/Question`,
+      create: `${postUrl}/Question`,
+      update: `${postUrl}/Question`,
+      delete: `${postUrl}/Question`,
     },
     answer: {
-      get: `${postUrl}/api/Answer`,
-      create: `${postUrl}/api/Answer`,
-      update: `${postUrl}/api/Answer`,
-      delete: `${postUrl}/api/Answer`,
+      get: `${postUrl}/Answer`,
+      create: `${postUrl}/Answer`,
+      update: `${postUrl}/Answer`,
+      delete: `${postUrl}/Answer`,
     },
     questionTemplateType: {
-      get: `${postUrl}/api/QuestionTemplateType`,
-      create: `${postUrl}/api/QuestionTemplateType`,
-      update: `${postUrl}/api/QuestionTemplateType`,
-      delete: `${postUrl}/api/QuestionTemplateType`,
+      get: `${postUrl}/QuestionTemplateType`,
+      create: `${postUrl}/QuestionTemplateType`,
+      update: `${postUrl}/QuestionTemplateType`,
+      delete: `${postUrl}/QuestionTemplateType`,
     },
     questionTemplate: {
-      get: `${postUrl}/api/QuestionTemplate/Filter`,
-      create: `${postUrl}/api/QuestionTemplate`,
-      update: `${postUrl}/api/QuestionTemplate`,
-      delete: `${postUrl}/api/QuestionTemplate`,
-      addQuestion: `${postUrl}/api/QuestionTemplate/Questions`,
-      deleteQuestion: `${postUrl}/api/QuestionTemplate/Questions`,
-      addSurveyResult: `${postUrl}/api/QuestionTemplate/SurveyResult`,
-      deleteSurveyResult: `${postUrl}/api/QuestionTemplate/SurveyResult`
+      get: `${postUrl}/QuestionTemplate/Filter`,
+      getDetail: (id: string): string => `${postUrl}/QuestionTemplate/${id}`,
+      create: `${postUrl}/QuestionTemplate`,
+      update: `${postUrl}/QuestionTemplate`,
+      delete: `${postUrl}/QuestionTemplate`,
+      addQuestion: `${postUrl}/QuestionTemplate/Questions`,
+      deleteQuestion: `${postUrl}/QuestionTemplate/Questions`,
+      addSurveyResult: `${postUrl}/QuestionTemplate/SurveyResult`,
+      deleteSurveyResult: `${postUrl}/QuestionTemplate/SurveyResult`
     },
   },
   pqm: {

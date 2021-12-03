@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { SemanticCOLORS } from 'semantic-ui-react/dist/commonjs/generic';
 import naturalCompare from 'natural-compare';
 import { v4 as uuidv4 } from 'uuid';
 
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { Popup, Label, Icon } from 'semantic-ui-react';
 import DataList from '@app/components/data-list';
 import AddGroupRoleModal from '@admin/user-management/user/components/AddGroupRoleToUserModal';
 import AddPermissionUIToUserModal from '@admin/user-management/user/components/AddPermissionUIToUserModal';
@@ -22,7 +24,8 @@ import groupService from '@admin/user-management/group/group.service';
 import roleService from '@admin/user-management/role/role.service';
 import permissionService from '@admin/user-management/permission/permission.service';
 import { HolderType } from '@admin/user-management/utils/constants';
-import { permissionUIList } from '@admin/user-management/utils/helpers';
+import { PermissionType } from '@admin/user-management/utils/constants';
+import { permissionUIList, permissionTypeColorList } from '@admin/user-management/utils/helpers';
 
 interface Props {
   isGroup?: boolean;
@@ -39,9 +42,10 @@ interface GroupRolePermission {
   fullName?: string;
   // Permission UI
   code?: string;
-  // Permision API
-  url?: string;
+  // Permission Resource
   method?: string;
+  normalizedMethod?: string;
+  url?: string;
   permissionType?: number;
   // Permission Data
   provinceId?: string;
@@ -273,13 +277,41 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
           },
         ]}
         getRowKey={(d): string => d.id ?? uuidv4()}
-        itemHeaderRender={(d): string => d?.name}
+        itemHeaderRender={(d): JSX.Element => {
+          if (isPermissionResource) {
+            const permissionTypeColor = permissionTypeColorList.find((p) => d?.normalizedMethod && p.name.includes(d?.normalizedMethod ?? ''))
+            return (
+              <>
+                {d?.normalizedMethod ? (
+                  <Popup
+                    size="mini"
+                    inverted
+                    position="top left"
+                    content={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'Từ chối' : 'Cho phép'}
+                    trigger={
+                      <Label color={(permissionTypeColor?.color ?? 'black') as SemanticCOLORS} basic horizontal>
+                        <Icon name={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'x' : 'check'} /> 
+                        {d?.normalizedMethod ?? ''}
+                      </Label>
+                    }
+                  />
+                ) : null}
+     
+                {d?.url ?? ''}
+              </>
+            )
+          }
+
+          return (
+            <>
+              {d?.name ?? ''}
+            </>
+          );
+        }}
         itemContentRender={(d): string =>
           // eslint-disable-next-line
           isGroup || isRole
             ? d?.description ?? ''
-            : isPermissionResource
-            ? `${d?.method ?? ''} - ${d?.url ?? ''}`
             : ''
         }
       />

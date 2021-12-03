@@ -1,11 +1,20 @@
 /* eslint-disable no-nested-ternary */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { SemanticCOLORS } from 'semantic-ui-react/dist/commonjs/generic';
+
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
+import { Popup, Label, Icon } from 'semantic-ui-react';
 
 import DataList from '@app/components/data-list';
 import AddUserToRole from '@admin/user-management/role/components/AddUserToRole';
-import { useConfirm, useDispatch, useFetchApi, useSelector } from '@app/hooks';
+import AddPermissionUIToRoleModal from '@admin/user-management/role/components/AddPermissionUIToRole';
 
+import {
+  useConfirm,
+  useDispatch,
+  useFetchApi,
+  useSelector
+} from '@app/hooks';
 import {
   getUsersOfRole,
   getPermissionsUIOfRole,
@@ -13,8 +22,8 @@ import {
 } from '@admin/user-management/role/role.slice';
 import roleService from '@admin/user-management/role/role.service';
 import permissionService from '@admin/user-management/permission/permission.service';
-import { HolderType } from '@admin/user-management/utils/constants';
-import AddPermissionUIToRoleModal from './AddPermissionUIToRole';
+import { HolderType, PermissionType } from '@admin/user-management/utils/constants';
+import { permissionTypeColorList } from '@admin/user-management/utils/helpers';
 
 interface Props {
   isUser?: boolean;
@@ -23,13 +32,17 @@ interface Props {
 }
 interface UserOrPermissionType {
   id: string;
+  name: string;
+  description: string;
   username?: string;
   fullName?: string;
-  name?: string;
-  description?: string;
-  url?: string;
-  method?: string;
+  // Permission UI
   code?: string;
+  // Permission Resource
+  method?: string;
+  normalizedMethod?: string;
+  url?: string;
+  permissionType?: number;
 }
 
 const UserPermissionOfRole: React.FC<Props> = (props) => {
@@ -163,18 +176,50 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
           },
         ]}
         getRowKey={(d): string => d?.id ?? ''}
-        itemHeaderRender={
-          (d): string => (isUser ? d?.username ?? '' : d?.name ?? '')
-          // eslint-disable-next-line react/jsx-curly-newline
-        }
-        itemContentRender={
-          (d): string =>
-            isUser
-              ? d?.fullName ?? ''
-              : isPermissionResource
-                ? `${d?.method ?? ''} - ${d?.url ?? ''}`
-                : `Mã: ${d?.code ?? ''}`
-          // eslint-disable-next-line react/jsx-curly-newline
+        itemHeaderRender={(d): JSX.Element => {
+          if (isUser) {
+            return (
+              <>
+                {d?.username ?? ''}
+              </>
+            );
+          }
+          if (isPermissionResource) {
+            const permissionTypeColor = permissionTypeColorList.find((p) => d?.normalizedMethod && p.name.includes(d?.normalizedMethod ?? ''))
+            return (
+              <>
+                {d?.normalizedMethod ? (
+                  <Popup
+                    size="mini"
+                    inverted
+                    position="top left"
+                    content={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'Từ chối' : 'Cho phép'}
+                    trigger={
+                      <Label color={(permissionTypeColor?.color ?? 'black') as SemanticCOLORS} basic horizontal>
+                        <Icon name={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'x' : 'check'} /> 
+                        {d?.normalizedMethod ?? ''}
+                      </Label>
+                    }
+                  />
+                ) : null}
+     
+                {d?.url ?? ''}
+              </>
+            )
+          }
+
+          return (
+            <>
+              {d?.name ?? ''}
+            </>
+          );
+        }}
+        itemContentRender={(d): string =>
+          isUser
+          ? (d?.fullName ?? '')
+          : isPermissionResource
+            ? ''
+            : (d?.description ?? '')
         }
       />
       <AddUserToRole
