@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import UserPage from '@admin/user-management/user';
 import GroupPage from '@admin/user-management/group';
 import RolePage from '@admin/user-management/role';
-import PermissionPage from '@admin/user-management/permission';
+// import PermissionPage from '@admin/user-management/permission';
 
 import CategoriesPage from "@news/category";
 import TagsPage from "@news/tag";
@@ -134,16 +134,16 @@ const componentTree: Component[] = [
         title: "Vai trò",
         component: <RolePage />,
       },
-      {
-        key: ComponentKey.ADMIN_PERMISSION_UI,
-        title: 'Quyền UI',
-        component: <PermissionPage isPermissionUI />,
-      },
-      {
-        key: ComponentKey.ADMIN_PERMISSION_RESOURCE,
-        title: 'Quyền Resource',
-        component: <PermissionPage isPermissionResource />,
-      },
+      // {
+      //   key: ComponentKey.ADMIN_PERMISSION_UI,
+      //   title: 'Quyền UI',
+      //   component: <PermissionPage isPermissionUI />,
+      // },
+      // {
+      //   key: ComponentKey.ADMIN_PERMISSION_RESOURCE,
+      //   title: 'Quyền Resource',
+      //   component: <PermissionPage isPermissionResource />,
+      // },
     ],
   },
   {

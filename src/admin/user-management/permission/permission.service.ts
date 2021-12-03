@@ -1,6 +1,6 @@
 import { httpClient, apiLinks } from '@app/utils';
 import { HolderType } from '@admin/user-management/utils/constants';
-import { Permission, PermissionCM, PermissionListCM } from './permission.model';
+import { Permission, PermissionCM, PermissionListCM, PermissionListByIdCM } from './permission.model';
 
 const getPermissionsUI = async (): Promise<Permission[]> => {
   try {
@@ -110,6 +110,49 @@ const createPermissionList = async ({
   });
 };
 
+const createPermissionListById = async ({
+  ids,
+  holderId = '',
+  isGroup = false,
+  isRole = false,
+  isUser = false,
+  isPermissionUI = false,
+  isPermissionResource = false,
+}: PermissionListByIdCM): Promise<void> => {
+  let url = apiLinks.admin.userManagement.permission.create;
+  let data = {};
+  let holderType = 0;
+  if (isGroup) {
+    holderType = HolderType.GROUP;
+  }
+  if (isRole) {
+    holderType = HolderType.ROLE;
+  }
+  if (isUser) {
+    holderType = HolderType.USER;
+  }
+  if (isPermissionUI) {
+    url += '/Ui/BatchIds';
+    data = {
+      ids,
+      holderId,
+      holderType,
+    };
+  }
+  if (isPermissionResource) {
+    url += '/Resource/BatchIds';
+    data = {
+      ids,
+      holderId,
+      holderType,
+    };
+  }
+  await httpClient.post({
+    url,
+    data,
+  });
+};
+
 // const updatePermission = async (
 //   data: Permission,
 //   isPermissionUI: boolean,
@@ -174,6 +217,7 @@ const permissionService = {
   getPermissionsResource,
   createPermission,
   createPermissionList,
+  createPermissionListById,
   // updatePermission,
   deletePermission,
   addUserToPermissionUI,

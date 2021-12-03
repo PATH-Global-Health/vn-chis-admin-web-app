@@ -1,14 +1,13 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { SemanticCOLORS } from 'semantic-ui-react/dist/commonjs/generic';
 
-// import { FiPlus } from 'react-icons/fi';
+import { FiPlus } from 'react-icons/fi';
 import { Popup, Label, Icon } from 'semantic-ui-react';
 import DataList from '@app/components/data-list';
 
 import {
   useDispatch,
   useSelector,
-  useConfirm,
   useFetchApi,
   useRefreshCallback,
 } from '@app/hooks';
@@ -23,6 +22,8 @@ interface Props {
 }
 
 const PermissionPage: React.FC<Props> = ({ isPermissionUI, isPermissionResource }) => {
+  const [openCreate, setOpenCreate] = useState(false);
+
   const dispatch = useDispatch();
   // const confirm = useConfirm();
   const { fetching } = useFetchApi();
@@ -77,17 +78,8 @@ const PermissionPage: React.FC<Props> = ({ isPermissionUI, isPermissionResource 
         data={data}
         loading={loading}
         totalCount={data.length}
-        listActions={[
-          // {
-          //   title: 'Tạo quyền',
-          //   color: 'green',
-          //   icon: <FiPlus />,
-          //   onClick: (): void => {},
-          // },
-        ]}
-        itemActions={[
-
-        ]}
+        listActions={[]}
+        itemActions={[]}
         getRowKey={(d): string => d.id}
         itemHeaderRender={(d): JSX.Element => {
           if (isPermissionResource) {

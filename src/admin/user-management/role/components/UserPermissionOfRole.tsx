@@ -7,7 +7,8 @@ import { Popup, Label, Icon } from 'semantic-ui-react';
 
 import DataList from '@app/components/data-list';
 import AddUserToRole from '@admin/user-management/role/components/AddUserToRole';
-import AddPermissionUIToRoleModal from '@admin/user-management/role/components/AddPermissionUIToRole';
+import AddPermissionUIToRoleModal from '@admin/user-management/role/components/AddPermissionUIToRoleModal';
+import AddPermissionResourceToRoleModal from '@admin/user-management/role/components/AddPermissionResourceToRoleModal';
 
 import {
   useConfirm,
@@ -227,16 +228,14 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
         onClose={() => setAddUserModal(false)}
         onRefresh={getData}
       />
-      {/*  <AddPermissionToRole
-        open={addPermissionModal}
-        onClose={() => setAddPermissionModal(false)}
-        onRefresh={getData}
-        isPermissionUI={isPermissionUI}
-        isPermissionResource={isPermissionResource}
-      /> */}
       <AddPermissionUIToRoleModal
         open={addPermissionModal}
         onClose={() => setAddPermissionModal(false)}
+        onRefresh={getData}
+      />
+      <AddPermissionResourceToRoleModal
+        open={addPermissionModal && (isPermissionResource || false)}
+        onClose={(): void => setAddPermissionModal(false)}
         onRefresh={getData}
       />
     </>

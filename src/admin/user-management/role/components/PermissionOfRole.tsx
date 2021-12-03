@@ -9,7 +9,7 @@ const panes = [
     render: () => <UserPermissionOfRole isPermissionUI />,
   },
   {
-    menuItem: 'API',
+    menuItem: 'Resource',
     render: () => <UserPermissionOfRole isPermissionResource />,
   },
 ];

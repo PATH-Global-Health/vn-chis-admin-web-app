@@ -41,6 +41,17 @@ export interface PermissionCM {
   isPermissionData?: boolean;
 }
 
+export interface PermissionListByIdCM {
+  ids: string[];
+  holderId: string;
+  isGroup?: boolean;
+  isRole?: boolean;
+  isUser?: boolean;
+  isPermissionUI?: boolean;
+  isPermissionResource?: boolean;
+  isPermissionData?: boolean;
+}
+
 export interface PermissionListCM {
   permissions?: {
     name?: string;

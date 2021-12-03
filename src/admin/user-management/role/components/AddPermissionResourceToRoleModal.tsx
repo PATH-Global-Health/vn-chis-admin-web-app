@@ -23,34 +23,34 @@ interface Props {
   onRefresh: () => void;
 }
 
-const AddPermissionResourceToUserModal: React.FC<Props> = (props) => {
+const AddPermissionResourceToRoleModal: React.FC<Props> = (props) => {
   const { open, onClose, onRefresh } = props;
 
   const [selected, setSelected] = useState<Permission[]>([]);
 
   const dispatch = useDispatch();
   const { fetch, fetching } = useFetchApi();
-  const { selectedUser, permissionsResourceOfUserList, getPermissionsResourceOfUserLoading } = useSelector(
-    (state) => state.admin.userManagement.user,
+  const { selectedRole, permissionResourceOfRoleList, getPermissionResourceOfRoleLoading } = useSelector(
+    (state) => state.admin.userManagement.role,
   );
   const { permissionResourceList, getPermissionsResourceLoading } = useSelector(
     (state) => state.admin.userManagement.permission,
   );
 
-  const loading = getPermissionsResourceLoading || getPermissionsResourceOfUserLoading;
+  const loading = getPermissionsResourceLoading || getPermissionResourceOfRoleLoading;
 
   const data = useMemo(() => {
-    const permissionsUIOfUserIds = permissionsResourceOfUserList.map((p) => p.id);
-    return permissionResourceList.filter((p) => !permissionsUIOfUserIds.includes(p.id));
-  }, [permissionResourceList, permissionsResourceOfUserList])
+    const permissionResourceOfRoleIds = permissionResourceOfRoleList.map((p) => p.id);
+    return permissionResourceList.filter((p) => !permissionResourceOfRoleIds.includes(p.id));
+  }, [permissionResourceList, permissionResourceOfRoleList])
 
   const onSubmit = async (): Promise<void> => {
-    if (selectedUser?.id) {
+    if (selectedRole?.id) {
       await fetch(
         permissionService.createPermissionListById({
           ids: selected.map((s) => s.id),
-          holderId: selectedUser.id,
-          isUser: true,
+          holderId: selectedRole.id,
+          isRole: true,
           isPermissionUI: false,
           isPermissionResource: true,
         }),
@@ -118,4 +118,4 @@ const AddPermissionResourceToUserModal: React.FC<Props> = (props) => {
   );
 };
 
-export default AddPermissionResourceToUserModal;
+export default AddPermissionResourceToRoleModal;
