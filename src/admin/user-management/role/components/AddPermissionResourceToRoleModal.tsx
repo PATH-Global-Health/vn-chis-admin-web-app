@@ -47,7 +47,7 @@ const AddPermissionResourceToRoleModal: React.FC<Props> = (props) => {
   const onSubmit = async (): Promise<void> => {
     if (selectedRole?.id) {
       await fetch(
-        permissionService.createPermissionListById({
+        permissionService.createPermissionForSubjectByIdList({
           ids: selected.map((s) => s.id),
           holderId: selectedRole.id,
           isRole: true,

@@ -52,6 +52,10 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
   const [addUserModal, setAddUserModal] = useState(false);
   const [addPermissionModal, setAddPermissionModal] = useState(false);
 
+  const confirm = useConfirm();
+  const dispatch = useDispatch();
+  const { fetch, fetching } = useFetchApi();
+
   const {
     selectedRole,
     getRolesLoading,
@@ -62,6 +66,7 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
     permissionResourceOfRoleList,
     getPermissionResourceOfRoleLoading,
   } = useSelector((state) => state.admin.userManagement.role);
+
   const title = useMemo(() => {
     if (selectedRole) {
       if (isUser) {
@@ -89,24 +94,7 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
     isPermissionResource,
     permissionResourceOfRoleList,
   ]);
-  const dispatch = useDispatch();
-  const getData = useCallback(() => {
-    if (selectedRole) {
-      if (isUser) {
-        dispatch(getUsersOfRole(selectedRole.id));
-      }
-      if (isPermissionUI) {
-        dispatch(getPermissionsUIOfRole(selectedRole.id));
-      }
-      if (isPermissionResource) {
-        dispatch(getPermissionsResourceOfRole(selectedRole.id));
-      }
-    }
-  }, [isUser, isPermissionUI, isPermissionResource, selectedRole, dispatch]);
-  useEffect(getData, [getData]);
 
-  const confirm = useConfirm();
-  const { fetch, fetching } = useFetchApi();
   const handleRemove = async (row: UserOrPermissionType) => {
     if (selectedRole) {
       if (isUser) {
@@ -137,9 +125,23 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
           ),
         );
       }
-      getData();
     }
   };
+
+  const getData = useCallback(() => {
+    if (selectedRole) {
+      if (isUser) {
+        dispatch(getUsersOfRole(selectedRole.id));
+      }
+      if (isPermissionUI) {
+        dispatch(getPermissionsUIOfRole(selectedRole.id));
+      }
+      if (isPermissionResource) {
+        dispatch(getPermissionsResourceOfRole(selectedRole.id));
+      }
+    }
+  }, [isUser, isPermissionUI, isPermissionResource, selectedRole, dispatch]);
+  useEffect(getData, [getData]);
 
   return (
     <>
@@ -173,7 +175,10 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
             title: 'Xoá',
             color: 'red',
             icon: <FiTrash2 />,
-            onClick: (row) => confirm('Xác nhận xóa?', () => handleRemove(row)),
+            onClick: (row) => confirm('Xác nhận xóa?', () => {
+              handleRemove(row);
+              getData();
+            }),
           },
         ]}
         getRowKey={(d): string => d?.id ?? ''}
@@ -182,6 +187,24 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
             return (
               <>
                 {d?.username ?? ''}
+              </>
+            );
+          }
+          if (isPermissionUI) {
+            return (
+              <>
+                <Popup
+                  size="mini"
+                  inverted
+                  position="top left"
+                  content={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'Từ chối' : 'Cho phép'}
+                  trigger={
+                    <Label color={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'red' : 'green'} basic horizontal>
+                      Tất cả
+                    </Label>
+                  }
+                />
+                {d?.name ?? ''}
               </>
             );
           }
@@ -208,7 +231,6 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
               </>
             )
           }
-
           return (
             <>
               {d?.name ?? ''}
@@ -216,11 +238,11 @@ const UserPermissionOfRole: React.FC<Props> = (props) => {
           );
         }}
         itemContentRender={(d): string =>
-          isUser
-          ? (d?.fullName ?? '')
-          : isPermissionResource
-            ? ''
-            : (d?.description ?? '')
+          isPermissionUI
+          ? `Mã ${d?.code ?? ''}`
+          : !isUser && !isPermissionResource
+            ? (d?.description ?? '')
+            : ''
         }
       />
       <AddUserToRole

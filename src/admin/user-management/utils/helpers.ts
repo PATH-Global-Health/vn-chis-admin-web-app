@@ -1,14 +1,10 @@
+import { Option } from '@app/models/utility';
 import { deburr } from '@app/utils/helpers';
 import {
   PermissionType,
   PermissionUIType,
   PermissionDataType,
-} from './constants';
-
-interface Option {
-  value: string;
-  text: string;
-}
+} from '@admin/user-management/utils/constants';
 
 const methodList = [
   { value: 'GET', text: 'GET', color: 'blue' },
@@ -149,7 +145,6 @@ const permissionDataTypeList = [
   { value: PermissionDataType.WRITE, text: 'Ghi' },
 ];
 
-
 const permissionTypeColorList = [
   { name: 'GET', color: 'blue' },
   { name: 'POST', color: 'green' },
@@ -163,25 +158,21 @@ const searchWithDeburr = (options: Option[], query: string): Option[] => {
   );
 };
 
-const parseTypeFromPermissionUI = (permission = ''): string => {
-  if (permission) {
-    return (
-      Object.keys(PermissionUIType).find((type) => permission.includes(type)) ||
-      ''
-    );
+const getFunctionFromPermission = (code = ''): Option | undefined => {
+  if (code && code.includes('_')) {
+    const splitIndex = code.lastIndexOf('_');
+    const name = code.substring(0, splitIndex);
+    const permission = permissionUIList.find((p) => p.code === name);
+    if (permission) {
+      const type = code.substring(splitIndex);
+      const permissionUIType = permissionUITypeList.find((p) => p.value === type);
+      if (permissionUIType) {
+        return permissionUIType;
+      }
+    }
   }
-  return permission;
-};
-
-const parseCodeFromPermissionUI = (permission = ''): string => {
-  if (permission) {
-    const permissionUIType = parseTypeFromPermissionUI(permission);
-    return permissionUIType
-      ? permission.substr(0, permission.indexOf(permissionUIType) - 1)
-      : '';
-  }
-  return permission;
-};
+  return undefined;
+}
 
 export {
   methodList,
@@ -191,6 +182,5 @@ export {
   permissionDataTypeList,
   permissionTypeColorList,
   searchWithDeburr,
-  parseTypeFromPermissionUI,
-  parseCodeFromPermissionUI,
+  getFunctionFromPermission,
 };

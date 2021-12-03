@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 import UserPage from '@admin/user-management/user';
 import GroupPage from '@admin/user-management/group';
 import RolePage from '@admin/user-management/role';
-// import PermissionPage from '@admin/user-management/permission';
+import PermissionPage from '@admin/user-management/permission';
 
 import CategoriesPage from '@news/category';
 import TagsPage from '@news/tag';
@@ -25,13 +25,11 @@ import DistrictsPage from '@pqm/category/district';
 import SitesPage from '@pqm/category/site';
 import SiteTypesPage from '@pqm/category/site-type';
 
-
 import AggregatedValuePage from '@pqm/aggregated-value/pages/AggregatedValuePage';
 import AggregatedValueDetailPage from '@pqm/aggregated-value/pages/AggregatedValueDetailPage';
 
 import ErrorLoggingPage from '@pqm/error-logging/pages/ErrorLoggingPage';
 import ErrorLoggingDetailPage from '@pqm/error-logging/pages/ErrorLoggingDetailPage';
-
 
 export enum GroupKey {
   // #region admin
@@ -66,8 +64,7 @@ export enum ComponentKey {
   ADMIN_USER = 'ADMIN_USER',
   ADMIN_GROUP = 'ADMIN_GROUP',
   ADMIN_ROLE = 'ADMIN_ROLE',
-  ADMIN_PERMISSION_UI = 'ADMIN_PERMISSION_UI',
-  ADMIN_PERMISSION_RESOURCE = 'ADMIN_PERMISSION_RESOURCE',
+  ADMIN_PERMISSION = 'ADMIN_PERMISSION',
   // #endregion
 
   // #region news
@@ -113,7 +110,7 @@ const componentTree: Component[] = [
   {
     key: GroupKey.ADMIN_USER_MANAGEMENT,
     title: 'Quản lý người dùng',
-    permissionCode: GroupKey.ADMIN_USER_MANAGEMENT,
+    // permissionCode: GroupKey.ADMIN_USER_MANAGEMENT,
     childrenList: [
       {
         key: ComponentKey.ADMIN_USER,
@@ -130,16 +127,11 @@ const componentTree: Component[] = [
         title: 'Vai trò',
         component: <RolePage />,
       },
-      // {
-      //   key: ComponentKey.ADMIN_PERMISSION_UI,
-      //   title: 'Quyền UI',
-      //   component: <PermissionPage isPermissionUI />,
-      // },
-      // {
-      //   key: ComponentKey.ADMIN_PERMISSION_RESOURCE,
-      //   title: 'Quyền Resource',
-      //   component: <PermissionPage isPermissionResource />,
-      // },
+      {
+        key: ComponentKey.ADMIN_PERMISSION,
+        title: 'Quyền',
+        component: <PermissionPage />,
+      },
     ],
   },
   {

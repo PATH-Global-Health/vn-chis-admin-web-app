@@ -17,21 +17,24 @@ export interface Permission {
 }
 
 export interface PermissionCM {
-  permission?: {
-    name?: string;
-    description?: string;
-    // Permission UI
-    code?: string;
-    // Permision API
-    url?: string;
-    method?: string;
-    permissionType?: number;
-    // Permission Data
-    username?: string;
-    provinceId?: string;
-    indicatorId?: string;
-    type?: number;
-  };
+  name?: string;
+  description?: string;
+  // Permission UI
+  code?: string;
+  function?: string;
+  // Permision Resource
+  url?: string;
+  method?: string;
+  permissionType?: number;
+  // Permission Data
+  username?: string;
+  provinceId?: string;
+  indicatorId?: string;
+  type?: number;
+}
+
+export interface PermissionForSubjectCM {
+  permission?: PermissionCM;
   holderId: string;
   isGroup?: boolean;
   isRole?: boolean;
@@ -41,33 +44,19 @@ export interface PermissionCM {
   isPermissionData?: boolean;
 }
 
-export interface PermissionListByIdCM {
+export interface PermissionForSubjectListCM {
+  permissions?: PermissionCM[];
+  holderId: string;
+  isGroup?: boolean;
+  isRole?: boolean;
+  isUser?: boolean;
+  isPermissionUI?: boolean;
+  isPermissionResource?: boolean;
+  isPermissionData?: boolean;
+}
+
+export interface PermissionForSubjectByIdListCM {
   ids: string[];
-  holderId: string;
-  isGroup?: boolean;
-  isRole?: boolean;
-  isUser?: boolean;
-  isPermissionUI?: boolean;
-  isPermissionResource?: boolean;
-  isPermissionData?: boolean;
-}
-
-export interface PermissionListCM {
-  permissions?: {
-    name?: string;
-    description?: string;
-    // Permission UI
-    code?: string;
-    // Permision API
-    url?: string;
-    method?: string;
-    permissionType?: number;
-    // Permission Data
-    username?: string;
-    provinceId?: string;
-    indicatorId?: string;
-    type?: number;
-  }[];
   holderId: string;
   isGroup?: boolean;
   isRole?: boolean;

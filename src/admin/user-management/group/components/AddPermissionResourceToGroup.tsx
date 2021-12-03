@@ -45,9 +45,9 @@ const AddPermissionResourceToGroupModal: React.FC<Props> = (props) => {
   }, [permissionResourceList, permissionResourceOfGroupList])
 
   const onSubmit = async (): Promise<void> => {
-    if (selectedGroup?.id) {
+    if (selectedGroup?.id && selected.length > 0) {
       await fetch(
-        permissionService.createPermissionListById({
+        permissionService.createPermissionForSubjectByIdList({
           ids: selected.map((s) => s.id),
           holderId: selectedGroup.id,
           isGroup: true,
@@ -68,7 +68,6 @@ const AddPermissionResourceToGroupModal: React.FC<Props> = (props) => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Modal.Header>Thêm quyền</Modal.Header>
       <StyledContent>
         <DataList
           search
@@ -99,7 +98,6 @@ const AddPermissionResourceToGroupModal: React.FC<Props> = (props) => {
                     }
                   />
                 ) : null}
-      
                 {d?.url ?? ''}
               </>
             )
