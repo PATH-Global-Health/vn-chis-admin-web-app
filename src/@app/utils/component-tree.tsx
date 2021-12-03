@@ -251,7 +251,7 @@ const componentTree: Component[] = [
   {
     key: GroupKey.ADMIN_PQM_AGGREGATED_VALUE,
     title: 'Dữ liệu tổng hợp',
-    permissionCode: GroupKey.ADMIN_PQM_AGGREGATED_VALUE,
+    // permissionCode: GroupKey.ADMIN_PQM_AGGREGATED_VALUE,
     component: <AggregatedValuePage />,
   },
   {
