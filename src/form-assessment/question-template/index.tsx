@@ -15,22 +15,21 @@ import {
 } from '@app/hooks';
 import { GroupKey, ComponentKey } from '@app/utils/component-tree';
 import { QuestionTemplate } from '@form-assessment/question-template/question-template.model';
-import { getQuestionTemplates } from '@form-assessment/question-template/question-template.slice';
+import { setSelectingQuestionTemplate, getQuestionTemplates } from '@form-assessment/question-template/question-template.slice';
 import questionTemplateService from '@form-assessment/question-template/question-template.service';
 
 const QuestionTemplatePage: React.FC = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [selected, setSelected] = useState<QuestionTemplate | undefined>(undefined);
   const [openCreate, setOpenCreate] = useState(false);
   const [updateDetails, setUpdateDetails] = useState<QuestionTemplate>();
-
-  const { questionTemplateData, getQuestionTemplateLoading } = useSelector(
-    (state) => state.formAssessment.questionTemplate,
-  );
-  const { fetch, fetching } = useFetchApi();
+  
   const confirm = useConfirm();
   const dispatch = useDispatch();
+  const { fetch, fetching } = useFetchApi();
+  const { selectingQuestionTemplate, questionTemplateData, getQuestionTemplateLoading } = useSelector(
+    (state) => state.formAssessment.questionTemplate,
+  );
 
   const { data, totalSize } = questionTemplateData;
   
@@ -49,7 +48,7 @@ const QuestionTemplatePage: React.FC = () => {
       {!openCreate && !updateDetails && (
         <Grid>
           <Grid.Row>
-            <Grid.Column width={selected?.id ? 8 : 16}>
+            <Grid.Column width={selectingQuestionTemplate?.id ? 8 : 16}>
               <DataList
                 search
                 toggle
@@ -62,10 +61,10 @@ const QuestionTemplatePage: React.FC = () => {
                   setPageSize(p.pageSize);
                 }}
                 onRowClick={(r) => {
-                  if (selected?.id && selected?.id === r.id) {
-                    setSelected(undefined);
+                  if (selectingQuestionTemplate?.id && selectingQuestionTemplate?.id === r.id) {
+                    dispatch(setSelectingQuestionTemplate(undefined));
                   } else {
-                    setSelected(r);
+                    dispatch(setSelectingQuestionTemplate(r));
                   }
                 }}
                 listActions={[
@@ -84,6 +83,7 @@ const QuestionTemplatePage: React.FC = () => {
                     onClick: (d): void => {
                       confirm('Xác nhận xoá?', async () => {
                         await fetch(questionTemplateService.deleteQuestionTemplate(d));
+                        dispatch(setSelectingQuestionTemplate(undefined));
                         getData();
                       });
                     },
@@ -100,9 +100,9 @@ const QuestionTemplatePage: React.FC = () => {
                 getRowKey={(d): string => d.id}
               />
             </Grid.Column>
-            {selected?.id && (
+            {selectingQuestionTemplate?.id && (
               <Grid.Column width="8">
-                <QuestionTemplatePreview data={selected} />
+                <QuestionTemplatePreview />
               </Grid.Column>
             )}
           </Grid.Row>
@@ -114,7 +114,7 @@ const QuestionTemplatePage: React.FC = () => {
           onClose={() => {
             setOpenCreate(false);
             setUpdateDetails(undefined);
-            setSelected(undefined);
+            dispatch(setSelectingQuestionTemplate(undefined));
           }}
           onRefresh={getData}
         />

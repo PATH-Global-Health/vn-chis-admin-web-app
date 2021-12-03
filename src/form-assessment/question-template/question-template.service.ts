@@ -3,6 +3,7 @@ import { httpClient, apiLinks } from '@app/utils';
 import { getResponseError } from '@app/utils/helpers';
 
 import {
+  QuestionTemplate,
   QuestionTemplateCM,
   QuestionTemplateUM,
   QuestionTemplateDM,
@@ -22,6 +23,14 @@ const getQuestionTemplates = async (params: QuestionTemplateFilter): Promise<Que
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   return response.data as QuestionTemplateResponse;
 };
+
+const getQuestionTemplateDetail = async (questionTemplateId: string): Promise<QuestionTemplate> => {
+  const response = await httpClient.get({
+    url: apiLinks.form.questionTemplate.getDetail(questionTemplateId),
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  return response.data as QuestionTemplate;
+}
 
 const createQuestionTemplate = async (data: QuestionTemplateCM): Promise<void> => {
   try {
@@ -61,18 +70,21 @@ const addQuestion = async (data: AddQuestionToQuestionTemplate): Promise<void> =
     data,
   });
 };
-const addSurveyResult = async (data: AddSurveyResultToQuestionTemplate): Promise<void> => {
-  await httpClient.put({
-    url: apiLinks.form.questionTemplate.addSurveyResult,
-    data,
-  });
-};
+
 const deleteQuestion = async (data: DeleteQuestionOfQuestionTemplate): Promise<void> => {
   await httpClient.delete({
     url: apiLinks.form.questionTemplate.deleteQuestion,
     data,
   });
 };
+
+const addSurveyResult = async (data: AddSurveyResultToQuestionTemplate): Promise<void> => {
+  await httpClient.put({
+    url: apiLinks.form.questionTemplate.addSurveyResult,
+    data,
+  });
+};
+
 const deleteSurveyResult = async (data: DeleteSurveyResultOfQuestionTemplate): Promise<void> => {
   await httpClient.delete({
     url: apiLinks.form.questionTemplate.deleteSurveyResult,
@@ -82,6 +94,7 @@ const deleteSurveyResult = async (data: DeleteSurveyResultOfQuestionTemplate): P
 
 const genderService = {
   getQuestionTemplates,
+  getQuestionTemplateDetail,
   createQuestionTemplate,
   updateQuestionTemplate,
   deleteQuestionTemplate,

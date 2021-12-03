@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { SemanticCOLORS } from 'semantic-ui-react/dist/commonjs/generic';
 import naturalCompare from 'natural-compare';
+
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { Popup, Label, Icon } from 'semantic-ui-react';
 
 import DataList from '@app/components/data-list';
 import AddUserRoleToGroup from '@admin/user-management/group/components/AddUserRoleToGroup';
@@ -19,8 +22,8 @@ import {
 } from '@admin/user-management/group/group.slice';
 import groupService from '@admin/user-management/group/group.service';
 import permissionService from '@admin/user-management/permission/permission.service';
-import { HolderType } from '@admin/user-management/utils/constants';
-import { permissionUIList } from '@admin/user-management/utils/helpers';
+import { HolderType, PermissionType } from '@admin/user-management/utils/constants';
+import { permissionUIList, permissionTypeColorList } from '@admin/user-management/utils/helpers';
 
 interface Props {
   isUser?: boolean;
@@ -31,10 +34,16 @@ interface Props {
 interface UserOrRoleType {
   id: string;
   name: string;
-  code?: string;
-  username: string;
-  fullName: string;
   description: string;
+  username?: string;
+  fullName?: string;
+  // Permission UI
+  code?: string;
+  // Permission Resource
+  method?: string;
+  normalizedMethod?: string;
+  url?: string;
+  permissionType?: number;
 }
 const UserRolePermissionOfGroup: React.FC<Props> = (props) => {
   const { isUser, isRole, isPermissionUI, isPermissionResource } = props;
@@ -258,8 +267,51 @@ const UserRolePermissionOfGroup: React.FC<Props> = (props) => {
           },
         ]}
         getRowKey={(d): string => d.id}
-        itemHeaderRender={(d): string => (isUser ? d.username : d.name)}
-        itemContentRender={(d): string => (isUser ? d.fullName : d.description)}
+        itemHeaderRender={(d): JSX.Element => {
+          if (isUser) {
+            return (
+              <>
+                {d?.username ?? ''}
+              </>
+            );
+          }
+          if (isPermissionResource) {
+            const permissionTypeColor = permissionTypeColorList.find((p) => d?.normalizedMethod && p.name.includes(d?.normalizedMethod ?? ''))
+            return (
+              <>
+                {d?.normalizedMethod ? (
+                  <Popup
+                    size="mini"
+                    inverted
+                    position="top left"
+                    content={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'Từ chối' : 'Cho phép'}
+                    trigger={
+                      <Label color={(permissionTypeColor?.color ?? 'black') as SemanticCOLORS} basic horizontal>
+                        <Icon name={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'x' : 'check'} /> 
+                        {d?.normalizedMethod ?? ''}
+                      </Label>
+                    }
+                  />
+                ) : null}
+     
+                {d?.url ?? ''}
+              </>
+            )
+          }
+
+          return (
+            <>
+              {d?.name ?? ''}
+            </>
+          );
+        }}
+        itemContentRender={(d): string =>
+          isUser
+          ? (d?.fullName ?? '')
+          : isPermissionResource
+            ? ''
+            : (d?.description ?? '')
+        }
       />
 
       <AddUserRoleToGroup

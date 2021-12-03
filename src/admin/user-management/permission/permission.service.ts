@@ -1,28 +1,28 @@
 import { httpClient, apiLinks } from '@app/utils';
 import { HolderType } from '@admin/user-management/utils/constants';
-import { PermissionCM, PermissionListCM } from './permission.model';
+import { Permission, PermissionCM, PermissionListCM } from './permission.model';
 
-// const getPermissionsUI = async (): Promise<Permission[]> => {
-//   try {
-//     const result = await httpClient.get({
-//       url: `${apiLinks.admin.userManagement.permission.get}/Ui`,
-//     });
-//     return result.data as Permission[];
-//   } catch (error) {
-//     return [];
-//   }
-// };
+const getPermissionsUI = async (): Promise<Permission[]> => {
+  try {
+    const result = await httpClient.get({
+      url: `${apiLinks.admin.userManagement.permission.get}/Ui`,
+    });
+    return result.data as Permission[];
+  } catch (error) {
+    return [];
+  }
+};
 
-// const getPermissionsResource = async (): Promise<Permission[]> => {
-//   try {
-//     const result = await httpClient.get({
-//       url: `${apiLinks.admin.userManagement.permission.get}/Resource`,
-//     });
-//     return result.data as Permission[];
-//   } catch (error) {
-//     return [];
-//   }
-// };
+const getPermissionsResource = async (): Promise<Permission[]> => {
+  try {
+    const result = await httpClient.get({
+      url: `${apiLinks.admin.userManagement.permission.get}/Resource`,
+    });
+    return result.data as Permission[];
+  } catch (error) {
+    return [];
+  }
+};
 
 const createPermission = async ({
   permission,
@@ -170,8 +170,8 @@ const addUserToPermissionResource = async (
 };
 
 const permissionService = {
-  // getPermissionsUI,
-  // getPermissionsResource,
+  getPermissionsUI,
+  getPermissionsResource,
   createPermission,
   createPermissionList,
   // updatePermission,

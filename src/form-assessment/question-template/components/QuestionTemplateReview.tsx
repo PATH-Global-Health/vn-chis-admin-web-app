@@ -1,8 +1,11 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
-import { Header, Segment } from 'semantic-ui-react';
+
+import { Dimmer, Loader, Header, Segment } from 'semantic-ui-react';
+
+import { useDispatch, useSelector } from '@app/hooks';
 import { Question } from '@form-assessment/question/question.model';
-import { QuestionTemplate } from '@form-assessment/question-template/question-template.model';
+import { getQuestionTemplateDetail } from '../question-template.slice';
 
 const Wrapper = styled.div`
   & .header {
@@ -16,6 +19,7 @@ const Wrapper = styled.div`
     padding-top: 5px;
     padding-bottom: 5px;
     box-shadow: none;
+    position: relative;
     & div {
       padding-top: 5px !important;
       padding-bottom: 5px !important;
@@ -34,31 +38,44 @@ const Wrapper = styled.div`
   }
 `;
 
-interface Props {
-  data?: QuestionTemplate;
-}
-
-const QuestionTemplatePreview: React.FC<Props> = ({ data }) => {
+const QuestionTemplatePreview = () => {
   const [pageIndex, setPageIndex] = useState(0);
 
+  const dispatch = useDispatch();
+  const {
+    selectingQuestionTemplate,
+    questionTemplateDetail,
+    getQuestionTemplateDetailLoading
+  } = useSelector((state) => state.formAssessment.questionTemplate);
+
   const filteredData: Question[] = useMemo(() =>
-    (data?.questions ?? [])
+    (questionTemplateDetail?.questions ?? [])
       .slice()
       .sort((a, b) => (a?.order ?? 0) > (b?.order ?? 0) ? 1 : 0)
       .slice(pageIndex, 10)
-  , [data, pageIndex]);
+  , [questionTemplateDetail, pageIndex]);
+
+  const getData = useCallback(() => {
+    if (selectingQuestionTemplate?.id) {
+      dispatch(getQuestionTemplateDetail(selectingQuestionTemplate.id));
+    }
+  }, [selectingQuestionTemplate, dispatch]);
+  useEffect(getData, [getData]);
 
   useEffect(() => {
     if (pageIndex !== 0) {
       setPageIndex(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [questionTemplateDetail]);
 
   return (
     <Wrapper>
       <Header>Xem biểu mẫu</Header>
       <Segment className="body">
+        <Dimmer inverted active={getQuestionTemplateDetailLoading}>
+          <Loader />
+        </Dimmer>
         {filteredData.map((question, index) => (
           <div key={`question_${index}`}>
             <div className="body__question">
