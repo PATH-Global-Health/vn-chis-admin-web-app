@@ -36,7 +36,7 @@ const Tab: React.FC<Props> = (props) => {
           )
           : items.map((i) => (
             <Menu.Item
-              key={`key_${i}`}
+              key={`key_${i.title}`}
               active={Boolean(selected?.title && selected.title === i.title)}
               onClick={() => setSelected(i)}
             >
