@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, ReactNode } from 'react';
-import { Button, Tab, Container } from 'semantic-ui-react';
+import { Dimmer, Loader, Button, Tab, Container } from 'semantic-ui-react';
 import { FiRefreshCw, FiUnlock, FiLock, FiX } from 'react-icons/fi';
 import styled from 'styled-components';
 
@@ -41,6 +41,7 @@ const StyledIconButton = styled(Button)`
 `;
 const ComponentWrapper = styled(Container)`
   display: ${(props): string => (props.hidden ? 'none' : 'block')} !important;
+  position: relative;
   padding: 8px;
   height: calc(100vh - 142px);
   overflow-y: auto;
@@ -58,7 +59,7 @@ interface Component {
 }
 
 const HomePage: React.FC = () => {
-  const { tabList } = useSelector((state) => state.global);
+  const { tabList, loading } = useSelector((state) => state.global);
   const dispatch = useDispatch();
 
   // #region tab list
@@ -179,12 +180,15 @@ const HomePage: React.FC = () => {
             key={`${c.groupKey}-${c.key}`}
             hidden={!(c.groupKey === selectedGroupKey && c.key === selectedKey)}
           >
+            <Dimmer inverted active={loading}>
+              <Loader />
+            </Dimmer>
             {c.component}
           </ComponentWrapper>
         ))}
       </div>
     ),
-    [contentList, selectedGroupKey, selectedKey],
+    [loading, contentList, selectedGroupKey, selectedKey],
   );
   // #endregion
 

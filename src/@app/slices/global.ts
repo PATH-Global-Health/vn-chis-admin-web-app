@@ -10,6 +10,7 @@ interface ComponentTab {
 
 interface State {
   tabList: ComponentTab[];
+  loading: boolean;
   confirmation?: {
     message: string;
     callback: () => void;
@@ -18,6 +19,7 @@ interface State {
 
 const initialState: State = {
   tabList: [],
+  loading: false,
 };
 
 type CR<T> = CaseReducer<State, PayloadAction<T>>;
@@ -134,6 +136,11 @@ const clearConfirmCallbackCR: CR<void> = (state) => ({
   confirmation: undefined,
 });
 
+const setLoadingCallbackCR: CR<boolean> = (state, action) => ({
+  ...state,
+  loading: action.payload,
+})
+
 const slice = createSlice({
   name: 'global',
   initialState,
@@ -144,6 +151,7 @@ const slice = createSlice({
     addComponentRefreshCallback: addComponentRefreshCallbackCR,
     addConfirmCallback: addConfirmCallbackCR,
     clearConfirmCallback: clearConfirmCallbackCR,
+    setLoadingCallback: setLoadingCallbackCR,
   },
 });
 
@@ -154,6 +162,7 @@ export const {
   addComponentRefreshCallback,
   addConfirmCallback,
   clearConfirmCallback,
+  setLoadingCallback,
 } = slice.actions;
 
 export default slice.reducer;

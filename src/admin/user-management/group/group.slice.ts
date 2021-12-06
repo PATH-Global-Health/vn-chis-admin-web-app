@@ -19,7 +19,7 @@ interface State {
   getUsersOfGroupLoading: boolean;
   getRolesOfGroupLoading: boolean;
   permissionUIOfGroupList: Permission[];
-  getPermissionsUIOfGroupLoading: boolean;
+  getPermissionUIOfGroupLoading: boolean;
   permissionResourceOfGroupList: Permission[];
   getPermissionsResourceOfGroupLoading: boolean;
 }
@@ -33,7 +33,7 @@ const initialState: State = {
   getUsersOfGroupLoading: false,
   getRolesOfGroupLoading: false,
   permissionUIOfGroupList: [],
-  getPermissionsUIOfGroupLoading: false,
+  getPermissionUIOfGroupLoading: false,
   permissionResourceOfGroupList: [],
   getPermissionsResourceOfGroupLoading: false,
 };
@@ -133,19 +133,19 @@ const slice = createSlice({
     }));
     builder.addCase(getPermissionsUIOfGroup.pending, (state) => ({
       ...state,
-      getPermissionsUIOfGroupLoading: true,
+      getPermissionUIOfGroupLoading: true,
     }));
     builder.addCase(
       getPermissionsUIOfGroup.fulfilled,
       (state, { payload }) => ({
         ...state,
         permissionUIOfGroupList: payload,
-        getPermissionsUIOfGroupLoading: false,
+        getPermissionUIOfGroupLoading: false,
       }),
     );
     builder.addCase(getPermissionsUIOfGroup.rejected, (state) => ({
       ...state,
-      getPermissionsUIOfGroupLoading: false,
+      getPermissionUIOfGroupLoading: false,
     }));
     builder.addCase(getPermissionsResourceOfGroup.pending, (state) => ({
       ...state,

@@ -1,160 +1,120 @@
-import React, { useEffect, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 
-import { Modal, Form, Select } from 'semantic-ui-react';
+import { Modal, Popup, Label, Button } from 'semantic-ui-react';
+import DataList from '@app/components/data-list';
 
-import { useFetchApi, useSelector } from '@app/hooks';
-
+import { useFetchApi, useDispatch, useSelector } from '@app/hooks';
+import { Permission } from '@admin/user-management/permission/permission.model';
 import permissionService from '@admin/user-management/permission/permission.service';
-import {
-  permissionUIList,
-  permissionUITypeList,
-} from '@admin/user-management/utils/helpers';
+import { getPermissionsUI } from '@admin/user-management/permission/permission.slice';
 import { PermissionType } from '@admin/user-management/utils/constants';
+import { getFunctionFromPermission } from '@admin/user-management/utils/helpers';
 
-const StyledSelect = styled(Select)`
-  & input {
-    min-height: 0 !important;
-  }
+const StyledContent = styled(Modal.Content)`
+  padding: 0.5rem 1rem !important;
 `;
-
-interface FormCM {
-  code: string;
-  types: any;
-}
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onRefresh: () => void;
-}
+};
 
-const AddPermissionToGroupModal: React.FC<Props> = (props) => {
+const AddPermissionUIToGroupModal: React.FC<Props> = (props) => {
   const { open, onClose, onRefresh } = props;
 
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const {
-    formState: { errors },
-    register,
-    watch,
-    setValue,
-    handleSubmit,
-  } = useForm<FormCM>({
-    defaultValues: {},
-  });
+  const [selected, setSelected] = useState<Permission[]>([]);
 
+  const dispatch = useDispatch();
   const { fetch, fetching } = useFetchApi();
-  const { selectedGroup, permissionUIOfGroupList } = useSelector(
-    (state) => state.admin.userManagement.group,
-  );
+  const {
+    selectedGroup,
+    permissionUIOfGroupList,
+    getPermissionUIOfGroupLoading
+  } = useSelector((state) => state.admin.userManagement.group);
+  const {
+    permissionUIList,
+    getPermissionsUILoading
+  } = useSelector((state) => state.admin.userManagement.permission);
 
-  const permissionList = permissionUIList.filter(
-    (permission) =>
-      !permissionUIOfGroupList.find((p) =>
-        (p?.code ?? '').includes(permission.code),
-      ),
-  );
-  const permissionCode = watch('code');
-  const permissionTypeList: string[] = useMemo(
-    () => permissionUIList.find((p) => p.code === permissionCode)?.types ?? [],
-    [permissionCode],
-  );
+  const loading = getPermissionsUILoading || getPermissionUIOfGroupLoading;
 
-  const onSubmit = async (data: FormCM): Promise<void> => {
+  const data = useMemo(() => {
+    const permissionUIOfGroupIds = permissionUIOfGroupList.map((p) => p.id);
+    return permissionUIList.filter((p) => !permissionUIOfGroupIds.includes(p.id));
+  }, [permissionUIList, permissionUIOfGroupList])
+
+  const onSubmit = async (): Promise<void> => {
     if (selectedGroup?.id) {
-      const { code, types } = data;
-      const permission = permissionList.find((p) => code === p.code);
-      if (permission) {
-        if (types) {
-          const permissions = types.map((type: any) => ({
-            name: permission.name,
-            code: `${permission.code}${type !== 'ALL' ? `_${type}` : ''}`,
-            permissionType: PermissionType.ALLOW,
-          }));
-          await fetch(
-            permissionService.createPermissionList({
-              permissions,
-              holderId: selectedGroup.id,
-              isGroup: true,
-              isPermissionUI: true,
-              isPermissionResource: false,
-            }),
-          );
-        }
-        if (!types && permissionTypeList.length === 0) {
-          await fetch(
-            permissionService.createPermission({
-              permission: {
-                name: permission.name,
-                code: permission.code,
-                permissionType: PermissionType.ALLOW,
-              },
-              holderId: selectedGroup.id,
-              isGroup: true,
-              isPermissionUI: true,
-              isPermissionResource: false,
-            }),
-          );
-        }
-      }
-      onClose();
-      onRefresh();
+      await fetch(
+        permissionService.createPermissionForSubjectByIdList({
+          ids: selected.map((s) => s.id),
+          holderId: selectedGroup.id,
+          isGroup: true,
+          isPermissionUI: true,
+          isPermissionResource: false,
+          isPermissionData: false,
+        })
+      )
     }
+    onClose();
+    onRefresh();
+    setSelected([]);
   };
 
-  useEffect(() => {
-    register('code', { required: 'Bắt buộc phải chọn chức năng' });
-    register('types', { required: 'Bắt buộc phải chọn quyền' });
-  }, [register]);
-
+  const getData = useCallback(() => {
+    dispatch(getPermissionsUI());
+  }, [dispatch]);
+  useEffect(getData, [getData]);
+  
   return (
     <Modal open={open} onClose={onClose}>
-      <Modal.Header>Thêm quyền UI</Modal.Header>
-      <Modal.Content>
-        <Form loading={fetching} onSubmit={handleSubmit((d) => onSubmit(d))}>
-          <Form.Group widths="equal">
-            <Form.Field
-              required
-              fluid
-              search
-              deburr
-              error={!!errors.code?.message && errors.code.message}
-              label="Chức năng"
-              control={Select}
-              options={(permissionList || []).map((p) => ({
-                text: p.name,
-                value: p.code,
-              }))}
-              value={watch('code')}
-              // eslint-disable-next-line
-              onChange={(e: any, d: any): void => setValue('code', d.value)}
-            />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field
-              required
-              fluid
-              search
-              deburr
-              clearable
-              multiple
-              error={!!errors.types?.message && errors.types.message}
-              label="Quyền"
-              control={StyledSelect}
-              options={permissionUITypeList.filter((p) =>
-                permissionTypeList.includes(p.value),
-              )}
-              value={watch('types') || []}
-              // eslint-disable-next-line
-              onChange={(e: any, d: any): void => setValue('types', d.value)}
-            />
-          </Form.Group>
-          <Form.Button primary content="Xác nhận" />
-        </Form>
-      </Modal.Content>
+      <Modal.Header>Thêm quyền</Modal.Header>
+      <StyledContent>
+        <DataList
+          search
+          selectable
+          data={data}
+          loading={loading}
+          totalCount={data.length}
+          selectedRows={selected}
+          onMultipleSelect={(d: Permission[]) => {
+            setSelected(d);
+          }}
+          getRowKey={(d): string => d.id}
+          itemHeaderRender={(d): JSX.Element => {
+            const type = getFunctionFromPermission(d?.code);
+            return (
+              <>
+                <Popup
+                  size="mini"
+                  inverted
+                  position="top left"
+                  content={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'Từ chối' : 'Cho phép'}
+                  trigger={
+                    <Label color={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'red' : 'green'} basic horizontal>
+                      {type ? type.text : 'Tất cả'}
+                    </Label>
+                  }
+                />
+                {d?.name ?? ''}
+              </>
+            )
+          }}
+          itemContentRender={(d): string => `Mã ${d?.code ?? ''}`}
+        />
+      </StyledContent>
+      <Modal.Actions>
+        <Button
+          positive
+          content="Xác nhận"
+          loading={fetching}
+          onClick={onSubmit}
+        />
+      </Modal.Actions>
     </Modal>
   );
 };
 
-export default AddPermissionToGroupModal;
+export default AddPermissionUIToGroupModal;

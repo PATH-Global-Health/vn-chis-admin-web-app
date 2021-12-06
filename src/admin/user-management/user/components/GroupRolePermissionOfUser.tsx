@@ -3,12 +3,11 @@ import { SemanticCOLORS } from 'semantic-ui-react/dist/commonjs/generic';
 import naturalCompare from 'natural-compare';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { FiPlus, FiTrash2 } from 'react-icons/fi';
 import { Popup, Label, Icon } from 'semantic-ui-react';
 import DataList from '@app/components/data-list';
 import AddGroupRoleModal from '@admin/user-management/user/components/AddGroupRoleToUserModal';
 import AddPermissionUIToUserModal from '@admin/user-management/user/components/AddPermissionUIToUserModal';
-import EditPermissionUIOfUserModal from '@admin/user-management/user/components/EditPermissionUIOfUserModal';
 import AddPermissionResourceToUserModal from '@admin/user-management/user/components/AddPermissionResourceToUserModal';
 
 import { useConfirm, useFetchApi, useDispatch, useSelector } from '@app/hooks';
@@ -61,6 +60,9 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
     isPermissionResource = false,
   } = props;
 
+  const [addGroupRoleModal, setAddGroupRoleModal] = useState(false);
+  const [addPermissionModal, setAddPermissionModal] = useState(false);
+
   const confirm = useConfirm();
   const dispatch = useDispatch();
   const { fetch, fetching } = useFetchApi();
@@ -77,12 +79,6 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
     permissionsResourceOfUserList,
     getPermissionsResourceOfUserLoading,
   } = useSelector((state) => state.admin.userManagement.user);
-
-  const [addGroupRoleModal, setAddGroupRoleModal] = useState(false);
-  const [addPermissionModal, setAddPermissionModal] = useState(false);
-  // eslint-disable-next-line
-  const [editPermissionUIModal, setEditPermssionUIModal] = 
-    useState<Permission | undefined>(undefined);
 
   const title = useMemo(() => {
     if (selectedUser) {
@@ -136,69 +132,41 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
   ]);
 
   const handleRemove = async (row: GroupRolePermission) => {
-      if (selectedUser) {
-        if (isGroup) {
-          // remove user from role
-          await fetch(groupService.removeUserToGroup(selectedUser.id, row.id));
-        }
-        if (isRole) {
-          // remove user from role
-          await fetch(roleService.removeUserToRole(selectedUser.id, row.id));
-        }
-        if (row?.code && isPermissionUI) {
-          // remove permission ui from user
-          const permission = permissionUIList.find((p) =>
-            row.code === p.code,
-          );
-          if (permission) {
-            if (permission.types.length > 0) {
-              const deletePromises = (permissionUIOfUserList || [])
-                .filter((p) => p?.code && p.code === permission.code)
-                .map((p) => {
-                  return fetch(
-                    permissionService.deletePermission(
-                      p.id,
-                      selectedUser.id,
-                      HolderType.USER,
-                      true,
-                      false,
-                    ),
-                  );
-                });
-              await Promise.all(deletePromises);
-            } else {
-              // eslint-disable-next-line
-              const _permission = (permissionUIOfUserList || []).find((p) =>
-                p?.code && p.code === permission.code,
-              );
-              if (_permission?.id) {
-                await fetch(
-                  permissionService.deletePermission(
-                    _permission.id,
-                    selectedUser.id,
-                    HolderType.USER,
-                    true,
-                    false,
-                  ),
-                );
-              }
-            }
-          }
-        }     
-        if (row?.code && isPermissionResource) {
-          // remove permission resource from user
-          await fetch(
-            permissionService.deletePermission(
-              row.id,
-              selectedUser.id,
-              HolderType.USER,
-              false,
-              true,
-            ),
-          );
-        }
-        getData();
+    if (selectedUser) {
+      if (isGroup) {
+        // remove user from role
+        await fetch(groupService.removeUserToGroup(selectedUser.id, row.id));
       }
+      if (isRole) {
+        // remove user from role
+        await fetch(roleService.removeUserToRole(selectedUser.id, row.id));
+      }
+      if (isPermissionUI) {
+        // remove permission UI from role
+        await fetch(
+          permissionService.deletePermission(
+            row.id,
+            selectedUser.id,
+            HolderType.USER,
+            true,
+            false,
+          ),
+        );
+      }
+      if (isPermissionResource) {
+        // remove permission Resource from role
+        await fetch(
+          permissionService.deletePermission(
+            row.id,
+            selectedUser.id,
+            HolderType.GROUP,
+            false,
+            true,
+          ),
+        );
+      }
+      getData();
+    }
   };
 
   const sortByAlphabet = (d: GroupRolePermission[]): GroupRolePermission[] => {
@@ -267,17 +235,28 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
             color: 'red',
             icon: <FiTrash2 />,
             onClick: (row) => confirm('Xác nhận xóa?', () => handleRemove(row)),
-          },
-          {
-            title: 'Sửa',
-            color: 'violet',
-            icon: <FiEdit2 />,
-            hidden: isGroup || isRole || isPermissionResource,
-            onClick: (row): void => setEditPermssionUIModal(row),
-          },
+          }
         ]}
         getRowKey={(d): string => d.id ?? uuidv4()}
         itemHeaderRender={(d): JSX.Element => {
+          if (isPermissionUI) {
+            return (
+              <>
+                <Popup
+                  size="mini"
+                  inverted
+                  position="top left"
+                  content={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'Từ chối' : 'Cho phép'}
+                  trigger={
+                    <Label color={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'red' : 'green'} basic horizontal>
+                      Tất cả
+                    </Label>
+                  }
+                />
+                {d?.name ?? ''}
+              </>
+            );
+          }
           if (isPermissionResource) {
             const permissionTypeColor = permissionTypeColorList.find((p) => d?.normalizedMethod && p.name.includes(d?.normalizedMethod ?? ''))
             return (
@@ -301,7 +280,6 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
               </>
             )
           }
-
           return (
             <>
               {d?.name ?? ''}
@@ -309,9 +287,10 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
           );
         }}
         itemContentRender={(d): string =>
-          // eslint-disable-next-line
-          isGroup || isRole
-            ? d?.description ?? ''
+          isPermissionUI
+          ? `Mã ${d?.code ?? ''}`
+          : !isPermissionResource
+            ? (d?.description ?? '')
             : ''
         }
       />
@@ -330,11 +309,6 @@ const GroupRolePermissionOfUser: React.FC<Props> = (props) => {
         onRefresh={getData}
       />
 
-      <EditPermissionUIOfUserModal
-        data={editPermissionUIModal}
-        onClose={(): void => setEditPermssionUIModal(undefined)}
-        onRefresh={getData}
-      />
       <AddPermissionResourceToUserModal
         open={addPermissionModal && (isPermissionResource || false)}
         onClose={(): void => setAddPermissionModal(false)}

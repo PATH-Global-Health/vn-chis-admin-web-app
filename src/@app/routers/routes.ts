@@ -37,7 +37,7 @@ const routes: Route[] = [
     component: HomePage,
     path: '/home',
     layout: AppLayout,
-    isPrivate: true,
+    isPrivate: false,
   },
   {
     component: PageNotFound,
