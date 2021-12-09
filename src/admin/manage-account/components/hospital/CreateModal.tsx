@@ -82,9 +82,15 @@ const CreateModal: React.FC<Props> = (props) => {
         />
       );
     } catch (error) {
-      console.log(error);
       toast(
-        <ToastComponent content={t("Create a failed Facility")} type="failed" />
+        <ToastComponent
+          content={
+            error.response.data.errorMessage === "EXISTED_USERNAME"
+              ? t("EXISTED_USERNAME")
+              : t("Create a failed Facility")
+          }
+          type="failed"
+        />
       );
     }
   };

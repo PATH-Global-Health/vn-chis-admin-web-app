@@ -455,5 +455,6 @@
     "Receive at facility": "Receive at facility",
     "Consulting type": "Consulting type",
     "Consulting content": "Consulting content",
-    "UserName": "UserName"
+    "UserName": "UserName",
+    "EXISTED_USERNAME": "Userame already exists"
 }

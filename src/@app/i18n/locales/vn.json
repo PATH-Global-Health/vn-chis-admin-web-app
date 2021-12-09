@@ -537,5 +537,6 @@
     "Receive at facility": "Nhận tại cơ sở",
     "Consulting type": "Loại tư vấn",
     "Consulting content": "Nội dung tư vấn",
-    "UserName": "Tên đăng nhập"
+    "UserName": "Tên đăng nhập",
+    "EXISTED_USERNAME": "Tên đăng nhập đã tồn tại"
 }

@@ -85,6 +85,7 @@ const createUser = async (data: UserCM): Promise<void> => {
     toast.success('Tạo thành công');
   } catch (error) {
     // eslint-disable-next-line
+    console.log(error.response);
     toast.warn(getResponseError(error.response?.data));
   }
 };
