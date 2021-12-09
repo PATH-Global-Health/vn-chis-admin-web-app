@@ -1,14 +1,14 @@
 // const isDev = process.env.NODE_ENV === 'development';
-const gatewayUrl = 'https://api.chis.vn/v1';
-
 // const gatewayUrl = 'https://api.chis.vn/v1';
-// const authUrl = `${gatewayUrl}/auth`;
-// const unitUrl = `${gatewayUrl}/schedule`;
-// const postUrl = `${gatewayUrl}/mini-cms`;
-const authUrl = 'https://user-management.bakco.vn/api';
+
+const gatewayUrl = 'https://chis-api.bakco.vn/v1';
+const authUrl = `${gatewayUrl}/auth`;
+const unitUrl = `${gatewayUrl}/schedule`;
+const postUrl = `${gatewayUrl}/mini-cms`;
+// const authUrl = 'https://user-management.bakco.vn/api';
 // const unitUrl = 'https://schedule-management.bakco.vn/api';
-const unitUrl = 'http://202.78.227.174:30111/api';
-const postUrl = 'https://mini-cms.bakco.vn/api';
+// const unitUrl = 'http://202.78.227.174:30111/api';
+// const postUrl = 'https://mini-cms.bakco.vn/api';
 const pqmUrl =
   process.env?.REACT_APP_PQM_ENDPOINT ?? 'https://pqm-core.hcdc.vn';
 
