@@ -23,7 +23,7 @@ const deburr = (s: string): string => {
   result = result.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y');
   result = result.replace(/đ/g, 'd');
   result = result.replace(
-    /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g,
+    /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|{|}|\||\\/g,
     ' ',
   );
   result = result.replace(/ + /g, ' ');
