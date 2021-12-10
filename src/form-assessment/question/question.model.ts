@@ -22,6 +22,10 @@ export interface QuestionForQuestionTemplateCM {
   questionId: string;
 }
 
+export type QuestionForQuestionTemplateUM = QuestionForQuestionTemplateCM;
+
+export type QuestionForQuestionTemplateDM = QuestionForQuestionTemplateUM;
+
 export type SingleAnwserCM = Omit<Answer, 'id'>;
 
 export interface MultipleAnswerCM {

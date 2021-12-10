@@ -89,7 +89,10 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
             .map((q): string => q.id);
         await fetch(questionTemplateService.deleteQuestion({
           id: data.id,
-          questions: questionDeletedList,
+          questions: questionDeletedList.map((q, i) => ({
+            order: i,
+            questionId: q
+          })),
         }));
 
         const questionNewestList =
@@ -98,7 +101,10 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
             .map((q) => q.id);
         await fetch(questionTemplateService.addQuestion({
           id: data.id,
-          questions: questionNewestList,
+          questions: questionNewestList.map((q, i) => ({
+            order: i,
+            questionId: q
+          })),
         }));
 
         const surveyResultDeletedList =

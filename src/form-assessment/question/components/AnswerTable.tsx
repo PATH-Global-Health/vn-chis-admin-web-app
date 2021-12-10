@@ -97,6 +97,12 @@ const AnswerTable: React.FC<Props> = ({ isCreate, onChange }) => {
         ]}
         itemActions={[
           {
+            icon: <FiEdit3 />,
+            color: 'violet',
+            title: 'Sửa',
+            onClick: (d): void => setUpdateDetails(d),
+          },
+          {
             icon: <FiTrash2 />,
             color: 'red',
             title: 'Xoá',
@@ -110,13 +116,7 @@ const AnswerTable: React.FC<Props> = ({ isCreate, onChange }) => {
                 }
               });
             },
-          },
-          {
-            icon: <FiEdit3 />,
-            color: 'violet',
-            title: 'Sửa',
-            onClick: (d): void => setUpdateDetails(d),
-          },
+          }
         ]}
         itemHeaderRender={(d): string => `${d.description}`}
         itemContentRender={(d): string => `Điểm: ${d.score}`}

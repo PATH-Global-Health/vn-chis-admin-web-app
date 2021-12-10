@@ -70,7 +70,7 @@ const AnswerModal: React.FC<Props> = ({ open, data, onChange, onClose, onRefresh
   return (
     <Modal open={open || Boolean(data)} onClose={onClose}>
       <Modal.Header>
-        {data?.id ? 'Sửa ' : 'Thêm '} câu hỏi
+        {data?.id ? 'Sửa ' : 'Thêm '} đáp án
       </Modal.Header>
       <Modal.Content>
         <Form>
@@ -78,7 +78,7 @@ const AnswerModal: React.FC<Props> = ({ open, data, onChange, onClose, onRefresh
             <Controller
               control={control}
               name="score"
-              defaultValue=""
+              defaultValue="0"
               rules={rules.score}
               render={({ onChange, onBlur, value }): React.ReactElement => (
                 <Form.Field

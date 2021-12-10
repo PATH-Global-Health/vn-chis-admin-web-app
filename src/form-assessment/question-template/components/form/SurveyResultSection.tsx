@@ -41,10 +41,28 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
   const disabled = !!errors.fromScore || !!errors.toScore || !!errors.description;
   const rules = {
     fromScore: {
-      required: 'Bắt buộc nhập từ điểm',
+      validate: () => {
+        const score = watch('fromScore');
+        const error =
+          typeof score !== 'number'
+          ? 'Bắt buộc'
+          : score < 0
+            ? 'Không hợp lệ'
+            : undefined;
+        return error || true;
+      }
     },
     toScore: {
-      required: 'Bắt buộc nhập đến điểm',
+      validate: () => {
+        const score = watch('toScore');
+        const error =
+          typeof score !== 'number'
+          ? 'Bắt buộc'
+          : score < 0
+            ? 'Không hợp lệ'
+            : undefined;
+        return error || true;
+      }
     },
     description: {
       required: 'Bắt buộc nhập mô tả',
@@ -54,8 +72,7 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
   const validateScore = () => {
     var fromScore = watch('fromScore');
     var toScore = watch('toScore');
-    console.log(fromScore, toScore, fromScore > toScore);
-    if (fromScore && toScore && fromScore > toScore) {
+    if (typeof fromScore === 'number' && typeof toScore === 'number' && fromScore > toScore) {
       setError(true);
     } else {
       setError(false);

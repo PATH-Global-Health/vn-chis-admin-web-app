@@ -61,7 +61,7 @@ const deleteQuestion = async (data: QuestionDM): Promise<void> => {
 
 const getAnswerOfQuestion = async (questionId: string): Promise<Answer[]> => {
   const response = await httpClient.get({
-    url: `${apiLinks.form.question.get}/?id=${questionId}`,
+    url: `${apiLinks.form.question.get}?id=${questionId}`,
   });
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   return (response.data[0]?.answers ?? []) as Answer[];

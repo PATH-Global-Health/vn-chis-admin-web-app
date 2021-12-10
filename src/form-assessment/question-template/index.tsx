@@ -77,6 +77,12 @@ const QuestionTemplatePage: React.FC = () => {
                 ]}
                 itemActions={[
                   {
+                    icon: <FiEdit3 />,
+                    color: 'violet',
+                    title: 'Sửa',
+                    onClick: (d): void => setUpdateDetails(d),
+                  },
+                  {
                     icon: <FiTrash2 />,
                     color: 'red',
                     title: 'Xoá',
@@ -87,12 +93,6 @@ const QuestionTemplatePage: React.FC = () => {
                         getData();
                       });
                     },
-                  },
-                  {
-                    icon: <FiEdit3 />,
-                    color: 'violet',
-                    title: 'Sửa',
-                    onClick: (d): void => setUpdateDetails(d),
                   },
                 ]}
                 itemHeaderRender={(d): string => d.title}
