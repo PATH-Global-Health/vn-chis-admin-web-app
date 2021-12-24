@@ -67,12 +67,11 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
     defaultValues: {},
   });
 
-  const error = !!errors.questionTemplateTypeId || !!errors.title || !!errors.questions || !!errors.surveyResults;
   const confirm = useConfirm();
   const { fetch, fetching } = useFetchApi();
 
   const handleSubmit = async () => {
-    if (!error) {
+    if (Object.keys(errors).length === 0) {
       const payload = getValues();
       if (data?.id) {
         await fetch(questionTemplateService.updateQuestionTemplate({
@@ -149,12 +148,11 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
   };
 
   const handleChange = (key: string, value: any, isTrigger = false): void => {
-    if (isTrigger) {
-      trigger();
-    }
-
     setChanged(true);
     setValue(key, value);
+    if (isTrigger) {
+      trigger(key);
+    }
   };
 
   const actions = useMemo(
@@ -163,8 +161,8 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
         title: 'Lưu biểu mẫu',
         icon: <FiSave />,
         color: 'blue',
-        onClick: () => {
-          trigger();
+        onClick: async () => {
+          await trigger();
           handleSubmit();
         },
       },

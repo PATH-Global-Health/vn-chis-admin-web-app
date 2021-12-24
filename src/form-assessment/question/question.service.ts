@@ -63,8 +63,9 @@ const getAnswerOfQuestion = async (questionId: string): Promise<Answer[]> => {
   const response = await httpClient.get({
     url: `${apiLinks.form.question.get}?id=${questionId}`,
   });
+  console.log(response);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  return (response.data[0]?.answers ?? []) as Answer[];
+  return (response.data?.answers ?? []) as Answer[];
 };
 
 

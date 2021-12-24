@@ -55,11 +55,10 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
   const [changed, setChanged] = useState<boolean>(false);
   const [postForm, setPostForm] = useState<PostCM | undefined>();
 
-  const error = !!errors.name;
   const username = useMemo((): string => token?.username ?? 'Unknown', [token]);
 
   const handleSubmit = async () => {
-    if (!error) {
+    if (Object.keys(errors).length === 0) {
       const payload = getValues();
       const postId = await fetch(
         data?.id
@@ -108,12 +107,12 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
   };
 
   const handleChange = (key: string, value: any, isTrigger = false): void => {
-    if (isTrigger) {
-      trigger();
-    }
     setChanged(true);
     setValue(key, value);
     setPostForm(getValues());
+    if (isTrigger) {
+      trigger();
+    }
   };
 
   const actions = useMemo(
@@ -122,8 +121,8 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
         title: 'Lưu bài viết',
         icon: <FiSave />,
         color: 'blue',
-        onClick: () => {
-          trigger();
+        onClick: async () => {
+          await trigger();
           handleSubmit();
         },
       },

@@ -42,7 +42,7 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
   const rules = {
     fromScore: {
       validate: () => {
-        const score = watch('fromScore');
+        const score = parseInt((watch('fromScore') as unknown) as string, 10);
         const error =
           typeof score !== 'number'
           ? 'Bắt buộc'
@@ -54,7 +54,7 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
     },
     toScore: {
       validate: () => {
-        const score = watch('toScore');
+        const score = parseInt((watch('toScore') as unknown) as string, 10);
         const error =
           typeof score !== 'number'
           ? 'Bắt buộc'
@@ -70,8 +70,8 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
   }
 
   const validateScore = () => {
-    var fromScore = watch('fromScore');
-    var toScore = watch('toScore');
+    var fromScore = parseInt((watch('fromScore') as unknown) as string, 10);
+    var toScore = parseInt((watch('toScore') as unknown) as string, 10);
     if (typeof fromScore === 'number' && typeof toScore === 'number' && fromScore > toScore) {
       setError(true);
     } else {
@@ -183,7 +183,7 @@ const SurveyResultSection: React.FC<Props> = ({ data, onChange }) => {
       }));
 
       if (_data !== surveyResultList) {
-        setSurveyResultList((state) => _data.map((s) => ({
+        setSurveyResultList((s) => _data.map((s) => ({
           ...s,
           isNew: false,
           isDeleted: false,

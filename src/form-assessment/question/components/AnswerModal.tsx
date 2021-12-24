@@ -34,7 +34,7 @@ const AnswerModal: React.FC<Props> = ({ open, data, onChange, onClose, onRefresh
     description: { required: 'Bắt buộc phải nhập mô tả lựa chọn' },
     score: {
       required: 'Bắt buộc phải nhập điểm',
-      validate: (value: string) => (value || '').replace(/[^0-9]/g,'') !== '' ? true : 'Bắt buộc phải nhập số',
+      validate: (value: string) => value.toString().replace(/[^0-9]/g,'') !== '' ? true : 'Bắt buộc phải nhập số',
     },
   };
 
