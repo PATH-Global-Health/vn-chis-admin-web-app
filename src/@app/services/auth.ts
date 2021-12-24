@@ -17,6 +17,14 @@ const login = async (username: string, password: string): Promise<Token> => {
   return response.data as Token;
 };
 
+const logout = async (): Promise<void> => {
+  try {
+    await httpClient.post({
+      url: apiLinks.authentication.logOut,
+    });
+  } catch (e) {}
+}
+
 const changePassword = async (token: string, data: { oldPassword: string; newPassword: string }): Promise<boolean> => {
   const headerToken = token ? { Authorization: `bearer ${token}` } : null;
   try {
@@ -53,6 +61,7 @@ const getPermission = async (token: string): Promise<Permission[]> => {
 
 const authService = {
   login,
+  logout,
   getUserInfo,
   getPermission,
   changePassword,

@@ -15,6 +15,7 @@ import {
   getPermission,
   getUserInfo,
 } from '@app/slices/auth';
+import authService from '@app/services/auth';
 
 type UseAuth = {
   isAuthenticated: () => boolean;
@@ -23,7 +24,7 @@ type UseAuth = {
     password: string,
     remember: boolean,
   ) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   hasPermission: (code: string) => boolean;
 };
 
@@ -111,7 +112,10 @@ const useAuth = (): UseAuth => {
     }
   };
 
-  const logout = useCallback((): void => {
+  const logout = useCallback(async (): Promise<void> => {
+    // Call api to disable token
+    await authService.logout();
+    // Clear token
     localStorage.removeItem(TOKEN);
     localStorage.removeItem(USER_ID);
     localStorage.removeItem(EXPIRED_TIME);

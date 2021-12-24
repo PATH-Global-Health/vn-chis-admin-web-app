@@ -49,12 +49,9 @@ const UserProfileButton: React.FC = () => {
         >
           <Dropdown.Menu>
             <Dropdown.Item
-              onClick={(): void => {
-                logout();
-                setTimeout(() => {
-                  history.push('/');
-                  window.location.reload();
-                }, 0);
+              onClick={async (): Promise<void> => {
+                await logout();
+                history.push('/');
               }}
               content="Đăng xuất"
               icon={icon(<FiLogOut />)}
