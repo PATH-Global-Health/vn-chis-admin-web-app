@@ -1,7 +1,10 @@
-// const isDev = process.env.NODE_ENV === 'development';
-// const gatewayUrl = 'https://api.chis.vn/v1';
+const url = window.location.href;
+const isDev =
+  url.indexOf('bakco') > -1 || process.env.NODE_ENV === 'development';
 
-const gatewayUrl = 'https://chis-api.bakco.vn/v1';
+const gatewayUrl = isDev
+  ? 'https://chis-api.bakco.vn/v1'
+  : 'https://api.chis.vn/v1';
 const authUrl = `${gatewayUrl}/auth`;
 const unitUrl = `${gatewayUrl}/schedule`;
 const postUrl = `${gatewayUrl}/mini-cms`;

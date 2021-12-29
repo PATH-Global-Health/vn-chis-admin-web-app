@@ -97,7 +97,7 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
       <Form onSubmit={handleSubmit((d) => onSubmit(d))}>
         {error && (
           <Message negative>
-            <strong>Từ điểm phải lớn hơn tới điểm</strong>
+            <strong>Đến điểm phải lớn hơn từ điểm</strong>
           </Message>
         )}
         <Form.Group widths="equal">
