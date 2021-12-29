@@ -66,35 +66,26 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
           : postService.createPost(payload),
       );
       if (postId && postId !== '') {
-        // eslint-disable-next-line
-        const promises = [];
-        const parts = (payload?.parts ?? []).map((o, index) => ({
-          ...o,
-          order: index,
-        }));
+        let promises = [];
+        const parts = (payload?.parts ?? []).map((o, index) => ({ ...o, order: index }));
         // new part
-        // eslint-disable-next-line
-        const newParts = parts.filter((o) => !o.isDeleted && o.isNew && o.isEdited);
+        const newParts = parts.filter((o) => !o.isDeleted && o.isNew);
         if (newParts.length > 0) {
           promises.push(
             fetch(postService.addPartsToPost({ postId, parts: newParts })),
           );
         }
         // edit part
-        parts
-          .filter((o) => !o.isNew && !o.isDeleted && o.isEdited)
-          // eslint-disable-next-line
-          .forEach(async (o) => {
-            promises.push(fetch(partService.updatePart(o)));
-          });
+        parts.filter((o) => !o.isNew && !o.isDeleted)
+             .forEach(async (o) => {
+                promises.push(fetch(partService.updatePart(o)));
+              });
         // delete part
-        parts
-          .filter((o) => !o.isNew && o.isDeleted)
-          // eslint-disable-next-line
-          .forEach(async (o) => {
-            promises.push(fetch(partService.deletePart(o)));
-          });
-        // fetch
+        parts.filter((o) => !o.isNew && o.isDeleted)
+             .forEach(async (o) => {
+                promises.push(fetch(partService.deletePart(o)));
+              });
+
         await Promise.all(promises).then(() => {
           onClose();
           onRefresh();

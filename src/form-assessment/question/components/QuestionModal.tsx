@@ -83,7 +83,7 @@ const CreateModal: React.FC<Props> = ({ open, data, onClose, onRefresh }) => {
             <Controller
               control={control}
               name="isMultipleChoice"
-              defaultValue={false}
+              defaultValue={undefined}
               render={({ onChange, onBlur, value }): React.ReactElement => (
                 <Form.Field
                   control={Checkbox}
