@@ -89,7 +89,7 @@ const PostPreview: React.FC<Props> = ({ title, data, edit = false, loading = fal
           (data?.parts ?? [])
             .filter((o) => !o?.isDeleted)
             .sort((a, b) => (a.order > b.order && !edit ? 1 : 0))
-            .map((o) => {
+            .map((o, i) => {
               let node = o.content;
               let className = 'content';
               if (o.type === 1 && o.content !== '') {
@@ -98,6 +98,7 @@ const PostPreview: React.FC<Props> = ({ title, data, edit = false, loading = fal
               }
               return (
                 <div
+                  key={`part_${i}`}
                   className={className}
                   // eslint-disable-next-line
                   dangerouslySetInnerHTML={{ __html: node }}

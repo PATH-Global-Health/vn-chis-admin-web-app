@@ -39,7 +39,12 @@ const CategorySection: React.FC<Props> = ({ data, onChange }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => onChange([value]), [value]);
+  useEffect(() => {
+    if (value) {
+      onChange([value]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
   useEffect(() => {
     if (data) {
       // eslint-disable-next-line @typescript-eslint/naming-convention
