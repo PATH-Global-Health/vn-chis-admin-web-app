@@ -38,7 +38,7 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
     defaultValues: {},
   });
 
-  const disabled = !!errors.fromScore || !!errors.toScore || !!errors.description;
+  const disabled = error || !!errors.fromScore || !!errors.toScore || !!errors.description;
   const rules = {
     fromScore: {
       validate: () => {
@@ -145,23 +145,23 @@ const SurveyResultModal: React.FC<ModalProps> = ({ open, onClose, onChange }) =>
           />
         </Form.Group>
         <Form.Group widths="equal">
-        <Controller
-              control={control}
-              name="description"
-              defaultValue=""
-              rules={rules.description}
-              render={({ onChange, onBlur, value }): React.ReactElement => (
-                <Form.Field
-                  required
-                  control={TextArea}
-                  label="Đánh giá"
-                  error={!!errors?.description?.message && errors.description.message}
-                  value={value}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                />
-              )}
-            />
+          <Controller
+            control={control}
+            name="description"
+            defaultValue=""
+            rules={rules.description}
+            render={({ onChange, onBlur, value }): React.ReactElement => (
+              <Form.Field
+                required
+                control={TextArea}
+                label="Đánh giá"
+                error={!!errors?.description?.message && errors.description.message}
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
+            )}
+          />
         </Form.Group>
         <Button primary disabled={disabled} content="Xác nhận" />
       </Form>
