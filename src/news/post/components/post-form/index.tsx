@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import _ from 'lodash';
 
 import { Grid, Dimmer, Loader, Form, Header, Input } from 'semantic-ui-react';
 import { FiSave, FiX } from 'react-icons/fi';
@@ -62,38 +63,27 @@ const PostForm: React.FC<Props> = ({ data, onClose, onRefresh }) => {
       const payload = getValues();
       const postId = await fetch(
         data?.id
-          ? postService.updatePost({ ...payload, id: data?.id ?? '' })
+          ? postService.updatePost({ ..._.omit(payload, 'parts'), id: data.id })
           : postService.createPost(payload),
       );
       if (postId && postId !== '') {
-        let promises = [];
         const parts = (payload?.parts ?? []).map((o, index) => ({ ...o, order: index }));
-        // new part
         const newParts = parts.filter((o) => !o.isDeleted && o.isNew);
         if (newParts.length > 0) {
-          promises.push(
-            fetch(postService.addPartsToPost({ postId, parts: newParts })),
-          );
+          await fetch(postService.addPartsToPost({ postId, parts: newParts }));
         }
-        // edit part
-        parts.filter((o) => !o.isNew && !o.isDeleted)
-             .forEach(async (o) => {
-                promises.push(fetch(partService.updatePart(o)));
-              });
-        // delete part
-        parts.filter((o) => !o.isNew && o.isDeleted)
-             .forEach(async (o) => {
-                promises.push(fetch(partService.deletePart(o)));
-              });
-
-        await Promise.all(promises).then(() => {
-          onClose();
-          onRefresh();
-        });
-      } else {
-        onClose();
-        onRefresh();
+        for (const part of parts) {
+          if (!part?.isNew) {
+            await fetch(
+              part?.isDeleted
+              ? partService.deletePart(part)
+              : partService.updatePart(part)
+            )
+          }
+        }
       }
+      onClose();
+      onRefresh();
     }
   };
 
