@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { SemanticCOLORS } from 'semantic-ui-react/dist/commonjs/generic';
 
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiRefreshCcw } from 'react-icons/fi';
 import { Popup, Label, Icon } from 'semantic-ui-react';
 import DataList from '@app/components/data-list';
 import CreateModal from '@admin/user-management/permission/components/CreateModal';
@@ -13,6 +13,7 @@ import {
   useRefreshCallback,
 } from '@app/hooks';
 import { GroupKey, ComponentKey } from '@app/utils/component-tree';
+import permissionService from '@admin/user-management/permission/permission.service';
 import { getPermissionsUI, getPermissionsResource } from '@admin/user-management/permission/permission.slice';
 import { permissionTypeColorList } from '@admin/user-management/utils/helpers';
 import { PermissionType } from '@admin/user-management/utils/constants';
@@ -89,7 +90,17 @@ const PermissionTable: React.FC<Props> = ({ isPermissionUI, isPermissionResource
             },
           },
         ]}
-        itemActions={[]}
+        itemActions={[
+          {
+            title: 'Đổi quyền',
+            color: 'yellow',
+            icon: <FiRefreshCcw />,
+            onClick: async (r) => {
+              await permissionService.changeAuthorizedResource({ permissionId: r.id, isAuthorized: !r?.isAuthorizedAPI });
+              getData();
+            } 
+          }
+        ]}
         getRowKey={(d): string => d.id}
         itemHeaderRender={(d): JSX.Element => {
           if (isPermissionResource) {
@@ -97,18 +108,29 @@ const PermissionTable: React.FC<Props> = ({ isPermissionUI, isPermissionResource
             return (
               <>
                 {d?.normalizedMethod ? (
-                  <Popup
-                    size="mini"
-                    inverted
-                    position="top left"
-                    content={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'Từ chối' : 'Cho phép'}
-                    trigger={
-                      <Label color={(permissionTypeColor?.color ?? 'black') as SemanticCOLORS} basic horizontal>
-                        <Icon name={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'x' : 'check'} /> 
-                        {d?.normalizedMethod ?? ''}
-                      </Label>
-                    }
-                  />
+                  <>
+                    <Label color={(permissionTypeColor?.color ?? 'black') as SemanticCOLORS} basic horizontal>
+                      <Popup
+                        size="mini"
+                        inverted
+                        position="top left"
+                        content={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'Từ chối truy cập' : 'Cho phép truy cập'}
+                        trigger={
+                          <Icon name={(d?.permissionType ?? PermissionType.DENY) === PermissionType.DENY ? 'x' : 'check'} /> 
+                        }
+                      />
+                      <Popup
+                        size="mini"
+                        inverted
+                        position="top left"
+                        content={d?.isAuthorizedAPI ? 'Sử dụng token' : 'Không sử dụng token'}
+                        trigger={
+                          <Icon name={d?.isAuthorizedAPI ? 'lock' : 'lock open'} /> 
+                        }
+                      />
+                      {d?.normalizedMethod ?? ''}
+                    </Label>
+                  </>
                 ) : null}
      
                 {d?.url ?? ''}
