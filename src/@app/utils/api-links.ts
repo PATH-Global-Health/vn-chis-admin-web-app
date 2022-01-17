@@ -68,6 +68,7 @@ const apiLinks = {
         update: `${authUrl}/Permissions`,
         delete: `${authUrl}/Permissions`,
         addUser: `${authUrl}/Permissions`,
+        changeAuthorizedResource: `${authUrl}/Permissions/Resource/ChangeAPIAuthorization`
       },
     },
   },

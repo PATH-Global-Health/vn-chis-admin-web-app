@@ -9,6 +9,7 @@ export interface Permission {
   normalizedMethod?: string;
   url?: string;
   permissionType?: number;
+  isAuthorizedAPI?: boolean;
   // Permission Data
   username?: string;
   provinceId?: string;

@@ -22,7 +22,6 @@ interface ExtendPermissionListCM {
   isPermissionData?: boolean;
 }
 
-
 const getPermissionsUI = async (): Promise<Permission[]> => {
   try {
     const result = await httpClient.get({
@@ -235,6 +234,17 @@ const deletePermission = async (
   });
 };
 
+const changeAuthorizedResource = async ({
+  permissionId,
+  isAuthorized
+}: {
+  permissionId: string,
+  isAuthorized: boolean
+}): Promise<void> =>  {
+  await httpClient.put({
+    url: `${apiLinks.admin.userManagement.permission.changeAuthorizedResource}/${permissionId}/${isAuthorized}`,
+  });
+}
 
 const permissionService = {
   getPermissionsUI,
@@ -245,6 +255,7 @@ const permissionService = {
   createPermissionForSubjectList,
   createPermissionForSubjectByIdList,
   deletePermission,
+  changeAuthorizedResource,
 };
 
 export default permissionService;
