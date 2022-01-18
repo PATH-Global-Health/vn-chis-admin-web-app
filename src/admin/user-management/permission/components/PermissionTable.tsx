@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { SemanticCOLORS } from 'semantic-ui-react/dist/commonjs/generic';
 
-import { FiPlus, FiRefreshCcw } from 'react-icons/fi';
+import { FiPlus, FiShield } from 'react-icons/fi';
 import { Popup, Label, Icon } from 'semantic-ui-react';
 import DataList from '@app/components/data-list';
 import CreateModal from '@admin/user-management/permission/components/CreateModal';
@@ -94,7 +94,7 @@ const PermissionTable: React.FC<Props> = ({ isPermissionUI, isPermissionResource
           {
             title: 'Đổi quyền',
             color: 'yellow',
-            icon: <FiRefreshCcw />,
+            icon: <FiShield />,
             onClick: async (r) => {
               await permissionService.changeAuthorizedResource({ permissionId: r.id, isAuthorized: !r?.isAuthorizedAPI });
               getData();
